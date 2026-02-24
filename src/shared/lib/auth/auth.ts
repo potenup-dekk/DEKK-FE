@@ -1,12 +1,20 @@
-/**
- * NextAuth Options (Provider/Session/Callback)
- * TODO:
- * 1) providers에 Google/Kakao 추가 (env에서 clientId/secret 읽기)
- * 2) 세션 전략 결정 (JWT 기본)
- * 3) pages.signIn을 /login으로 연결
- * 4) (선택) callbacks에서 token/session에 필요한 필드만 추가
- *
- * Note:
- * - Google: GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET
- * - Kakao : KAKAO_CLIENT_ID(REST API 키) / KAKAO_CLIENT_SECRET(선택)
- */
+import NextAuth, { type NextAuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+// import KakaoProvider from "next-auth/providers/kakao";
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    // KakaoProvider({
+    //   clientId: process.env.KAKAO_CLIENT_ID!,
+    //   clientSecret: process.env.KAKAO_CLIENT_SECRET!,
+    // }),
+  ],
+  session: { strategy: "jwt" },
+  pages: { signIn: "/login" },
+};
+
+export const handler = NextAuth(authOptions);
