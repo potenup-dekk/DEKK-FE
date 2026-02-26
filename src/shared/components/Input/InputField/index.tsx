@@ -21,7 +21,7 @@ const InputField = ({
   const message = hasError ? error : hint;
 
   return (
-    <div className="flex flex-col items-start text-black">
+    <div className="flex flex-col items-start text-black w-full">
       {label && (
         <label className="text-xs" htmlFor={inputId}>
           {label}
@@ -36,13 +36,13 @@ const InputField = ({
         onChange={onChange}
         disabled={disabled}
         className={[
-          "border rounded-sm bg-white px-3 py-2 my-1",
+          "border rounded-sm bg-white px-3 py-2 my-1 w-full",
           hasError ? "border-red-500" : "border-black",
         ].join(" ")}
         maxLength={maxLength}
       />
 
-      <div className="flex justify-between text-sm self-end">
+      <div className="flex justify-between text-sm self-end min-h-5">
         <span className={hasError ? "text-red-500" : "text-gray-500"}>
           {!shouldShowCount ? message : null}
         </span>

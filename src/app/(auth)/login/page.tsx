@@ -9,7 +9,7 @@ import {
 export default function LoginPage() {
   return (
     <>
-      <div className="flex flex-col justify-center items-center m-auto h-screen gap-2.5 max-w-75 py-12">
+      <div className="flex flex-col justify-center items-center m-auto h-screen gap-2.5 max-w-md py-12">
         <div className="flex flex-1 items-center">
           <Image
             src="/logo_dekk.png"
@@ -18,7 +18,7 @@ export default function LoginPage() {
             height={81}
           ></Image>
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 w-full">
           <GoogleLoginButton />
           <KakaoLoginButton />
         </div>
