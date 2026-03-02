@@ -1,10 +1,11 @@
 "use client";
 
-import { ActionButton } from "@/shared/components/Button";
+import { ActionButton, ControlButton } from "@/shared/components/Button";
 
 import { Card } from "@/shared/components/Card";
 import Flip from "@/shared/components/flip";
 import Spread from "@/shared/components/spread";
+import { RefreshCwIcon, ThumbsDown } from "lucide-react";
 import Image from "next/image";
 import { useEffect } from "react";
 
@@ -29,11 +30,17 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex h-dvh w-full items-center justify-center">
+    <div className="flex flex-col h-dvh w-full items-center justify-center">
       <div className="flex relative h-full w-md items-center justify-center">
         <Card />
         {/* <Flip /> */}
         {/* <Spread /> */}
+      </div>
+
+      <div className="flex justify-between items-center">
+        <ControlButton icon={ThumbsDown} label="별로예요" />
+        <ControlButton icon={RefreshCwIcon} label="뒤집기" color="secondary" />
+        <ControlButton icon={ThumbsDown} label="마음에 들어요" />
       </div>
     </div>
   );
