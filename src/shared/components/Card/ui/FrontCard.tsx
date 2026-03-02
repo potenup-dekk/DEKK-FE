@@ -10,6 +10,12 @@ import {
 } from "framer-motion";
 import BackFace from "./BackFace";
 import FrontFace from "./FrontFace";
+import {
+  CheckCircle,
+  CheckCircleIcon,
+  HeartIcon,
+  ThumbsDownIcon,
+} from "lucide-react";
 
 interface FrontCardProps {
   cards: {
@@ -55,7 +61,7 @@ const FrontCard = ({
   return (
     <motion.div
       key={cards[0].id}
-      className="relative w-5/6 aspect-1/1.5 z-10 rounded-lg shadow-md flex items-center justify-center cursor-pointer"
+      className="relative w-5/6 aspect-1/1.5 z-10 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden"
       drag
       dragSnapToOrigin
       dragConstraints={{ left: -80, right: 80, top: -80, bottom: 80 }}
@@ -83,38 +89,46 @@ const FrontCard = ({
         opacity: 0,
         scale: 0.8,
         x: x.get() >= 0 ? x.get() : -x.get(),
-        transition: { duration: 0.4 },
+        transition: { duration: 0.3 },
       }}
     >
-      {/* overlay - 뒤집혀지지 않음 */}
+      {/* Overlay */}
       <motion.div
-        className="absolute z-20 size-full pointer-events-none rounded-lg"
+        className="flex absolute items-center z-20 size-full pointer-events-none rounded-lg"
         style={{ background, opacity, filter, backdropFilter }}
       >
-        {/* Like */}
+        {/* Like View */}
         <motion.div
-          className="absolute left-4 top-4 text-green-500 font-bold"
+          className="flex absolute flex-col gap-2 left-10 text-white"
           style={{ opacity: likeOpacity }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.2 }}
         >
-          Like
+          <span className="text-2xl font-bold">마음에 들어요!</span>
+
+          <div className="flex items-center gap-2">
+            <HeartIcon strokeWidth={3} />
+
+            <span className="text-sm">
+              덱에 저장하고 언제든 다시 볼 수 있습니다
+            </span>
+          </div>
         </motion.div>
 
-        {/* Dislike */}
+        {/* Dislike View */}
         <motion.div
-          className="absolute left-4 top-4 text-red-500 font-bold"
+          className="flex absolute flex-col gap-2 right-10 text-white text-end"
           style={{ opacity: dislikeOpacity }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.2 }}
         >
-          Dislike
+          <span className="text-2xl font-bold">별로예요!</span>
+
+          <div className="flex items-center gap-2">
+            <span className="text-sm">비슷한 코디 추천 빈도가 줄어들어요</span>
+
+            <ThumbsDownIcon strokeWidth={3} />
+          </div>
         </motion.div>
       </motion.div>
 
-      {/* 카드 뒤집기 */}
+      {/* Back Face */}
       <motion.div
         className="relative size-full rounded-lg"
         style={{

@@ -8,7 +8,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 const MAX_X = 250;
-const MAX_ROTATE = 16;
+const MAX_ROTATE = 12;
 const INITIAL_CARD_COUNT = 3;
 const PREFETCH_COUNT = 5;
 const PICSUM_LIMIT = 5;
@@ -77,7 +77,6 @@ const useCardStack = () => {
 
   // Dislike 액션 handler
   const onDislike = () => {
-    // alert(`👎 Disliked card: ${cards[0]?.id}`);
     console.log("dislike");
     setRemovingCardId(cards[0]?.id || null);
   };
