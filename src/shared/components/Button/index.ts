@@ -1,4 +1,3 @@
-import GoogleLoginButton from "./GoogleLoginButton";
-import KakaoLoginButton from "./KakaoLoginButton";
+import ActionButton from "./ActionButton";
 
-export { GoogleLoginButton, KakaoLoginButton };
+export { ActionButton };
