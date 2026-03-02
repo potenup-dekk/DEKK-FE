@@ -1,15 +1,39 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { requestJson } from "@/shared/api/client";
+import { clearAccessToken } from "@/shared/auth/tokenStorage";
 import { ActionButton } from "@/shared/components/Button";
 
-import { useSession, signOut } from "next-auth/react";
+type ApiResponse<T> = { code: string; message: string; data: T };
+type Me = { email: string; status: "PENDING" | "ACTIVE" };
 
-export default function SessionCheck() {
-  const { data, status } = useSession();
-  if (status === "loading") return <div>loading...</div>;
+export default function HomePage() {
+  const [me, setMe] = useState<Me | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await requestJson<ApiResponse<Me>>("/w/v1/users/me", {
+          method: "GET",
+        });
+        setMe(res.data);
+      } catch {
+        setMe(null);
+      }
+    })();
+  }, []);
+
+  const logout = () => {
+    // refreshToken 쿠키 로그아웃까지 하려면 BE logout API가 필요(추후)
+    clearAccessToken();
+    window.location.href = "/login";
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <ActionButton label="안녕" />
-      </main>
+    <div>
+      <div>{me ? `로그인: ${me.email} (${me.status})` : "비로그인"}</div>
+      {me && <ActionButton label="로그아웃" onClick={logout} />}
     </div>
   );
 }
