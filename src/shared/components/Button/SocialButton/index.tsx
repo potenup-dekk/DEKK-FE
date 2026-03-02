@@ -1,16 +1,6 @@
 import Image from "next/image";
 import type { SocialButtonProps } from "./props.type";
 
-// clsx, tailwind variants
-// tailwind => style관리가 어려움!
-//
-// tailwind 장점!
-// 1. palette => color 정의되어있음.
-// 2. 디자인 시스템 구축 용이
-// 3.
-
-// scss =>
-
 const SocialButton = ({
   iconSrc,
   iconAlt,

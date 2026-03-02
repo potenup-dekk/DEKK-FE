@@ -3,9 +3,19 @@
 import { ActionButtonProps } from "./props.type";
 import actionButtonStyle from "./style";
 
-const ActionButton = ({ label, color, size, onClick }: ActionButtonProps) => {
+const ActionButton = ({
+  label,
+  color,
+  size,
+  onClick,
+  type = "button",
+}: ActionButtonProps) => {
   return (
-    <button className={actionButtonStyle({ color, size })} onClick={onClick}>
+    <button
+      type={type}
+      className={actionButtonStyle({ color, size })}
+      onClick={onClick}
+    >
       {label}
     </button>
   );
