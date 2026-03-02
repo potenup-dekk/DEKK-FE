@@ -20,6 +20,8 @@ const FrontFace = ({ imageUrl }: FrontFaceProps) => {
         className="object-cover size-full"
         draggable={false}
         fill
+        sizes="(max-width: 768px) 83vw, 66vw"
+        loading="eager"
         alt="asdf"
       />
     </motion.div>

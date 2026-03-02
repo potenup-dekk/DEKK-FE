@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 const MAX_X = 250;
 const MAX_ROTATE = 16;
 const INITIAL_CARD_COUNT = 3;
+const PREFETCH_COUNT = 5;
 const PICSUM_LIMIT = 5;
 const PICSUM_START_PAGE = 2;
 
@@ -30,6 +31,43 @@ const useCardStack = () => {
 
   const nextPageRef = useRef(PICSUM_START_PAGE);
   const isFetchingRef = useRef(false);
+  const imageUrlCacheRef = useRef<Map<string, string>>(new Map());
+  const loadingImageRef = useRef<Map<string, Promise<string>>>(new Map());
+  const createdBlobUrlsRef = useRef<Set<string>>(new Set());
+
+  const resolveImageUrl = async (remoteUrl: string) => {
+    const cached = imageUrlCacheRef.current.get(remoteUrl);
+    if (cached) return cached;
+
+    const loading = loadingImageRef.current.get(remoteUrl);
+    if (loading) return loading;
+
+    const loadingPromise = (async () => {
+      try {
+        const response = await fetch(remoteUrl, { cache: "force-cache" });
+        if (!response.ok) {
+          imageUrlCacheRef.current.set(remoteUrl, remoteUrl);
+          return remoteUrl;
+        }
+
+        const imageBlob = await response.blob();
+        const blobUrl = URL.createObjectURL(imageBlob);
+
+        createdBlobUrlsRef.current.add(blobUrl);
+        imageUrlCacheRef.current.set(remoteUrl, blobUrl);
+
+        return blobUrl;
+      } catch {
+        imageUrlCacheRef.current.set(remoteUrl, remoteUrl);
+        return remoteUrl;
+      } finally {
+        loadingImageRef.current.delete(remoteUrl);
+      }
+    })();
+
+    loadingImageRef.current.set(remoteUrl, loadingPromise);
+    return loadingPromise;
+  };
 
   // Like 액션 handler
   const onLike = () => {
@@ -69,6 +107,41 @@ const useCardStack = () => {
       isFetchingRef.current = false;
     }
   };
+
+  useEffect(() => {
+    const prefetchCards = async () => {
+      const targetCards = cards.slice(0, PREFETCH_COUNT);
+
+      await Promise.all(
+        targetCards.map(async (card) => {
+          if (!card?.imageUrl || card.imageUrl.startsWith("blob:")) {
+            return;
+          }
+
+          const resolvedUrl = await resolveImageUrl(card.imageUrl);
+          if (resolvedUrl === card.imageUrl) return;
+
+          setCards((prev) =>
+            prev.map((item) =>
+              item.id === card.id && item.imageUrl !== resolvedUrl
+                ? { ...item, imageUrl: resolvedUrl }
+                : item,
+            ),
+          );
+        }),
+      );
+    };
+
+    void prefetchCards();
+  }, [cards]);
+
+  useEffect(() => {
+    return () => {
+      createdBlobUrlsRef.current.forEach((blobUrl) => {
+        URL.revokeObjectURL(blobUrl);
+      });
+    };
+  }, []);
 
   useEffect(() => {
     void appendNextPage();

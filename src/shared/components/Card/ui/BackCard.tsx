@@ -20,10 +20,10 @@ const BackCard = ({ backImage, backScale }: BackCardProps) => {
         <Image
           src={backImage}
           className="size-full object-cover"
-          priority
+          draggable={false}
+          fill
+          sizes="(max-width: 768px) 83vw, 66vw"
           alt="asdf"
-          width={200}
-          height={200}
         />
       </motion.div>
     </motion.div>
