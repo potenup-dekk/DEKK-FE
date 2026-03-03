@@ -4,6 +4,8 @@ import "./globals.css";
 import { Tab, TabItem } from "@/shared/components/Tab";
 import { HomeIcon, LayersIcon } from "lucide-react";
 import Link from "next/link";
+import APP_ROUTES from "@/shared/constants/routes";
+import BottomTab from "@/shared/widgets/BottomTab/ui/BottomTab";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-dvh w-full flex flex-col justify-between`}
       >
@@ -34,15 +36,7 @@ export default function RootLayout({
           {children}
         </div>
 
-        <Tab>
-          <Link href="/">
-            <TabItem icon={HomeIcon} label="홈" selected />
-          </Link>
-
-          <Link href="/deck">
-            <TabItem icon={LayersIcon} label="덱" />
-          </Link>
-        </Tab>
+        <BottomTab />
       </body>
     </html>
   );

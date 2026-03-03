@@ -5,11 +5,11 @@ const tabStyle = tv({
 });
 
 const tabItemStyle = tv({
-  base: "flex flex-col items-center justify-center gap-1 px-6 py-1 cursor-pointer rounded-full",
+  base: "relative flex flex-1 flex-col items-center justify-center gap-1 px-6 py-1 cursor-pointer rounded-full",
 
   variants: {
     selected: {
-      true: "bg-primary text-white",
+      true: "text-white",
       false: "bg-transparent text-primary",
     },
   },
