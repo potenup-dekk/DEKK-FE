@@ -1,42 +1,52 @@
-// src/shared/auth/tokenStorage.ts
 const ACCESS_TOKEN_KEY = "dekk_access_token";
+const REFRESH_TOKEN_KEY = "dekk_refresh_token";
 
-/**
- * refreshToken은 HttpOnly 쿠키로 내려오므로 FE에서 저장/조회하지 않음.
- * accessToken만 FE가 들고 API Authorization 헤더에 붙여서 사용.
- *
- * - 보안 최선: 메모리 저장(새로고침 시 로그아웃처럼 동작)
- * - 개발/UX 절충: sessionStorage(탭 닫히면 삭제)
- *
- * 여기선 sessionStorage + 메모리 캐시로 구성(간단).
- */
+let memAccess: string | null = null;
+let memRefresh: string | null = null;
 
-let memoryToken: string | null = null;
+export function setTokens(accessToken: string, refreshToken: string) {
+  memAccess = accessToken;
+  memRefresh = refreshToken;
+  try {
+    sessionStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+    sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+  } catch {}
+}
 
 export function setAccessToken(token: string) {
-  memoryToken = token;
+  memAccess = token;
   try {
     sessionStorage.setItem(ACCESS_TOKEN_KEY, token);
-  } catch {
-    // storage 사용 불가 환경 대비
-  }
+  } catch {}
 }
 
 export function getAccessToken(): string | null {
-  if (memoryToken) return memoryToken;
-
+  if (memAccess) return memAccess;
   try {
     const t = sessionStorage.getItem(ACCESS_TOKEN_KEY);
-    memoryToken = t;
+    memAccess = t;
     return t;
   } catch {
     return null;
   }
 }
 
-export function clearAccessToken() {
-  memoryToken = null;
+export function getRefreshToken(): string | null {
+  if (memRefresh) return memRefresh;
+  try {
+    const t = sessionStorage.getItem(REFRESH_TOKEN_KEY);
+    memRefresh = t;
+    return t;
+  } catch {
+    return null;
+  }
+}
+
+export function clearTokens() {
+  memAccess = null;
+  memRefresh = null;
   try {
     sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+    sessionStorage.removeItem(REFRESH_TOKEN_KEY);
   } catch {}
 }

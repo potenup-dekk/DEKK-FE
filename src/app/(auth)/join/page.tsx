@@ -6,6 +6,7 @@ import { useState } from "react";
 import { InputField } from "@/shared/components/Input";
 import { ActionButton } from "@/shared/components/Button";
 import { requestJson, ApiRequestError } from "@/shared/api/client";
+import { clearTokens } from "@/shared/auth/tokenStorage";
 
 type Gender = "MALE" | "FEMALE" | "OTHER";
 
@@ -156,12 +157,20 @@ export default function JoinPage() {
     }
   };
 
+  const cancelJoin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    clearTokens();
+    router.replace("/login");
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
       className="flex flex-col items-center gap-4 max-w-md h-screen m-auto"
     >
-      <Image src="/logo_dekk.png" alt="DEKK" width={203} height={81} />
+      <div className="mt-25">
+        <Image src="/logo_dekk.png" alt="DEKK" width={203} height={81} />
+      </div>
 
       <InputField
         id="nickname"
@@ -199,53 +208,67 @@ export default function JoinPage() {
       />
 
       <div className="flex flex-col items-start text-black w-full">
-        <p className="text-xs">성별</p>
-        <div className="flex gap-6 my-1">
-          <label className="flex items-center gap-2">
-            <input
-              name="gender"
-              type="radio"
-              value="MALE"
-              checked={form.gender === "MALE"}
-              onChange={handleChange}
-            />
-            <span>남성</span>
-          </label>
+        <div className="flex justify-between items-center w-full">
+          <p className="text-xs">성별</p>
+          <div className="flex gap-6 my-1">
+            <label className="flex items-center gap-2">
+              <input
+                name="gender"
+                type="radio"
+                value="MALE"
+                checked={form.gender === "MALE"}
+                onChange={handleChange}
+              />
+              <span className="text-xs">남성</span>
+            </label>
 
-          <label className="flex items-center gap-2">
-            <input
-              name="gender"
-              type="radio"
-              value="FEMALE"
-              checked={form.gender === "FEMALE"}
-              onChange={handleChange}
-            />
-            <span>여성</span>
-          </label>
+            <label className="flex items-center gap-2">
+              <input
+                name="gender"
+                type="radio"
+                value="FEMALE"
+                checked={form.gender === "FEMALE"}
+                onChange={handleChange}
+              />
+              <span className="text-xs">여성</span>
+            </label>
 
-          <label className="flex items-center gap-2">
-            <input
-              name="gender"
-              type="radio"
-              value="OTHER"
-              checked={form.gender === "OTHER"}
-              onChange={handleChange}
-            />
-            <span>기타</span>
-          </label>
+            <label className="flex items-center gap-2">
+              <input
+                name="gender"
+                type="radio"
+                value="OTHER"
+                checked={form.gender === "OTHER"}
+                onChange={handleChange}
+              />
+              <span className="text-xs">기타</span>
+            </label>
+          </div>
         </div>
 
         <div className="flex justify-between text-sm self-end">
-          <span className={errors.gender ? "text-red-500" : "text-gray-500"}>
+          <span
+            className={errors.gender ? "text-red-500 text-xs" : "text-gray-500"}
+          >
             {errors.gender ?? null}
           </span>
         </div>
       </div>
 
-      <ActionButton
-        type="submit"
-        label={isSubmitting ? "가입 처리 중…" : "가입하기"}
-      />
+      <div className="mt-auto mb-11 w-full text-center">
+        <ActionButton
+          type="submit"
+          label={isSubmitting ? "가입 처리 중…" : "가입하기"}
+          className="w-full"
+        />
+        <button
+          type="button"
+          onClick={cancelJoin}
+          className="text-[#525252] text-xs text-center mt-3"
+        >
+          다음에 할게요
+        </button>
+      </div>
     </form>
   );
 }
