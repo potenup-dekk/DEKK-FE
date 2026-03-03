@@ -43,7 +43,13 @@ export default function Home() {
           }}
         />
         <ControlButton icon={RefreshCwIcon} label="뒤집기" color="secondary" />
-        <ControlButton icon={ThumbsDown} label="마음에 들어요" />
+        <ControlButton
+          icon={ThumbsDown}
+          label="마음에 들어요"
+          onClick={() => {
+            window.dispatchEvent(new Event("card:like"));
+          }}
+        />
       </div>
     </div>
   );
