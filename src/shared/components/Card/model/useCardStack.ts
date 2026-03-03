@@ -81,6 +81,20 @@ const useCardStack = () => {
     setRemovingCardId(cards[0]?.id || null);
   };
 
+  const dislikeAnimation = () => {
+    if (removingCardId || !cards[0]?.id) return;
+
+    setIsSwiping(true);
+
+    animate(x, -MAX_X, {
+      duration: 0.2,
+      ease: "easeOut",
+      onComplete: () => {
+        setRemovingCardId(cards[0]?.id || null);
+      },
+    });
+  };
+
   const appendNextPage = async () => {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
@@ -224,6 +238,18 @@ const useCardStack = () => {
     rotateY.set(0);
   }, [cards[0]?.id, rotateY]);
 
+  useEffect(() => {
+    const handleDislikeTrigger = () => {
+      dislikeAnimation();
+    };
+
+    window.addEventListener("card:dislike", handleDislikeTrigger);
+
+    return () => {
+      window.removeEventListener("card:dislike", handleDislikeTrigger);
+    };
+  }, [dislikeAnimation]);
+
   return {
     frontImage,
     backImage,
@@ -244,6 +270,7 @@ const useCardStack = () => {
     setRemovingCardId,
     onLike,
     onDislike,
+    dislikeAnimation,
   };
 };
 

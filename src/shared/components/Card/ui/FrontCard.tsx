@@ -88,7 +88,7 @@ const FrontCard = ({
         zIndex: 0,
         opacity: 0,
         scale: 0.8,
-        x: x.get() >= 0 ? x.get() : -x.get(),
+        x: x.get(),
         transition: { duration: 0.3 },
       }}
     >
