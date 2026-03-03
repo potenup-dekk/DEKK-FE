@@ -1,12 +1,9 @@
 "use client";
 
-import { ActionButton, ControlButton } from "@/shared/components/Button";
+import { ControlButton } from "@/shared/components/Button";
 
 import { Card } from "@/shared/components/Card";
-import Flip from "@/shared/components/flip";
-import Spread from "@/shared/components/spread";
 import { RefreshCwIcon, ThumbsDown } from "lucide-react";
-import Image from "next/image";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -38,7 +35,13 @@ export default function Home() {
       </div>
 
       <div className="flex items-center justify-between w-full gap-2">
-        <ControlButton icon={ThumbsDown} label="별로예요" />
+        <ControlButton
+          icon={ThumbsDown}
+          label="별로예요"
+          onClick={() => {
+            window.dispatchEvent(new Event("card:dislike"));
+          }}
+        />
         <ControlButton icon={RefreshCwIcon} label="뒤집기" color="secondary" />
         <ControlButton icon={ThumbsDown} label="마음에 들어요" />
       </div>
