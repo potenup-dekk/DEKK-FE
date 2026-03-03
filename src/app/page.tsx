@@ -31,13 +31,13 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-dvh w-full items-center justify-center">
-      <div className="flex relative h-full w-md items-center justify-center">
+      <div className="flex relative h-fit max-w-md w-full items-center justify-center m-2">
         <Card />
         {/* <Flip /> */}
         {/* <Spread /> */}
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between w-full gap-2">
         <ControlButton icon={ThumbsDown} label="별로예요" />
         <ControlButton icon={RefreshCwIcon} label="뒤집기" color="secondary" />
         <ControlButton icon={ThumbsDown} label="마음에 들어요" />
