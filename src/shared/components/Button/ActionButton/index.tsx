@@ -9,11 +9,12 @@ const ActionButton = ({
   size,
   onClick,
   type = "button",
+  className,
 }: ActionButtonProps) => {
   return (
     <button
       type={type}
-      className={actionButtonStyle({ color, size })}
+      className={actionButtonStyle({ color, size, className })}
       onClick={onClick}
     >
       {label}

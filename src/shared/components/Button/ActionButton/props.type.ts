@@ -9,6 +9,7 @@ interface ActionButtonProps {
   size?: Size;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
+  className?: string;
 }
 
 export type { ActionButtonProps };
