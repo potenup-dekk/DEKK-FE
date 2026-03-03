@@ -95,6 +95,20 @@ const useCardStack = () => {
     });
   };
 
+  const likeAnimation = () => {
+    if (removingCardId || !cards[0]?.id) return;
+
+    setIsSwiping(true);
+
+    animate(x, MAX_X, {
+      duration: 0.2,
+      ease: "easeOut",
+      onComplete: () => {
+        setRemovingCardId(cards[0]?.id || null);
+      },
+    });
+  };
+
   const appendNextPage = async () => {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
@@ -249,6 +263,18 @@ const useCardStack = () => {
       window.removeEventListener("card:dislike", handleDislikeTrigger);
     };
   }, [dislikeAnimation]);
+
+  useEffect(() => {
+    const handleLikeTrigger = () => {
+      likeAnimation();
+    };
+
+    window.addEventListener("card:like", handleLikeTrigger);
+
+    return () => {
+      window.removeEventListener("card:like", handleLikeTrigger);
+    };
+  }, [likeAnimation]);
 
   return {
     frontImage,
