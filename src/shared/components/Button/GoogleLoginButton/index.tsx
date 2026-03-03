@@ -7,12 +7,10 @@ import { API_BASE } from "@/shared/config/env";
 const GoogleLoginButton = () => {
   const handleClick = () => {
     if (USE_MOCK) {
-      // 백엔드 없이 테스트: OAuth 성공한 것처럼 redirect 페이지로 이동
       window.location.href = `/oauth2/redirect?accessToken=mock_access_token`;
       return;
     }
 
-    // 실제 백엔드 붙을 때만 사용
     window.location.href = `${API_BASE}/oauth2/authorization/google`;
   };
 

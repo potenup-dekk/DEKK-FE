@@ -1,20 +1,24 @@
-import type { HTMLInputTypeAttribute } from "react";
+import type { InputHTMLAttributes, ChangeEventHandler, ReactNode } from "react";
 
-type InputType = HTMLInputTypeAttribute;
+type BaseInputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "value" | "defaultValue" | "onChange" | "size"
+>;
 
-interface InputFieldProps {
-  label?: string;
-  hint?: string;
-  error?: string;
+export interface InputFieldProps extends BaseInputProps {
+  label?: ReactNode;
+  hint?: ReactNode;
+  error?: ReactNode;
+
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  name?: string;
-  type?: InputType;
-  id?: string;
-  maxLength?: number;
-  showCount?: boolean;
-}
+  onChange: ChangeEventHandler<HTMLInputElement>;
 
-export type { InputFieldProps };
+  showCount?: boolean;
+  maxLength?: number;
+
+  disabled?: boolean;
+  id?: string;
+  name?: string;
+
+  size?: "md" | "sm";
+}

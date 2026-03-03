@@ -1,4 +1,7 @@
+"use client";
+
 import type { InputFieldProps } from "./props.type";
+import { inputFieldStyle } from "./style";
 
 const InputField = ({
   label,
@@ -6,49 +9,52 @@ const InputField = ({
   error,
   value,
   onChange,
-  placeholder,
   disabled = false,
   name,
-  type,
   id,
   maxLength,
   showCount,
+  size = "sm",
+  ...rest
 }: InputFieldProps) => {
-  const inputId = id ?? name ?? undefined;
+  const inputId = id ?? name;
   const hasError = Boolean(error);
   const shouldShowCount =
     !hasError && showCount && typeof maxLength === "number";
   const message = hasError ? error : hint;
 
+  const styles = inputFieldStyle({
+    state: hasError ? "error" : "default",
+    disabled,
+    size,
+  });
+
   return (
-    <div className="flex flex-col items-start text-black w-full">
-      {label && (
-        <label className="text-xs" htmlFor={inputId}>
+    <div className={styles.root()}>
+      {label ? (
+        <label className={styles.label()} htmlFor={inputId}>
           {label}
         </label>
-      )}
+      ) : null}
+
       <input
         id={inputId}
         name={name}
-        type={type}
-        placeholder={placeholder}
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className={[
-          "border rounded-sm bg-white px-3 py-2 my-1 w-full",
-          hasError ? "border-red-500" : "border-black",
-        ].join(" ")}
         maxLength={maxLength}
+        className={styles.input()}
+        {...rest}
       />
 
-      <div className="flex justify-between text-sm self-end min-h-5">
-        <span className={hasError ? "text-red-500" : "text-gray-500"}>
+      <div className={styles.bottom()}>
+        <span className={styles.message()}>
           {!shouldShowCount ? message : null}
         </span>
 
         {shouldShowCount ? (
-          <span className="text-gray-500">
+          <span className={styles.count()}>
             {value.length}/{maxLength}
           </span>
         ) : null}
