@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Tab, TabItem } from "@/shared/components/Tab";
-import { HomeIcon, LayersIcon } from "lucide-react";
-import Link from "next/link";
-import APP_ROUTES from "@/shared/constants/routes";
 import BottomTab from "@/shared/widgets/BottomTab/ui/BottomTab";
 
 const geistSans = Geist({
@@ -30,11 +26,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-dvh w-full flex flex-col justify-between`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh w-full`}
       >
-        <div className="w-full h-full items-center justify-center">
-          {children}
-        </div>
+        <div className="mx-auto w-full max-w-md pb-20">{children}</div>
 
         <BottomTab />
       </body>

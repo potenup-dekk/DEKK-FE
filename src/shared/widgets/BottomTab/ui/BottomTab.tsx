@@ -12,34 +12,38 @@ const BottomTab = () => {
   const router = useRouter();
 
   return (
-    <Tab>
-      <TabItem
-        icon={HomeIcon}
-        label="홈"
-        selected={pathname === APP_ROUTES.HOME}
-        onClick={() => {
-          router.push(APP_ROUTES.HOME);
-        }}
-      />
+    <div className="fixed inset-x-0 bottom-0 flex justify-center">
+      <div className="w-full max-w-md">
+        <Tab>
+          <TabItem
+            icon={HomeIcon}
+            label="홈"
+            selected={pathname === APP_ROUTES.HOME}
+            onClick={() => {
+              router.push(APP_ROUTES.HOME);
+            }}
+          />
 
-      <TabItem
-        icon={LayersIcon}
-        label="덱"
-        selected={pathname === APP_ROUTES.DECK}
-        onClick={() => {
-          router.push(APP_ROUTES.DECK);
-        }}
-      />
+          <TabItem
+            icon={LayersIcon}
+            label="덱"
+            selected={pathname === APP_ROUTES.DECK}
+            onClick={() => {
+              router.push(APP_ROUTES.DECK);
+            }}
+          />
 
-      <TabItem
-        icon={ShirtIcon}
-        label="코디 등록"
-        selected={pathname === APP_ROUTES.UPLOAD}
-        onClick={() => {
-          router.push(APP_ROUTES.UPLOAD);
-        }}
-      />
-    </Tab>
+          <TabItem
+            icon={ShirtIcon}
+            label="코디 등록"
+            selected={pathname === APP_ROUTES.UPLOAD}
+            onClick={() => {
+              router.push(APP_ROUTES.UPLOAD);
+            }}
+          />
+        </Tab>
+      </div>
+    </div>
   );
 };
 

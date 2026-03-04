@@ -1,5 +1,5 @@
 import React from "react";
-import { AnimatePresence, motion, spring } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Spread = () => {
   const [isSpread, setIsSpread] = React.useState(false);

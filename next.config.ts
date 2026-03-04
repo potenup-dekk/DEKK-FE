@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         port: "3000",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com",
+        pathname: "/**",
+      },
     ],
   },
 };
