@@ -24,6 +24,16 @@ type CardItem = {
   id: string;
   cardId: number;
   imageUrl: string;
+  products: {
+    productId: number;
+    brand: string;
+    name: string;
+    productImageUrl: string;
+    productUrl: string;
+  }[];
+  height: number | null;
+  weight: number | null;
+  tags: string[] | null;
 };
 
 // type PicsumImage = {
@@ -142,6 +152,10 @@ const useCardStack = (isLoggedIn = false) => {
         imageUrl:
           "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/" +
             item.cardImageUrl || "",
+        products: item.products ?? [],
+        height: item.height,
+        weight: item.weight,
+        tags: item.tags ?? null,
       }));
 
       setCards((prev) => [...prev, ...nextCards]);

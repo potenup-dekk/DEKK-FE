@@ -21,6 +21,15 @@ export interface CardContentData {
   height: number | null;
   weight: number | null;
   tags: string[];
+  products?: CardProductData[];
+}
+
+export interface CardProductData {
+  productId: number;
+  brand: string;
+  name: string;
+  productImageUrl: string;
+  productUrl: string;
 }
 
 export async function getCards(page: number, size: number) {
