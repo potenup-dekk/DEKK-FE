@@ -6,7 +6,12 @@ import {
   useTransform,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { saveCardSwipeEvaluation, type SwipeType } from "@/shared/api/card";
+import {
+  getCards,
+  saveCardSwipeEvaluation,
+  type CardContentData,
+  type SwipeType,
+} from "@/shared/api/card";
 
 const MAX_X = 250;
 const MAX_ROTATE = 12;
@@ -20,28 +25,6 @@ type CardItem = {
   cardId: number;
   imageUrl: string;
 };
-
-interface CardResponse {
-  code: string;
-  message: string;
-  data: CardResponseData;
-}
-
-interface CardResponseData {
-  content: CardContentData[];
-  currentPage: number;
-  size: number;
-  totalElements: number;
-  hasNext: boolean;
-}
-
-interface CardContentData {
-  cardId: number;
-  cardImageUrl: string;
-  height: number | null;
-  weight: number | null;
-  tags: string[];
-}
 
 // type PicsumImage = {
 //   id: string;
@@ -148,14 +131,8 @@ const useCardStack = (isLoggedIn = false) => {
 
     try {
       const page = nextPageRef.current;
-      const response = await fetch(
-        `https://api.dekk.co.kr/w/v1/cards?page=${page}&size=${PICSUM_LIMIT}`,
-        // `https://picsum.photos/v2/list?page=${page}&limit=${PICSUM_LIMIT}`,
-      );
-
-      if (!response.ok) return;
-
-      const data = (await response.json()) as CardResponse;
+      const data = await getCards(page, PICSUM_LIMIT);
+      if (!data.data) return;
       console.log(data);
       nextPageRef.current += 1;
 
