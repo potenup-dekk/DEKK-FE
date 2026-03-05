@@ -6,7 +6,7 @@ import { clearTokens } from "@/shared/auth/tokenStorage";
 import { ActionButton } from "@/shared/components/Button";
 import ControlButton from "@/shared/components/Button/ControlButton";
 import { Card } from "@/shared/components/Card";
-import { ThumbsDown, RefreshCwIcon } from "lucide-react";
+import { ThumbsDown, RefreshCwIcon, HeartIcon } from "lucide-react";
 
 type ApiResponse<T> = { code: string; message: string; data: T };
 type Me = { email: string; status: "PENDING" | "ACTIVE" };
@@ -97,7 +97,7 @@ export default function Home() {
         />
         <ControlButton icon={RefreshCwIcon} label="뒤집기" color="secondary" />
         <ControlButton
-          icon={ThumbsDown}
+          icon={HeartIcon}
           label="마음에 들어요"
           onClick={() => {
             window.dispatchEvent(new Event("card:like"));
