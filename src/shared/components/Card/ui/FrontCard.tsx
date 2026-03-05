@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 
 interface FrontCardProps {
-  isLoggedIn?: boolean;
   cards: {
     id: string;
     imageUrl: string;
@@ -52,7 +51,6 @@ interface FrontCardProps {
 }
 
 const FrontCard = ({
-  isLoggedIn = false,
   cards,
   x,
   rotate,
@@ -158,7 +156,6 @@ const FrontCard = ({
       >
         <FrontFace imageUrl={frontImage} />
         <BackFace
-          isLoggedIn={isLoggedIn}
           height={height}
           weight={weight}
           products={products}
