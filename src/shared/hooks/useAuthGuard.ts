@@ -8,6 +8,9 @@ type GuardUser = {
   id?: number;
   email?: string;
   status?: UserStatus;
+  height?: number | null;
+  weight?: number | null;
+  gender?: "MALE" | "FEMALE" | "OTHER" | null;
 };
 
 type GuardResponse = {
