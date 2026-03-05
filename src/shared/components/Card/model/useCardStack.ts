@@ -19,10 +19,32 @@ type CardItem = {
   imageUrl: string;
 };
 
-type PicsumImage = {
-  id: string;
-  download_url: string;
-};
+interface CardResponse {
+  code: string;
+  message: string;
+  data: CardResponseData;
+}
+
+interface CardResponseData {
+  content: CardContentData[];
+  currentPage: number;
+  size: number;
+  totalElements: number;
+  hasNext: boolean;
+}
+
+interface CardContentData {
+  cardId: number;
+  cardImageUrl: string;
+  height: number | null;
+  weight: number | null;
+  tags: string[];
+}
+
+// type PicsumImage = {
+//   id: string;
+//   download_url: string;
+// };
 
 const useCardStack = () => {
   const [cards, setCards] = useState<CardItem[]>([]);
@@ -116,17 +138,21 @@ const useCardStack = () => {
     try {
       const page = nextPageRef.current;
       const response = await fetch(
-        `https://picsum.photos/v2/list?page=${page}&limit=${PICSUM_LIMIT}`,
+        `https://api.dekk.co.kr/w/v1/cards?page=${page}&size=${PICSUM_LIMIT}`,
+        // `https://picsum.photos/v2/list?page=${page}&limit=${PICSUM_LIMIT}`,
       );
 
       if (!response.ok) return;
 
-      const data = (await response.json()) as PicsumImage[];
+      const data = (await response.json()) as CardResponse;
+      console.log(data);
       nextPageRef.current += 1;
 
-      const nextCards = data.map((item, index) => ({
-        id: `${page}-${item.id}-${index}`,
-        imageUrl: item.download_url,
+      const nextCards = data.data.content?.map((item, index) => ({
+        id: `${page}-${item.cardId}-${index}`,
+        imageUrl:
+          "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/" +
+            item.cardImageUrl || "",
       }));
 
       setCards((prev) => [...prev, ...nextCards]);
