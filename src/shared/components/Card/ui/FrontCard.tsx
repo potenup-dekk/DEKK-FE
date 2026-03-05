@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 interface FrontCardProps {
+  isLoggedIn?: boolean;
   cards: {
     id: string;
     imageUrl: string;
@@ -36,9 +37,22 @@ interface FrontCardProps {
   opacity: MotionValue<number>;
   filter: MotionValue<string>;
   backdropFilter: MotionValue<string>;
+
+  products?: {
+    productId: number;
+    brand: string;
+    name: string;
+    productImageUrl: string;
+    productUrl: string;
+  }[];
+
+  height?: number | null;
+  weight?: number | null;
+  tags?: string[] | null;
 }
 
 const FrontCard = ({
+  isLoggedIn = false,
   cards,
   x,
   rotate,
@@ -52,6 +66,10 @@ const FrontCard = ({
   opacity,
   filter,
   backdropFilter,
+  products = [],
+  height = null,
+  weight = null,
+  tags = null,
 }: FrontCardProps) => {
   if (!cards || cards.length === 0) return null;
 
@@ -139,7 +157,13 @@ const FrontCard = ({
         onTap={() => Math.abs(x.get()) >= 20 || animateFlip()}
       >
         <FrontFace imageUrl={frontImage} />
-        <BackFace />
+        <BackFace
+          isLoggedIn={isLoggedIn}
+          height={height}
+          weight={weight}
+          products={products}
+          tags={tags}
+        />
       </motion.div>
     </motion.div>
   );
