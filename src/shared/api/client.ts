@@ -6,6 +6,15 @@ import {
 } from "@/shared/auth/tokenStorage";
 import { USE_MOCK } from "@/shared/constants/config";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+function resolveUrl(input: RequestInfo) {
+  if (typeof input !== "string") return input;
+  if (input.startsWith("http://") || input.startsWith("https://")) return input;
+  if (input.startsWith("/")) return `${API_BASE_URL}${input}`;
+  return input;
+}
+
 export type ApiError = {
   code: string;
   message: string;
@@ -52,7 +61,7 @@ async function refreshTokens(): Promise<{
 
   if (!refreshPromise) {
     refreshPromise = (async () => {
-      const res = await fetch("/w/v1/auth/refresh", {
+      const res = await fetch(resolveUrl("/w/v1/auth/refresh"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken }),
@@ -116,7 +125,7 @@ export async function requestJson<T>(
   }
 
   const doFetch = () =>
-    fetch(input, {
+    fetch(resolveUrl(input), {
       ...init,
       headers,
       credentials: "include",
