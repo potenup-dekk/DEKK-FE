@@ -6,6 +6,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { saveCardSwipeEvaluation, type SwipeType } from "@/shared/api/card";
 
 const MAX_X = 250;
 const MAX_ROTATE = 12;
@@ -16,6 +17,7 @@ const PICSUM_START_PAGE = 2;
 
 type CardItem = {
   id: string;
+  cardId: number;
   imageUrl: string;
 };
 
@@ -46,7 +48,7 @@ interface CardContentData {
 //   download_url: string;
 // };
 
-const useCardStack = () => {
+const useCardStack = (isLoggedIn = false) => {
   const [cards, setCards] = useState<CardItem[]>([]);
   const [isSwiping, setIsSwiping] = useState(false);
   const [removingCardId, setRemovingCardId] = useState<string | null>(null);
@@ -91,15 +93,24 @@ const useCardStack = () => {
     return loadingPromise;
   };
 
+  const saveSwipe = (swipeType: SwipeType) => {
+    const topCard = cards[0];
+    if (!isLoggedIn || !topCard?.cardId) return;
+
+    void saveCardSwipeEvaluation(topCard.cardId, { swipeType }).catch(() => {
+      return;
+    });
+  };
+
   // Like 액션 handler
   const onLike = () => {
-    console.log("like");
+    saveSwipe("LIKE");
     setRemovingCardId(cards[0]?.id || null);
   };
 
   // Dislike 액션 handler
   const onDislike = () => {
-    console.log("dislike");
+    saveSwipe("DISLIKE");
     setRemovingCardId(cards[0]?.id || null);
   };
 
@@ -150,6 +161,7 @@ const useCardStack = () => {
 
       const nextCards = data.data.content?.map((item, index) => ({
         id: `${page}-${item.cardId}-${index}`,
+        cardId: item.cardId,
         imageUrl:
           "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/" +
             item.cardImageUrl || "",
