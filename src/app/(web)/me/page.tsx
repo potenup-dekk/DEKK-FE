@@ -1,7 +1,11 @@
-import React from "react";
+import { ProfileClient } from "@/shared/widgets/ProfileClient";
 
 const MePage = () => {
-  return <div>MePage</div>;
+  return (
+    <div className="flex justify-center">
+      <ProfileClient />
+    </div>
+  );
 };
 
 export default MePage;

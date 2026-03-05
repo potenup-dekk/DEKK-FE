@@ -109,7 +109,14 @@ export async function GET() {
   }
 
   const userPayload = (await meResponse.json()) as {
-    data?: { id?: number; email?: string; status?: "PENDING" | "ACTIVE" };
+    data?: {
+      id?: number;
+      email?: string;
+      status?: "PENDING" | "ACTIVE";
+      height?: number | null;
+      weight?: number | null;
+      gender?: "MALE" | "FEMALE" | "OTHER" | null;
+    };
   };
 
   const response = NextResponse.json(
