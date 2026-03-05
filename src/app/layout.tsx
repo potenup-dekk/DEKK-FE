@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Tab, TabItem } from "@/shared/components/Tab";
+import { HomeIcon, LayersIcon } from "lucide-react";
+import Link from "next/link";
+import APP_ROUTES from "@/shared/constants/routes";
+import BottomTab from "@/shared/widgets/BottomTab/ui/BottomTab";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,8 +17,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="px-5">{children}</body>
+    <html lang="ko">
+      <body
+        className={`antialiased h-dvh w-full flex flex-col justify-between`}
+      >
+        <div className="w-full h-full items-center justify-center">
+          {children}
+        </div>
+
+        <BottomTab />
+      </body>
     </html>
   );
 }
