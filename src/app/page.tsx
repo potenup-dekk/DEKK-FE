@@ -42,7 +42,7 @@ export default function Home() {
 
         // 온보딩 미완료면 join으로 라우팅
         if (res.data.status === "PENDING") {
-          clearTokens();
+          await clearTokens();
           setMe(null);
           return;
         }
@@ -63,7 +63,7 @@ export default function Home() {
     } catch {
       // 실패해도 FE 토큰 삭제는 진행(서버가 stateless라 의미 없음)
     } finally {
-      clearTokens();
+      await clearTokens();
       setMe(null);
     }
   };

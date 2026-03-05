@@ -29,7 +29,7 @@ export default function LoginPage() {
         }
 
         if (res.data.status === "PENDING") {
-          clearTokens();
+          await clearTokens();
         }
       } catch {}
     })();

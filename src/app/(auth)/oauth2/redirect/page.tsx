@@ -16,24 +16,24 @@ function OAuthRedirectHandler() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const error = searchParams.get("error");
-    if (error) {
-      router.replace("/login");
-      return;
-    }
-
-    const accessToken = searchParams.get("accessToken");
-    const refreshToken = searchParams.get("refreshToken");
-
-    if (!accessToken || !refreshToken) {
-      router.replace("/login");
-      return;
-    }
-
-    setTokens(accessToken, refreshToken);
-
     (async () => {
+      const error = searchParams.get("error");
+      if (error) {
+        router.replace("/login");
+        return;
+      }
+
+      const accessToken = searchParams.get("accessToken");
+      const refreshToken = searchParams.get("refreshToken");
+
+      if (!accessToken || !refreshToken) {
+        router.replace("/login");
+        return;
+      }
+
       try {
+        await setTokens(accessToken, refreshToken);
+
         const res = await requestJson<ApiResponse<UserMe>>("/w/v1/users/me", {
           method: "GET",
         });
