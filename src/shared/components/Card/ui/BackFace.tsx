@@ -36,7 +36,10 @@ const BackFace = ({ products, tags }: BackFaceProps) => {
                       brandName={brand}
                       productName={name}
                       productOriginUrl={productUrl}
-                      productImageUrl={productImageUrl}
+                      productImageUrl={
+                        "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/" +
+                        productImageUrl
+                      }
                     />
                   ),
                 )}
