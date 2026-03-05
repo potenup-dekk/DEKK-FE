@@ -72,7 +72,6 @@ export async function requestJson<T>(
     fetch(resolveUrl(input), {
       ...init,
       headers,
-      credentials: "include",
     });
 
   const res = await doFetch();
