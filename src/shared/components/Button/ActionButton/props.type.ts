@@ -5,11 +5,11 @@ type Size = "lg" | "md" | "sm";
 
 interface ActionButtonProps {
   label: string;
-
   color?: Color;
   size?: Size;
-
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  type?: "button" | "submit" | "reset";
+  className?: string;
 }
 
 export type { ActionButtonProps };
