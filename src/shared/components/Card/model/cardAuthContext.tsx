@@ -15,7 +15,10 @@ type CardAuthProviderProps = {
   children: ReactNode;
 };
 
-export function CardAuthProvider({ isLoggedIn, children }: CardAuthProviderProps) {
+export function CardAuthProvider({
+  isLoggedIn,
+  children,
+}: CardAuthProviderProps) {
   return (
     <CardAuthContext.Provider value={{ isLoggedIn }}>
       {children}

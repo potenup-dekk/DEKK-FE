@@ -155,7 +155,12 @@ const FrontCard = ({
         onTap={() => Math.abs(x.get()) >= 20 || animateFlip()}
       >
         <FrontFace imageUrl={frontImage} />
-        <BackFace height={height} weight={weight} products={products} tags={tags} />
+        <BackFace
+          height={height}
+          weight={weight}
+          products={products}
+          tags={tags}
+        />
       </motion.div>
     </motion.div>
   );
