@@ -4,11 +4,33 @@ import { useEffect, useState } from "react";
 import { requestJson } from "@/shared/api/client";
 import { clearTokens } from "@/shared/auth/tokenStorage";
 import { ActionButton } from "@/shared/components/Button";
+import ControlButton from "@/shared/components/Button/ControlButton";
+import { Card } from "@/shared/components/Card";
+import { ThumbsDown, RefreshCwIcon } from "lucide-react";
 
 type ApiResponse<T> = { code: string; message: string; data: T };
 type Me = { email: string; status: "PENDING" | "ACTIVE" };
 
-export default function HomePage() {
+export default function Home() {
+  useEffect(() => {
+    // if (!true) return;
+
+    const { body, documentElement } = document;
+    const prevBodyOverflow = body.style.overflow;
+    const prevBodyTouchAction = body.style.touchAction;
+    const prevHtmlOverscroll = documentElement.style.overscrollBehavior;
+
+    body.style.overflow = "hidden";
+    body.style.touchAction = "none"; // 모바일 터치 스크롤 방지
+    documentElement.style.overscrollBehavior = "none"; // 바운스/체인 스크롤 방지
+
+    return () => {
+      body.style.overflow = prevBodyOverflow;
+      body.style.touchAction = prevBodyTouchAction;
+      documentElement.style.overscrollBehavior = prevHtmlOverscroll;
+    };
+  }, []);
+
   const [me, setMe] = useState<Me | null>(null);
 
   useEffect(() => {
@@ -47,7 +69,13 @@ export default function HomePage() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-dvh w-full items-center justify-center">
+      <div className="flex relative h-fit max-w-md w-full items-center justify-center m-2">
+        <Card />
+        {/* <Flip /> */}
+        {/* <Spread /> */}
+      </div>
+
       <div>{me ? `로그인: ${me.email} (${me.status})` : "비로그인"}</div>
 
       {me ? (
@@ -58,6 +86,24 @@ export default function HomePage() {
           onClick={() => (window.location.href = "/login")}
         />
       )}
+
+      <div className="flex items-center justify-between w-full gap-2">
+        <ControlButton
+          icon={ThumbsDown}
+          label="별로예요"
+          onClick={() => {
+            window.dispatchEvent(new Event("card:dislike"));
+          }}
+        />
+        <ControlButton icon={RefreshCwIcon} label="뒤집기" color="secondary" />
+        <ControlButton
+          icon={ThumbsDown}
+          label="마음에 들어요"
+          onClick={() => {
+            window.dispatchEvent(new Event("card:like"));
+          }}
+        />
+      </div>
     </div>
   );
 }
