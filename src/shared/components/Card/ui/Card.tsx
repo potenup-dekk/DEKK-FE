@@ -53,6 +53,10 @@ const Card = () => {
             key={cards[0].id}
             cards={cards}
             frontImage={frontImage}
+            products={cards[0].products}
+            height={cards[0].height}
+            weight={cards[0].weight}
+            tags={cards[0].tags}
             x={x}
             rotate={rotate}
             rotateYSpring={rotateYSpring}
