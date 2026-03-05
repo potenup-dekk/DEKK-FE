@@ -1,4 +1,5 @@
 interface ProductProps {
+  productId: number;
   brandName: string;
   productName: string;
   productImageUrl: string;

@@ -51,6 +51,7 @@ const Card = ({ isLoggedIn = false }: CardProps) => {
       {cards.length > 0 && !removingCardId && (
         <FrontCard
           key={cards[0].id}
+          isLoggedIn={isLoggedIn}
           cards={cards}
           frontImage={frontImage}
           x={x}

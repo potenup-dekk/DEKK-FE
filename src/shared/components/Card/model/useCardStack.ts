@@ -133,7 +133,7 @@ const useCardStack = (isLoggedIn = false) => {
       const page = nextPageRef.current;
       const data = await getCards(page, PICSUM_LIMIT);
       if (!data.data) return;
-      console.log(data);
+
       nextPageRef.current += 1;
 
       const nextCards = data.data.content?.map((item, index) => ({
@@ -193,8 +193,6 @@ const useCardStack = (isLoggedIn = false) => {
     if (cards.length < INITIAL_CARD_COUNT) {
       void appendNextPage();
     }
-
-    console.log(cards);
   }, [cards.length]);
 
   const frontImage = cards[0]?.imageUrl;
