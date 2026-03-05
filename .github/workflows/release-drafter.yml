@@ -1,0 +1,17 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main # 배포 기준 브랜치
+
+jobs:
+  update_release_draft:
+    permissions:
+      contents: write # Release를 생성/수정하기 위한 권한
+      pull-requests: read # PR 라벨을 읽기 위한 권한
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 별도 설정 없이 GitHub에서 자동 제공
