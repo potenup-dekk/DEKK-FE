@@ -6,7 +6,11 @@ import FrontCard from "./FrontCard";
 import { motion } from "framer-motion";
 import BackCard from "./BackCard";
 
-const Card = () => {
+interface CardProps {
+  isLoggedIn?: boolean;
+}
+
+const Card = ({ isLoggedIn = false }: CardProps) => {
   const {
     setCards,
     rotate,
@@ -26,7 +30,7 @@ const Card = () => {
     setRemovingCardId,
     onLike,
     onDislike,
-  } = useCardStack();
+  } = useCardStack(isLoggedIn);
 
   return (
     <AnimatePresence
