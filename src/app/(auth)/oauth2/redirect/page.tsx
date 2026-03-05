@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { setTokens } from "@/shared/auth/tokenStorage";
 import { requestJson } from "@/shared/api/client";
-import { USE_MOCK } from "@/shared/constants/config";
 
 type ApiResponse<T> = { code: string; message: string; data: T };
 
@@ -12,7 +11,7 @@ type UserMe = {
   status: "PENDING" | "ACTIVE";
 };
 
-export default function OAuthRedirectPage() {
+function OAuthRedirectHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -20,12 +19,6 @@ export default function OAuthRedirectPage() {
     const error = searchParams.get("error");
     if (error) {
       router.replace("/login");
-      return;
-    }
-
-    if (USE_MOCK) {
-      setTokens("mock_access_token", "mock_refresh_token");
-      router.replace("/join");
       return;
     }
 
@@ -53,4 +46,12 @@ export default function OAuthRedirectPage() {
   }, [router, searchParams]);
 
   return <div>로그인 처리 중…</div>;
+}
+
+export default function OAuthRedirectPage() {
+  return (
+    <Suspense fallback={<div>로그인 처리 중…</div>}>
+      <OAuthRedirectHandler />
+    </Suspense>
+  );
 }
