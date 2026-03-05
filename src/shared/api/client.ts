@@ -1,17 +1,10 @@
-import {
-  getAccessToken,
-  getRefreshToken,
-  setTokens,
-  clearTokens,
-} from "@/shared/auth/tokenStorage";
 import { USE_MOCK } from "@/shared/constants/config";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 
 function resolveUrl(input: RequestInfo) {
   if (typeof input !== "string") return input;
   if (input.startsWith("http://") || input.startsWith("https://")) return input;
-  if (input.startsWith("/")) return `${API_BASE_URL}${input}`;
+  if (input.startsWith("/api/")) return input;
+  if (input.startsWith("/")) return `/api/proxy${input}`;
   return input;
 }
 
@@ -39,51 +32,7 @@ export class ApiRequestError extends Error {
   }
 }
 
-type RefreshResponse = {
-  code: string;
-  message: string;
-  data: { accessToken: string; refreshToken: string };
-};
-
 type UserStatus = "PENDING" | "ACTIVE";
-
-let refreshPromise: Promise<{
-  accessToken: string;
-  refreshToken: string;
-} | null> | null = null;
-
-async function refreshTokens(): Promise<{
-  accessToken: string;
-  refreshToken: string;
-} | null> {
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) return null;
-
-  if (!refreshPromise) {
-    refreshPromise = (async () => {
-      const res = await fetch(resolveUrl("/w/v1/auth/refresh"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken }),
-        credentials: "include",
-      });
-
-      if (!res.ok) return null;
-
-      const json = (await res.json()) as RefreshResponse;
-      const tokens = json?.data;
-
-      if (!tokens?.accessToken || !tokens?.refreshToken) return null;
-
-      setTokens(tokens.accessToken, tokens.refreshToken);
-      return tokens;
-    })().finally(() => {
-      refreshPromise = null;
-    });
-  }
-
-  return refreshPromise;
-}
 
 export async function requestJson<T>(
   input: RequestInfo,
@@ -119,11 +68,6 @@ export async function requestJson<T>(
     headers.set("Content-Type", "application/json");
   }
 
-  const accessToken = getAccessToken();
-  if (accessToken && !headers.has("Authorization")) {
-    headers.set("Authorization", `Bearer ${accessToken}`);
-  }
-
   const doFetch = () =>
     fetch(resolveUrl(input), {
       ...init,
@@ -131,21 +75,7 @@ export async function requestJson<T>(
       credentials: "include",
     });
 
-  let res = await doFetch();
-
-  if (res.status === 401) {
-    const tokens = await refreshTokens();
-    if (!tokens) {
-      clearTokens();
-      throw new ApiRequestError(
-        401,
-        "인증이 만료되었습니다. 다시 로그인 해주세요.",
-      );
-    }
-
-    headers.set("Authorization", `Bearer ${tokens.accessToken}`);
-    res = await doFetch();
-  }
+  const res = await doFetch();
 
   const contentType = res.headers.get("content-type") ?? "";
   const isJson = contentType.includes("application/json");
@@ -161,10 +91,6 @@ export async function requestJson<T>(
     } catch {
       payload = null;
     }
-  }
-
-  if (res.status === 401) {
-    clearTokens();
   }
 
   throw new ApiRequestError(
