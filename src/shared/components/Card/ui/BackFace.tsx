@@ -5,8 +5,11 @@ import { BackFaceProps } from "../props.type";
 import { motion } from "framer-motion";
 import { Product } from "../../Product";
 import { Tag } from "../../Badge";
+import { useCardAuth } from "../model/cardAuthContext";
 
-const BackFace = ({ isLoggedIn = false, products, tags }: BackFaceProps) => {
+const BackFace = ({ products, tags }: BackFaceProps) => {
+  const { isLoggedIn } = useCardAuth();
+
   return (
     <motion.div
       className="absolute inset-0 flex p-6 text-white bg-white rounded-lg "

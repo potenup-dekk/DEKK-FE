@@ -71,7 +71,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-full w-full items-center justify-center">
       <div className="flex relative h-fit max-w-md w-full items-center justify-center m-2">
-        <Card isLoggedIn={!!me} />
+        <Card />
         {/* <Flip /> */}
         {/* <Spread /> */}
       </div>

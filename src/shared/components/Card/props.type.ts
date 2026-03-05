@@ -11,7 +11,6 @@ interface FrontFaceProps {
 }
 
 interface BackFaceProps {
-  isLoggedIn?: boolean;
   height: number | null;
   weight: number | null;
 
