@@ -1,0 +1,48 @@
+template: |
+  ## What's Changed 🚀
+  $CHANGES
+
+# 1. 라벨별 카테고리 분류 (릴리즈 노트에 보일 제목)
+categories:
+  - title: "🆕 신규 기능 (Features)"
+    labels:
+      - "✨ FEATURE"
+  - title: "🚑 긴급 수정 (Hotfixes)"
+    labels:
+      - "🔥 HOTFIX"
+  - title: "🐛 버그 수정 (Bug Fixes)"
+    labels:
+      - "🐞 BUG"
+  - title: "⚙️ 코드 개선 및 리팩토링"
+    labels:
+      - "♻️ REFACTORING"
+      - "⚙️ CHORE"
+  - title: "📝 문서 및 테스트"
+    labels:
+      - "📄 DOCS"
+      - "✅ TEST"
+
+# 2. 릴리즈 노트 본문에서 제외할 라벨 (내부 관리용)
+exclude-labels:
+  - "🚀 RELEASE"
+  - "🔺 p0"
+  - "➖ p1"
+  - "🔻 p2"
+
+# 3. 라벨에 따른 자동 버전 업 연산 (SemVer)
+version-resolver:
+  major:
+    labels:
+      - "major"
+  minor:
+    labels:
+      - "✨ FEATURE"
+  patch:
+    labels:
+      - "🐞 BUG"
+      - "🔥 HOTFIX"
+      - "♻️ REFACTORING"
+      - "⚙️ CHORE"
+
+# 4. 개별 항목 표시 형식
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
