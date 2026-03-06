@@ -77,7 +77,7 @@ const FrontCard = ({
   return (
     <motion.div
       key={cards[0].id}
-      className="relative w-5/6 aspect-1/1.5 z-10 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden"
+      className="relative w-5/6 aspect-1/1.5 z-10 rounded-lg flex items-center justify-center cursor-pointer"
       drag
       dragSnapToOrigin
       dragConstraints={{ left: -80, right: 80, top: -80, bottom: 80 }}

@@ -3,7 +3,7 @@ import React from "react";
 
 const Profile = () => {
   return (
-    <button className="flex size-10 items-center justify-center bg-primary rounded-full text-white cursor-pointer">
+    <button className="flex size-fit p-1 items-center justify-center bg-primary rounded-full text-white cursor-pointer">
       <UserIcon size={24} />
     </button>
   );

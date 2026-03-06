@@ -15,7 +15,7 @@ const SocialButton = ({
       onClick={onClick}
       disabled={disabled}
       className={[
-        "flex items-center justify-center gap-2.5 min-w-75 w-full h-15 rounded-lg text-xl lh-1 py-1.5",
+        "flex items-center justify-center gap-2.5 min-w-75 w-full h-10 rounded-lg text-xl lh-1 py-1.5",
         disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className,
       ].join(" ")}
@@ -26,8 +26,8 @@ const SocialButton = ({
       // display:flex;
       // }
     >
-      <Image src={iconSrc} alt={iconAlt} width={24} height={24} />
-      <span>{label}</span>
+      <Image src={iconSrc} alt={iconAlt} width={21} height={21} />
+      <span className="text-sm">{label}</span>
     </button>
   );
 };
