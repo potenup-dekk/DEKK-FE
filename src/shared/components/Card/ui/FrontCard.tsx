@@ -36,6 +36,18 @@ interface FrontCardProps {
   opacity: MotionValue<number>;
   filter: MotionValue<string>;
   backdropFilter: MotionValue<string>;
+
+  products?: {
+    productId: number;
+    brand: string;
+    name: string;
+    productImageUrl: string;
+    productUrl: string;
+  }[];
+
+  height?: number | null;
+  weight?: number | null;
+  tags?: string[] | null;
 }
 
 const FrontCard = ({
@@ -52,6 +64,10 @@ const FrontCard = ({
   opacity,
   filter,
   backdropFilter,
+  products = [],
+  height = null,
+  weight = null,
+  tags = null,
 }: FrontCardProps) => {
   if (!cards || cards.length === 0) return null;
 
@@ -61,7 +77,7 @@ const FrontCard = ({
   return (
     <motion.div
       key={cards[0].id}
-      className="relative w-5/6 aspect-1/1.5 z-10 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden"
+      className="relative w-5/6 aspect-1/1.5 z-10 rounded-lg flex items-center justify-center cursor-pointer"
       drag
       dragSnapToOrigin
       dragConstraints={{ left: -80, right: 80, top: -80, bottom: 80 }}
@@ -139,7 +155,12 @@ const FrontCard = ({
         onTap={() => Math.abs(x.get()) >= 20 || animateFlip()}
       >
         <FrontFace imageUrl={frontImage} />
-        <BackFace />
+        <BackFace
+          height={height}
+          weight={weight}
+          products={products}
+          tags={tags}
+        />
       </motion.div>
     </motion.div>
   );

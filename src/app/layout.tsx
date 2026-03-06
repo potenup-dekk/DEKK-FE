@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import BottomTab from "@/shared/widgets/BottomTab/ui/BottomTab";
+import { Header } from "@/shared/widgets/Header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,9 +18,13 @@ export default function RootLayout({
       <body
         className={`antialiased h-dvh w-full flex flex-col justify-between`}
       >
-        <div className="mx-auto w-full max-w-md pb-20">{children}</div>
+        <div className="mx-auto size-full max-w-md">
+          <Header />
 
-        <BottomTab />
+          <div className="flex size-full pb-20">{children}</div>
+
+          <BottomTab />
+        </div>
       </body>
     </html>
   );

@@ -6,7 +6,12 @@ import {
   useTransform,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { saveCardSwipeEvaluation, type SwipeType } from "@/shared/api/card";
+import {
+  getCards,
+  saveCardSwipeEvaluation,
+  type CardContentData,
+  type SwipeType,
+} from "@/shared/api/card";
 
 const MAX_X = 250;
 const MAX_ROTATE = 12;
@@ -19,29 +24,17 @@ type CardItem = {
   id: string;
   cardId: number;
   imageUrl: string;
-};
-
-interface CardResponse {
-  code: string;
-  message: string;
-  data: CardResponseData;
-}
-
-interface CardResponseData {
-  content: CardContentData[];
-  currentPage: number;
-  size: number;
-  totalElements: number;
-  hasNext: boolean;
-}
-
-interface CardContentData {
-  cardId: number;
-  cardImageUrl: string;
+  products: {
+    productId: number;
+    brand: string;
+    name: string;
+    productImageUrl: string;
+    productUrl: string;
+  }[];
   height: number | null;
   weight: number | null;
-  tags: string[];
-}
+  tags: string[] | null;
+};
 
 // type PicsumImage = {
 //   id: string;
@@ -124,6 +117,7 @@ const useCardStack = (isLoggedIn = false) => {
       ease: "easeOut",
       onComplete: () => {
         setRemovingCardId(cards[0]?.id || null);
+        onDislike();
       },
     });
   };
@@ -138,6 +132,7 @@ const useCardStack = (isLoggedIn = false) => {
       ease: "easeOut",
       onComplete: () => {
         setRemovingCardId(cards[0]?.id || null);
+        onLike();
       },
     });
   };
@@ -148,15 +143,9 @@ const useCardStack = (isLoggedIn = false) => {
 
     try {
       const page = nextPageRef.current;
-      const response = await fetch(
-        `https://api.dekk.co.kr/w/v1/cards?page=${page}&size=${PICSUM_LIMIT}`,
-        // `https://picsum.photos/v2/list?page=${page}&limit=${PICSUM_LIMIT}`,
-      );
+      const data = await getCards(page, PICSUM_LIMIT);
+      if (!data.data) return;
 
-      if (!response.ok) return;
-
-      const data = (await response.json()) as CardResponse;
-      console.log(data);
       nextPageRef.current += 1;
 
       const nextCards = data.data.content?.map((item, index) => ({
@@ -165,6 +154,10 @@ const useCardStack = (isLoggedIn = false) => {
         imageUrl:
           "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/" +
             item.cardImageUrl || "",
+        products: item.products ?? [],
+        height: item.height,
+        weight: item.weight,
+        tags: item.tags ?? null,
       }));
 
       setCards((prev) => [...prev, ...nextCards]);
@@ -216,8 +209,6 @@ const useCardStack = (isLoggedIn = false) => {
     if (cards.length < INITIAL_CARD_COUNT) {
       void appendNextPage();
     }
-
-    console.log(cards);
   }, [cards.length]);
 
   const frontImage = cards[0]?.imageUrl;

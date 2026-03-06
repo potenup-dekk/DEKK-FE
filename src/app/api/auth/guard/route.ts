@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-const ACCESS_TOKEN_COOKIE = "dekk_access_token";
-const REFRESH_TOKEN_COOKIE = "dekk_refresh_token";
+const ACCESS_TOKEN_COOKIE = "accessToken";
+const REFRESH_TOKEN_COOKIE = "refreshToken";
 
 function apiBaseUrl() {
   return (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").replace(/\/$/, "");

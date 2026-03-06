@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { requestJson } from "@/shared/api/client";
 import { clearTokens } from "@/shared/auth/tokenStorage";
-import { ActionButton } from "@/shared/components/Button";
 import ControlButton from "@/shared/components/Button/ControlButton";
 import { Card } from "@/shared/components/Card";
-import { ThumbsDown, RefreshCwIcon } from "lucide-react";
+import { ThumbsDown, RefreshCwIcon, HeartIcon } from "lucide-react";
 
 type ApiResponse<T> = { code: string; message: string; data: T };
 type Me = { email: string; status: "PENDING" | "ACTIVE" };
@@ -54,40 +53,13 @@ export default function Home() {
     })();
   }, []);
 
-  const logout = async () => {
-    try {
-      // 현재는 더미지만, 규격 맞추기로 호출
-      await requestJson<ApiResponse<null>>("/w/v1/auth/logout", {
-        method: "POST",
-      });
-    } catch {
-      // 실패해도 FE 토큰 삭제는 진행(서버가 stateless라 의미 없음)
-    } finally {
-      await clearTokens();
-      setMe(null);
-    }
-  };
-
   return (
-    <div className="flex flex-col h-full w-full items-center justify-center">
-      <div className="flex relative h-fit max-w-md w-full items-center justify-center m-2">
-        <Card isLoggedIn={!!me} />
-        {/* <Flip /> */}
-        {/* <Spread /> */}
+    <div className="flex flex-col h-full w-full items-center justify-center gap-3">
+      <div className="flex relative max-w-md w-full items-center justify-center">
+        <Card />
       </div>
 
-      <div>{me ? `로그인: ${me.email} (${me.status})` : "비로그인"}</div>
-
-      {me ? (
-        <ActionButton label="로그아웃" onClick={logout} />
-      ) : (
-        <ActionButton
-          label="로그인 하러가기"
-          onClick={() => (window.location.href = "/login")}
-        />
-      )}
-
-      <div className="flex items-center justify-between w-full gap-2">
+      <div className="flex items-center justify-between w-5/6 gap-1">
         <ControlButton
           icon={ThumbsDown}
           label="별로예요"
@@ -97,7 +69,7 @@ export default function Home() {
         />
         <ControlButton icon={RefreshCwIcon} label="뒤집기" color="secondary" />
         <ControlButton
-          icon={ThumbsDown}
+          icon={HeartIcon}
           label="마음에 들어요"
           onClick={() => {
             window.dispatchEvent(new Event("card:like"));

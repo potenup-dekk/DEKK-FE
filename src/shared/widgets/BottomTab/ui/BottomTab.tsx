@@ -3,9 +3,7 @@
 import { Tab, TabItem } from "@/shared/components/Tab";
 import APP_ROUTES from "@/shared/constants/routes";
 import { HomeIcon, LayersIcon, ShirtIcon } from "lucide-react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
 
 const BottomTab = () => {
   const pathname = usePathname();
@@ -35,7 +33,7 @@ const BottomTab = () => {
 
           <TabItem
             icon={ShirtIcon}
-            label="코디 등록"
+            label="등록"
             selected={pathname === APP_ROUTES.UPLOAD}
             onClick={() => {
               router.push(APP_ROUTES.UPLOAD);
