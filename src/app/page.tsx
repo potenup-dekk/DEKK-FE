@@ -67,7 +67,14 @@ export default function Home() {
             window.dispatchEvent(new Event("card:dislike"));
           }}
         />
-        <ControlButton icon={RefreshCwIcon} label="뒤집기" color="secondary" />
+        <ControlButton
+          icon={RefreshCwIcon}
+          label="뒤집기"
+          color="secondary"
+          onClick={() => {
+            window.dispatchEvent(new Event("card:flip"));
+          }}
+        />
         <ControlButton
           icon={HeartIcon}
           label="마음에 들어요"
