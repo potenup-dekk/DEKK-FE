@@ -137,6 +137,11 @@ const useCardStack = (isLoggedIn = false) => {
     });
   };
 
+  // const flipAnimation = () => {
+  //   const flipEvent = new CustomEvent("card:flip");
+  //   window.dispatchEvent(flipEvent);
+  // };
+
   const appendNextPage = async () => {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
@@ -292,6 +297,18 @@ const useCardStack = (isLoggedIn = false) => {
       window.removeEventListener("card:dislike", handleDislikeTrigger);
     };
   }, [dislikeAnimation]);
+
+  useEffect(() => {
+    const handleFlipTrigger = () => {
+      animateFlip();
+    };
+
+    window.addEventListener("card:flip", handleFlipTrigger);
+
+    return () => {
+      window.removeEventListener("card:flip", handleFlipTrigger);
+    };
+  });
 
   useEffect(() => {
     const handleLikeTrigger = () => {
