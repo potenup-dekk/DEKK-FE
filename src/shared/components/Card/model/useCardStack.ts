@@ -281,6 +281,7 @@ const useCardStack = (isLoggedIn = false) => {
 
   useEffect(() => {
     const handleDislikeTrigger = () => {
+      onDislike();
       dislikeAnimation();
     };
 
@@ -293,6 +294,7 @@ const useCardStack = (isLoggedIn = false) => {
 
   useEffect(() => {
     const handleLikeTrigger = () => {
+      onLike();
       likeAnimation();
     };
 
