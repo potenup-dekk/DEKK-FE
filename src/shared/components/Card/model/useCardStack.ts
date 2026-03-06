@@ -117,6 +117,7 @@ const useCardStack = (isLoggedIn = false) => {
       ease: "easeOut",
       onComplete: () => {
         setRemovingCardId(cards[0]?.id || null);
+        onDislike();
       },
     });
   };
@@ -131,6 +132,7 @@ const useCardStack = (isLoggedIn = false) => {
       ease: "easeOut",
       onComplete: () => {
         setRemovingCardId(cards[0]?.id || null);
+        onLike();
       },
     });
   };
