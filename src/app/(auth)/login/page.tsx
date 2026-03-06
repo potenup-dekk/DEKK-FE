@@ -34,16 +34,14 @@ export default function LoginPage() {
       } catch {}
     })();
   }, [router]);
-  return (
-    <div className="flex flex-col justify-center items-center m-auto h-screen gap-2.5 max-w-md py-11">
-      <div className="flex flex-1 items-center">
-        <Image src="/logo_dekk.png" alt="DEKK" width={203} height={81} />
-      </div>
 
+  return (
+    <div className="flex flex-col justify-center h-full items-center m-auto gap-2.5 p-3">
       <div className="flex flex-col gap-3 w-full">
-        <span className="text-[#525252] text-[11px] text-center">
+        <span className="text-primary text-[11px] text-center">
           소셜 로그인으로 빠르게 시작하기
         </span>
+
         <GoogleLoginButton />
         <KakaoLoginButton />
       </div>

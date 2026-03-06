@@ -36,10 +36,6 @@ const Tab = ({ children }: TabProps) => {
           {children}
         </div>
       </div>
-
-      <Link href="./me">
-        <Profile />
-      </Link>
     </div>
   );
 };
