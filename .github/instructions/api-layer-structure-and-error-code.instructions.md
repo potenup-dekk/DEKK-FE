@@ -1,5 +1,5 @@
 ---
-description: "Use when creating or refactoring API modules under src/shared/api. Enforce fetcher/services folder structure, GET invocation policy (Route Handler or Server Component), non-GET via Server Actions, and handle request errors by response code field."
+description: "Use when creating or refactoring API modules under src/shared/api. Enforce fetcher/services/actions folder structure, GET invocation policy (Route Handler or Server Component), non-GET via Server Actions, and handle request errors by response code field."
 name: "API Layer Structure and Error Code Rules"
 applyTo: "src/shared/api/**/*.ts"
 ---
@@ -25,11 +25,20 @@ src/shared/api/
     ...
   services/
     ...
+  actions/
+    ...
 ```
 
 - Place low-level request utilities in `fetcher`.
 - Place domain API functions in `services`.
+- Place Server Action entry files in `actions`.
 - Do not mix domain service logic into `fetcher`.
+
+## Server Action Location Rule
+
+- For non-`GET` API entry points, create Server Actions under `src/shared/api/actions`.
+- Keep Server Action files focused on action orchestration and delegate request details to `services`/`fetcher`.
+- Do not place non-`GET` action entry points inside UI/component folders.
 
 ## HTTP Method Execution Rule
 
@@ -37,6 +46,7 @@ src/shared/api/
   - Route Handler for CSR use cases (client-facing cached fetch path)
   - Server Component for SSR use cases
 - For non-`GET` methods (`POST`, `PUT`, `PATCH`, `DELETE`), use Server Actions.
+- Keep those Server Action entry points in `src/shared/api/actions`.
 - Do not call non-`GET` APIs directly from client components.
 - Keep external API endpoints, auth headers, and sensitive request details hidden behind Server Actions.
 
