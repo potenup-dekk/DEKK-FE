@@ -54,12 +54,12 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full w-full items-center justify-center gap-3">
-      <div className="flex relative max-w-md w-full items-center justify-center">
+    <div className="flex h-full w-full flex-col items-center gap-3 overflow-hidden pb-2">
+      <div className="relative flex w-full max-w-md min-h-0 flex-1 items-center justify-center">
         <Card />
       </div>
 
-      <div className="flex items-center justify-between w-5/6 gap-1">
+      <div className="relative z-20 flex w-5/6 shrink-0 items-center justify-between gap-1">
         <ControlButton
           icon={ThumbsDown}
           label="별로예요"

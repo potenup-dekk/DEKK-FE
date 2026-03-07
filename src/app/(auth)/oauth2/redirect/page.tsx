@@ -45,12 +45,12 @@ function OAuthRedirectHandler() {
     })();
   }, [router, searchParams]);
 
-  return <div>로그인 처리 중…</div>;
+  return <></>;
 }
 
 export default function OAuthRedirectPage() {
   return (
-    <Suspense fallback={<div>로그인 처리 중…</div>}>
+    <Suspense fallback={<></>}>
       <OAuthRedirectHandler />
     </Suspense>
   );

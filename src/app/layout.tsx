@@ -16,12 +16,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`antialiased h-dvh w-full flex flex-col justify-between`}
+        className={`antialiased flex h-dvh w-full flex-col overflow-hidden`}
       >
-        <div className="mx-auto size-full max-w-md">
+        <div className="mx-auto flex h-full w-full max-w-md flex-col">
           <Header />
 
-          <div className="flex size-full pb-20">{children}</div>
+          <div className="flex min-h-0 flex-1 pb-20">{children}</div>
 
           <BottomTab />
         </div>

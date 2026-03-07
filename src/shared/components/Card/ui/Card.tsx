@@ -34,51 +34,53 @@ const Card = () => {
 
   return (
     <CardAuthProvider isLoggedIn={isAuthenticated}>
-      <AnimatePresence
-        onExitComplete={() => {
-          resetFlipState();
+      <div className="relative flex size-full min-h-0 items-center justify-center overflow-hidden">
+        <AnimatePresence
+          onExitComplete={() => {
+            resetFlipState();
 
-          setCards((prev) => {
-            if (prev.length === 0) return prev;
+            setCards((prev) => {
+              if (prev.length === 0) return prev;
 
-            const [, ...rest] = prev;
-            return rest;
-          });
+              const [, ...rest] = prev;
+              return rest;
+            });
 
-          x.set(0);
-          setIsSwiping(false);
-          setRemovingCardId(null);
-        }}
-      >
-        {/* front card */}
-        {cards.length > 0 && !removingCardId && (
-          <FrontCard
-            key={cards[0].id}
-            cards={cards}
-            frontImage={frontImage}
-            products={cards[0].products}
-            height={cards[0].height}
-            weight={cards[0].weight}
-            tags={cards[0].tags}
-            x={x}
-            rotate={rotate}
-            rotateYSpring={rotateYSpring}
-            animateFlip={animateFlip}
-            setIsSwiping={setIsSwiping}
-            onLike={onLike}
-            onDislike={onDislike}
-            background={background}
-            opacity={opacity}
-            filter={filter}
-            backdropFilter={backdropFilter}
-          />
-        )}
+            x.set(0);
+            setIsSwiping(false);
+            setRemovingCardId(null);
+          }}
+        >
+          {/* front card */}
+          {cards.length > 0 && !removingCardId && (
+            <FrontCard
+              key={cards[0].id}
+              cards={cards}
+              frontImage={frontImage}
+              products={cards[0].products}
+              height={cards[0].height}
+              weight={cards[0].weight}
+              tags={cards[0].tags}
+              x={x}
+              rotate={rotate}
+              rotateYSpring={rotateYSpring}
+              animateFlip={animateFlip}
+              setIsSwiping={setIsSwiping}
+              onLike={onLike}
+              onDislike={onDislike}
+              background={background}
+              opacity={opacity}
+              filter={filter}
+              backdropFilter={backdropFilter}
+            />
+          )}
 
-        {/* back card */}
-        {cards.length > 1 && (
-          <BackCard backImage={backImage} backScale={backScale} />
-        )}
-      </AnimatePresence>
+          {/* back card */}
+          {cards.length > 1 && (
+            <BackCard backImage={backImage} backScale={backScale} />
+          )}
+        </AnimatePresence>
+      </div>
     </CardAuthProvider>
   );
 };
