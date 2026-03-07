@@ -3,19 +3,13 @@
 import {
   motion,
   MotionValue,
-  useMotionTemplate,
   useMotionValue,
   useSpring,
   useTransform,
 } from "framer-motion";
 import BackFace from "./BackFace";
 import FrontFace from "./FrontFace";
-import {
-  CheckCircle,
-  CheckCircleIcon,
-  HeartIcon,
-  ThumbsDownIcon,
-} from "lucide-react";
+import { HeartIcon, ThumbsDownIcon } from "lucide-react";
 
 interface FrontCardProps {
   cards: {
@@ -77,7 +71,7 @@ const FrontCard = ({
   return (
     <motion.div
       key={cards[0].id}
-      className="relative w-5/6 aspect-1/1.5 z-10 rounded-lg flex items-center justify-center cursor-pointer"
+      className="relative z-10 h-full w-5/6 rounded-lg flex items-center justify-center cursor-pointer"
       drag
       dragSnapToOrigin
       dragConstraints={{ left: -80, right: 80, top: -80, bottom: 80 }}

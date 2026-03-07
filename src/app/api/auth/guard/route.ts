@@ -71,6 +71,13 @@ async function requestRefresh(baseUrl: string, refreshToken: string) {
 }
 
 export async function GET() {
+  if (process.env.NODE_ENV === "development") {
+    return NextResponse.json(
+      { authenticated: true, user: null },
+      { status: 200 },
+    );
+  }
+
   const baseUrl = apiBaseUrl();
   if (!baseUrl) {
     return NextResponse.json(
