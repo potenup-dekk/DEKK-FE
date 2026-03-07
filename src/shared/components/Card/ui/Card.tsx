@@ -20,6 +20,7 @@ const Card = () => {
     backdropFilter,
     background,
     animateFlip,
+    resetFlipState,
     backImage,
     opacity,
     x,
@@ -35,6 +36,8 @@ const Card = () => {
     <CardAuthProvider isLoggedIn={isAuthenticated}>
       <AnimatePresence
         onExitComplete={() => {
+          resetFlipState();
+
           setCards((prev) => {
             if (prev.length === 0) return prev;
 

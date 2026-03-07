@@ -275,6 +275,12 @@ const useCardStack = (isLoggedIn = false) => {
   const rotateY = useMotionValue(0);
   const rotateYSpring = useSpring(rotateY, { stiffness: 300, damping: 30 });
 
+  const resetFlipState = () => {
+    setIsFlipped(false);
+    rotateY.jump(0);
+    rotateYSpring.jump(0);
+  };
+
   const animateFlip = () => {
     const next = !isFlipped;
     setIsFlipped(next);
@@ -282,9 +288,8 @@ const useCardStack = (isLoggedIn = false) => {
   };
 
   useEffect(() => {
-    setIsFlipped(false);
-    rotateY.set(0);
-  }, [cards[0]?.id, rotateY]);
+    resetFlipState();
+  }, [cards[0]?.id]);
 
   useEffect(() => {
     const handleDislikeTrigger = () => {
@@ -333,6 +338,7 @@ const useCardStack = (isLoggedIn = false) => {
     backScale,
     rotateYSpring,
     animateFlip,
+    resetFlipState,
     isSwiping,
     setIsSwiping,
     setCards,
