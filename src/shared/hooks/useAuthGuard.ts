@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+const isLocalEnvironment = process.env.NODE_ENV === "development";
+
 type UserStatus = "PENDING" | "ACTIVE";
 
 type GuardUser = {
@@ -47,6 +49,14 @@ export function useAuthGuard(): UseAuthGuardResult {
   const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
+    if (isLocalEnvironment) {
+      setIsAuthenticated(true);
+      setUser(null);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
