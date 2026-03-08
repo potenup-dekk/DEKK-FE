@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+// development environment bypass for easier testing without authentication
 const isLocalEnvironment = process.env.NODE_ENV === "development";
 
 type UserStatus = "PENDING" | "ACTIVE";

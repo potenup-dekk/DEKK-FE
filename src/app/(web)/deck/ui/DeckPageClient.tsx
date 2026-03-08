@@ -24,8 +24,7 @@ const DeckPageClient = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 max-w-md items-center justify-center">
-      <Deck />
+    <div className="mx-auto w-full px-4 pb-24 pt-6 sm:px-6">
       <Deck />
     </div>
   );
