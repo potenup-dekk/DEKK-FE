@@ -1,7 +1,6 @@
-"use client";
-
 import type { InputFieldProps } from "./props.type";
 import { inputFieldStyle } from "./style";
+import InputFieldView from "./InputFieldView";
 
 const InputField = ({
   label,
@@ -30,36 +29,19 @@ const InputField = ({
   });
 
   return (
-    <div className={styles.root()}>
-      {label ? (
-        <label className={styles.label()} htmlFor={inputId}>
-          {label}
-        </label>
-      ) : null}
-
-      <input
-        id={inputId}
-        name={name}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        maxLength={maxLength}
-        className={styles.input()}
-        {...rest}
-      />
-
-      <div className={styles.bottom()}>
-        <span className={styles.message()}>
-          {!shouldShowCount ? message : null}
-        </span>
-
-        {shouldShowCount ? (
-          <span className={styles.count()}>
-            {value.length}/{maxLength}
-          </span>
-        ) : null}
-      </div>
-    </div>
+    <InputFieldView
+      label={label}
+      inputId={inputId}
+      name={name}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      maxLength={maxLength}
+      shouldShowCount={Boolean(shouldShowCount)}
+      message={message}
+      styles={styles}
+      rest={rest as Record<string, unknown>}
+    />
   );
 };
 

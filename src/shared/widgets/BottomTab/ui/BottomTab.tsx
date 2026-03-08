@@ -4,14 +4,16 @@ import { Tab, TabItem } from "@/shared/components/Tab";
 import APP_ROUTES from "@/shared/constants/routes";
 import { HomeIcon, LayersIcon, ShirtIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { bottomTabStyle } from "../style";
 
 const BottomTab = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const { root, inner } = bottomTabStyle();
 
   return (
-    <div className="fixed inset-x-0 bottom-0 flex justify-center">
-      <div className="w-full max-w-md">
+    <div className={root()}>
+      <div className={inner()}>
         <Tab>
           <TabItem
             icon={HomeIcon}

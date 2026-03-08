@@ -1,3 +1,3 @@
 import Tag from "./ui/Tag";
 
-export { Tag };
+export default Tag;

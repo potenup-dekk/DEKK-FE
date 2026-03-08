@@ -1,7 +1,7 @@
-type TokenPayload = {
+interface TokenPayload {
   accessToken: string;
   refreshToken: string;
-};
+}
 
 export async function setTokens(accessToken: string, refreshToken: string) {
   const payload: TokenPayload = { accessToken, refreshToken };

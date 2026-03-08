@@ -1,11 +1,14 @@
-export type ApiSuccess<T> = {
+export interface ApiResponse<T = unknown> {
   code: string;
   message: string;
-  data?: T; // data가 없을 수도 있음
-};
+  data?: T;
+  errors?: string[];
+}
 
-export type ApiError = {
-  code: string; // EG001 같은
+export type ApiSuccess<T> = ApiResponse<T>;
+
+export interface ApiError {
+  code: string;
   message: string;
-  errors?: string[]; // 문서에 배열로 옴
-};
+  errors?: string[];
+}

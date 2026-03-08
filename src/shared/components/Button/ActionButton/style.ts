@@ -1,15 +1,14 @@
-import clsx from "clsx";
 import { tv } from "tailwind-variants";
 
 const actionButtonStyle = tv({
-  base: clsx("cursor-pointer", "rounded-sm", "border"),
+  base: "cursor-pointer rounded-sm border",
 
   variants: {
     color: {
-      primary: clsx("text-white bg-primary", "border-primary"),
-      secondary: clsx("text-primary bg-white", "border-primary"),
-      cancel: clsx("text-white bg-error", "border-primary"),
-      disabled: clsx("text-gray bg-white", "border-gray"),
+      primary: "text-white bg-primary border-primary",
+      secondary: "text-primary bg-white border-primary",
+      cancel: "text-white bg-error border-primary",
+      disabled: "text-gray bg-white border-gray",
     },
 
     size: {

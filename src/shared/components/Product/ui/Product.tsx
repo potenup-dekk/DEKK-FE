@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ProductProps } from "../props.type";
 import { ActionButton } from "../../Button";
 import Link from "next/link";
+import { productStyle } from "../style";
 
 const Product = ({
   brandName,
@@ -9,13 +10,21 @@ const Product = ({
   productImageUrl,
   productOriginUrl,
 }: ProductProps) => {
-  return (
-    <div className="flex h-fit justify-center gap-3">
-      <Image className="size-10 rounded-lg" src={productImageUrl} alt="" />
+  const { root, image, content, brand, name } = productStyle();
 
-      <div className="flex flex-col flex-1 justify-between">
-        <span className="text-sm font-bold text-black">{brandName}</span>
-        <span className="text-[11px] text-black">{productName}</span>
+  return (
+    <div className={root()}>
+      <Image
+        className={image()}
+        src={productImageUrl}
+        width={40}
+        height={40}
+        alt={productName}
+      />
+
+      <div className={content()}>
+        <span className={brand()}>{brandName}</span>
+        <span className={name()}>{productName}</span>
       </div>
 
       <Link href={productOriginUrl} target="_blank">
