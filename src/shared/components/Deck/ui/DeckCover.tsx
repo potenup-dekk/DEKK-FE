@@ -1,5 +1,5 @@
 import React from "react";
-import { deckCardStyle } from "../style";
+import deckCardStyle from "../style";
 import clsx from "clsx";
 import { DeckCoverProps } from "../props.type";
 import { motion } from "framer-motion";

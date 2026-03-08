@@ -1,4 +1,5 @@
 import Tab from "./ui/Tab";
 import TabItem from "./ui/TabItem";
+import Profile from "./ui/Profile";
 
-export { Tab, TabItem };
+export { Profile, Tab, TabItem };

@@ -3,16 +3,16 @@ import { NextResponse } from "next/server";
 const ACCESS_TOKEN_COOKIE = "accessToken";
 const REFRESH_TOKEN_COOKIE = "refreshToken";
 
-function cookieOptions() {
+const cookieOptions = () => {
   return {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax" as const,
     path: "/",
   };
-}
+};
 
-function clearAuthCookies(response: NextResponse) {
+const clearAuthCookies = (response: NextResponse) => {
   response.cookies.set(ACCESS_TOKEN_COOKIE, "", {
     ...cookieOptions(),
     maxAge: 0,
@@ -21,12 +21,12 @@ function clearAuthCookies(response: NextResponse) {
     ...cookieOptions(),
     maxAge: 0,
   });
-}
+};
 
-type TokenPayload = {
+interface TokenPayload {
   accessToken?: string;
   refreshToken?: string;
-};
+}
 
 export async function POST(request: Request) {
   let payload: TokenPayload;

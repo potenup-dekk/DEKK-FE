@@ -1,20 +1,29 @@
 import Logo from "../../../../../public/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import Profile from "@/shared/components/Tab/ui/Profile";
+import { Profile } from "@/shared/components/Tab";
+import { headerStyle } from "../style";
 
 const Header = () => {
-  return (
-    <div className="grid grid-cols-3 justify-between items-center w-full h-16 p-5">
-      <div className="flex"></div>
+  const { root, left, center, right } = headerStyle();
 
-      <div className="flex items-center justify-center">
+  return (
+    <div className={root()}>
+      <div className={left()}></div>
+
+      <div className={center()}>
         <Link href={"/"}>
-          <Image src={Logo} width={90} alt="asdf" />
+          <Image
+            src={Logo}
+            width={90}
+            height={24}
+            alt="DEKK logo"
+            loading="eager"
+          />
         </Link>
       </div>
 
-      <div className="flex items-center justify-end">
+      <div className={right()}>
         <Link href="/me">
           <Profile />
         </Link>

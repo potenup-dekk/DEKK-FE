@@ -17,6 +17,12 @@ applyTo: "**/*.{ts,tsx}"
 - Component props with object shape
 - API response item models with object shape
 
+## Component Props File Rule
+
+- Define component type declarations in `model/props.type.ts`.
+- In `model/props.type.ts`, define the component contract as `interface {ComponentName}`.
+- Keep one component contract per file unless multiple tightly-coupled contracts are required.
+
 Example:
 
 ```ts

@@ -25,6 +25,13 @@ applyTo: "**/*.{ts,tsx}"
 - Prefer early returns to reduce nested condition blocks.
 - Keep control flow simple and shallow.
 
+## File Size Guideline
+
+- Keep files small and easy to scan.
+- Treat `~100 lines` as a soft guardrail, not a hard limit.
+- When a file grows because of mixed responsibilities, split by concern first (view/model/style/type/helper) instead of compressing code.
+- For UI-heavy modules, prefer component decomposition (for example, Atomic Design style separation) to keep each file focused and maintainable.
+
 ## Abstraction Level Rule
 
 - Keep each function at a single abstraction level.

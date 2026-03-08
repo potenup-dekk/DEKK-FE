@@ -3,6 +3,7 @@ description: "Use when writing or refactoring React/Next TypeScript files for fu
 name: "Frontend Function and Rendering Rules"
 applyTo: "**/*.{ts,tsx}"
 ---
+
 # Frontend Function And Rendering Rules
 
 ## Single File Principle
@@ -11,6 +12,9 @@ applyTo: "**/*.{ts,tsx}"
 - One file should focus on one concern (view, model logic, or type definition).
 - Do not mix multiple major concerns in one file.
 - Prefer splitting when a file starts combining rendering and data logic heavily.
+- Keep file length near or under `~100 lines` as a maintenance guardrail.
+- This is not a strict line-count rule; prioritize readability and responsibility split.
+- For components, split into smaller units (for example: Atomic Design style such as atom/molecule/organism roles) when scope grows.
 
 ## Arrow Function Rule
 

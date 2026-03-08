@@ -6,29 +6,29 @@ const isLocalEnvironment = process.env.NODE_ENV === "development";
 
 type UserStatus = "PENDING" | "ACTIVE";
 
-type GuardUser = {
+interface GuardUser {
   id?: number;
   email?: string;
   status?: UserStatus;
   height?: number | null;
   weight?: number | null;
   gender?: "MALE" | "FEMALE" | "OTHER" | null;
-};
+}
 
-type GuardResponse = {
+interface GuardResponse {
   authenticated: boolean;
   user?: GuardUser | null;
-};
+}
 
-type UseAuthGuardResult = {
+interface UseAuthGuardResult {
   isLoading: boolean;
   isAuthenticated: boolean;
   user: GuardUser | null;
   error: string | null;
   refetch: () => Promise<void>;
-};
+}
 
-async function fetchAuthGuard(): Promise<GuardResponse> {
+const fetchAuthGuard = async (): Promise<GuardResponse> => {
   const response = await fetch("/api/auth/guard", {
     method: "GET",
     credentials: "include",
@@ -40,9 +40,9 @@ async function fetchAuthGuard(): Promise<GuardResponse> {
   }
 
   return (await response.json()) as GuardResponse;
-}
+};
 
-export function useAuthGuard(): UseAuthGuardResult {
+const useAuthGuard = (): UseAuthGuardResult => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<GuardUser | null>(null);
@@ -88,4 +88,6 @@ export function useAuthGuard(): UseAuthGuardResult {
     error,
     refetch,
   };
-}
+};
+
+export { useAuthGuard };

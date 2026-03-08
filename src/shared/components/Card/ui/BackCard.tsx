@@ -1,8 +1,7 @@
-"use client";
-
 import { motion, useSpring } from "framer-motion";
 import Image from "next/image";
 import React from "react";
+import { cardStyle } from "../style";
 
 interface BackCardProps {
   backImage: string;
@@ -10,13 +9,15 @@ interface BackCardProps {
 }
 
 const BackCard = ({ backImage, backScale }: BackCardProps) => {
+  const { backRoot, backInner } = cardStyle();
+
   return (
     <motion.div
       key={"back"}
-      className="absolute h-full w-5/6 bg-gray-200 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden"
+      className={backRoot()}
       style={{ scale: backScale }}
     >
-      <motion.div className="size-full">
+      <motion.div className={backInner()}>
         <Image
           src={backImage}
           className="size-full object-cover"
