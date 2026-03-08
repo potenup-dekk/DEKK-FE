@@ -1,0 +1,74 @@
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import { deckHeroBackdropMotion } from "../model/animate";
+import type { DeckCardItem } from "../model/deckState.helpers";
+import useDeckHeroGesture from "../model/useDeckHeroGesture";
+import deckStyle from "../style";
+import DeckHeroActions from "./DeckHeroActions";
+import DeckHeroCard from "./DeckHeroCard";
+
+interface DeckHeroOverlayProps {
+  selectedCard: DeckCardItem | null;
+  isOpen: boolean;
+  isFlipped: boolean;
+  onClose: () => void;
+  onDeleteCard: () => void;
+  onFlip: () => void;
+  onOpenCreateDeckSheet: () => void;
+}
+
+const DeckHeroOverlay = ({
+  selectedCard,
+  isOpen,
+  isFlipped,
+  onClose,
+  onDeleteCard,
+  onFlip,
+  onOpenCreateDeckSheet,
+}: DeckHeroOverlayProps) => {
+  const { heroBackdrop, heroContainer } = deckStyle();
+  const { onDragEnd, onTap, x, y } = useDeckHeroGesture({
+    onSwipeClose: onClose,
+    onTapFlip: onFlip,
+  });
+
+  return (
+    <AnimatePresence>
+      {isOpen && selectedCard ? (
+        <>
+          <motion.div
+            className={heroBackdrop()}
+            initial={deckHeroBackdropMotion.initial}
+            animate={deckHeroBackdropMotion.animate}
+            exit={deckHeroBackdropMotion.exit}
+          />
+          <motion.section
+            className={heroContainer()}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <DeckHeroCard
+              card={selectedCard}
+              isFlipped={isFlipped}
+              gestureBindings={{
+                x,
+                y,
+                onDragEnd,
+                onTap,
+              }}
+            />
+            <DeckHeroActions
+              onClose={onClose}
+              onDeleteCard={onDeleteCard}
+              onOpenCreateDeckSheet={onOpenCreateDeckSheet}
+            />
+          </motion.section>
+        </>
+      ) : null}
+    </AnimatePresence>
+  );
+};
+
+export default DeckHeroOverlay;

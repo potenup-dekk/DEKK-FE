@@ -7,7 +7,7 @@ import Tag from "../../Badge";
 import { useCardAuth } from "../model/cardAuthContext";
 import { backFaceMotionStyle } from "../model/animate";
 import { MOCK_PRODUCTS } from "../model/mockProducts";
-import ProductList from "./ProductList";
+import ProductList from "@/shared/components/ProductList";
 import { GoogleLoginButton, KakaoLoginButton } from "../../Button";
 
 const BackFace = ({ products, tags }: BackFaceProps) => {

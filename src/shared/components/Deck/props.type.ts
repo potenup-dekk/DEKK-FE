@@ -1,13 +1,20 @@
-import { MotionStyle } from "framer-motion";
-
-interface DeckCardProps {
-  style?: MotionStyle;
+interface DeckCardItemProps {
+  cardId: number;
+  name: string;
+  imageSrc: string;
 }
 
-interface DeckCoverProps {
-  onClick?: () => void;
-
-  style?: MotionStyle;
+interface DeckItemProps {
+  deckId: number;
+  name: string;
+  isSystem: boolean;
+  previewImageSrcList: string[];
+  cards: DeckCardItemProps[];
 }
 
-export type { DeckCardProps, DeckCoverProps };
+interface DeckOriginOffsetProps {
+  x: number;
+  y: number;
+}
+
+export type { DeckCardItemProps, DeckItemProps, DeckOriginOffsetProps };

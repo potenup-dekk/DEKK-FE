@@ -1,39 +1,65 @@
-import { motion } from "framer-motion";
+import type {
+  DeckCardItem,
+  DeckOriginOffset,
+} from "../model/deckState.helpers";
+import deckStyle from "../style";
 import DeckCard from "./DeckCard";
-import { deckCardLayoutTransition } from "../model/animate";
 
 interface DeckCardListProps {
-  isOpen: boolean;
-  isCollapsedAfterAnimation: boolean;
-  visibleCardIndexes: number[];
+  cards: DeckCardItem[];
+  radialOrigin: DeckOriginOffset;
+  isClosing: boolean;
+  isLoading: boolean;
+  errorMessage: string | null;
+  onRetry: () => void;
+  onSelectCard: (cardId: number) => void;
 }
 
 const DeckCardList = ({
-  isOpen,
-  isCollapsedAfterAnimation,
-  visibleCardIndexes,
+  cards,
+  radialOrigin,
+  isClosing,
+  isLoading,
+  errorMessage,
+  onRetry,
+  onSelectCard,
 }: DeckCardListProps) => {
+  const { cardGrid, emptyMessage, statusRetryButton } = deckStyle();
+
+  if (isLoading) {
+    return <div className={emptyMessage()}>카드를 불러오는 중입니다.</div>;
+  }
+
+  if (errorMessage) {
+    return (
+      <div className={emptyMessage()}>
+        <p>{errorMessage}</p>
+        <button type="button" className={statusRetryButton()} onClick={onRetry}>
+          다시 시도
+        </button>
+      </div>
+    );
+  }
+
+  if (!cards.length) {
+    return <div className={emptyMessage()}>아직 카드가 없습니다.</div>;
+  }
+
   return (
-    <>
-      {visibleCardIndexes.map((cardIndex) => (
-        <motion.div
-          key={cardIndex}
-          layout
-          transition={deckCardLayoutTransition}
-          className={isOpen ? "" : "absolute"}
-        >
+    <div className={cardGrid()}>
+      {cards.map((card, index) => {
+        return (
           <DeckCard
-            style={
-              isCollapsedAfterAnimation
-                ? {
-                    rotate: (cardIndex + 1) * 4,
-                  }
-                : undefined
-            }
+            key={card.id}
+            card={card}
+            index={index}
+            radialOrigin={radialOrigin}
+            isClosing={isClosing}
+            onSelect={onSelectCard}
           />
-        </motion.div>
-      ))}
-    </>
+        );
+      })}
+    </div>
   );
 };
 

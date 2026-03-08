@@ -1,41 +1,146 @@
+import { X } from "lucide-react";
 import { motion } from "framer-motion";
-import clsx from "clsx";
+import type { DeckItem, DeckOriginOffset } from "../model/deckState.helpers";
+import type { DefaultDeckFetchStatus } from "../model/useDeckState.types";
+import deckStyle from "../style";
 import DeckCover from "./DeckCover";
 import DeckCardList from "./DeckCardList";
 
 interface DeckFrameProps {
-  isOpen: boolean;
-  isCollapsedAfterAnimation: boolean;
-  visibleCardIndexes: number[];
-  handleCoverClick: () => void;
+  decks: DeckItem[];
+  activeDeck: DeckItem | null;
+  mode: "closed" | "open" | "hero" | "closing";
+  radialOrigin: DeckOriginOffset;
+  defaultDeckFetchStatus: DefaultDeckFetchStatus;
+  defaultDeckFetchError: string | null;
+  onOpenDeck: (deckId: number, sourceRect: DOMRect) => void;
+  onRetryLoadDefaultDeck: () => void;
+  onCloseDeck: () => void;
+  onSelectCard: (cardId: number) => void;
 }
 
-const DeckFrame = ({
-  isOpen,
-  isCollapsedAfterAnimation,
-  visibleCardIndexes,
-  handleCoverClick,
-}: DeckFrameProps) => {
+interface DeckGridLayerProps {
+  decks: DeckItem[];
+  hiddenDeckId: number | null;
+  onOpenDeck: (deckId: number, sourceRect: DOMRect) => void;
+}
+
+interface OpenDeckLayerProps {
+  deck: DeckItem;
+  radialOrigin: DeckOriginOffset;
+  isClosing: boolean;
+  defaultDeckFetchStatus: DefaultDeckFetchStatus;
+  defaultDeckFetchError: string | null;
+  onCloseDeck: () => void;
+  onRetryLoadDefaultDeck: () => void;
+  onSelectCard: (cardId: number) => void;
+}
+
+const DeckGridLayer = ({ decks, hiddenDeckId, onOpenDeck }: DeckGridLayerProps) => {
+  const { deckGrid } = deckStyle();
+
   return (
-    <motion.div
-      className={clsx(
-        "grid-cols-3 gap-5",
-        isOpen
-          ? "fixed inset-y-0 left-1/2 z-40 w-full max-w-md -translate-x-1/2 overflow-y-auto p-5"
-          : "relative z-10",
-      )}
-      style={{ display: isOpen ? "grid" : "flex" }}
+    <div className={deckGrid()}>
+      {decks.map((deck) => {
+        if (deck.id === hiddenDeckId) {
+          return null;
+        }
+
+        return <DeckCover key={deck.id} deck={deck} onOpen={onOpenDeck} />;
+      })}
+    </div>
+  );
+};
+
+const OpenDeckLayer = ({
+  deck,
+  radialOrigin,
+  isClosing,
+  defaultDeckFetchStatus,
+  defaultDeckFetchError,
+  onCloseDeck,
+  onRetryLoadDefaultDeck,
+  onSelectCard,
+}: OpenDeckLayerProps) => {
+  const {
+    closeButton,
+    openContent,
+    openDescription,
+    openHeader,
+    openLayer,
+    openTitle,
+  } =
+    deckStyle();
+
+  return (
+    <motion.section
+      className={openLayer()}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
     >
-      <DeckCover
-        onClick={handleCoverClick}
-        style={{ display: isOpen ? "absolute" : "" }}
+      <div className={openContent()}>
+        <header className={openHeader()}>
+          <div>
+            <h2 className={openTitle()}>{deck.name}</h2>
+            <p className={openDescription()}>{`${deck.cards.length}개의 카드`}</p>
+          </div>
+          <button type="button" className={closeButton()} onClick={onCloseDeck}>
+            <X size={18} />
+          </button>
+        </header>
+
+        <DeckCardList
+          cards={deck.cards}
+          radialOrigin={radialOrigin}
+          isClosing={isClosing}
+          isLoading={deck.isSystem && defaultDeckFetchStatus === "loading"}
+          errorMessage={deck.isSystem ? defaultDeckFetchError : null}
+          onRetry={onRetryLoadDefaultDeck}
+          onSelectCard={onSelectCard}
+        />
+      </div>
+    </motion.section>
+  );
+};
+
+const DeckFrame = ({
+  decks,
+  activeDeck,
+  mode,
+  radialOrigin,
+  defaultDeckFetchStatus,
+  defaultDeckFetchError,
+  onOpenDeck,
+  onRetryLoadDefaultDeck,
+  onCloseDeck,
+  onSelectCard,
+}: DeckFrameProps) => {
+  const isOpenLayerVisible = mode !== "closed" && activeDeck;
+  const isClosing = mode === "closing";
+  const hiddenDeckId = isOpenLayerVisible ? activeDeck.id : null;
+
+  return (
+    <>
+      <DeckGridLayer
+        decks={decks}
+        hiddenDeckId={hiddenDeckId}
+        onOpenDeck={onOpenDeck}
       />
-      <DeckCardList
-        isOpen={isOpen}
-        isCollapsedAfterAnimation={isCollapsedAfterAnimation}
-        visibleCardIndexes={visibleCardIndexes}
-      />
-    </motion.div>
+
+      {isOpenLayerVisible ? (
+        <OpenDeckLayer
+          deck={activeDeck}
+          radialOrigin={radialOrigin}
+          isClosing={isClosing}
+          defaultDeckFetchStatus={defaultDeckFetchStatus}
+          defaultDeckFetchError={defaultDeckFetchError}
+          onCloseDeck={onCloseDeck}
+          onRetryLoadDefaultDeck={onRetryLoadDefaultDeck}
+          onSelectCard={onSelectCard}
+        />
+      ) : null}
+    </>
   );
 };
 
