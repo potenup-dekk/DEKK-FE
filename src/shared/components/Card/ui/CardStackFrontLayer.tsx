@@ -1,11 +1,16 @@
 import FrontCard from "./FrontCard";
 import type { UseCardStackResult } from "../model/useCardStack.types";
+import type { CardDisplayOptions } from "../model/props.type";
 
 interface CardStackFrontLayerProps {
   cardStack: UseCardStackResult;
+  displayOptions: CardDisplayOptions;
 }
 
-const CardStackFrontLayer = ({ cardStack }: CardStackFrontLayerProps) => {
+const CardStackFrontLayer = ({
+  cardStack,
+  displayOptions,
+}: CardStackFrontLayerProps) => {
   const { cards, frontImage } = cardStack;
   const frontCard = cards[0];
 
@@ -30,6 +35,11 @@ const CardStackFrontLayer = ({ cardStack }: CardStackFrontLayerProps) => {
       opacity={cardStack.opacity}
       filter={cardStack.filter}
       backdropFilter={cardStack.backdropFilter}
+      isCardCompressed={displayOptions.isCardCompressed}
+      isFocusMode={displayOptions.isFocusMode}
+      compressedCardHeight={displayOptions.compressedCardHeight}
+      expandedCardHeight={displayOptions.expandedCardHeight}
+      onToggleFocusMode={displayOptions.onToggleFocusMode}
     />
   );
 };

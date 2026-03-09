@@ -18,6 +18,11 @@ const FrontCard = (props: FrontCardProps) => {
       setIsSwiping={props.setIsSwiping}
       onLike={props.onLike}
       onDislike={props.onDislike}
+      isCardCompressed={props.isCardCompressed}
+      isFocusMode={props.isFocusMode}
+      compressedCardHeight={props.compressedCardHeight}
+      expandedCardHeight={props.expandedCardHeight}
+      onToggleFocusMode={props.onToggleFocusMode}
     >
       <FrontCardOverlay
         background={props.background}
