@@ -44,12 +44,22 @@ const flipAnimationTransition = {
 const backCardScaleAnimation = {
   duration: 0.4,
   type: "spring",
-  stiffness: 300,
-  damping: 20,
+  stiffness: 220,
+  damping: 30,
+} as const;
+
+const cardResizeTransition = {
+  type: "spring",
+  stiffness: 145,
+  damping: 36,
+  mass: 1,
+  restDelta: 0.08,
+  restSpeed: 0.08,
 } as const;
 
 export {
   backCardScaleAnimation,
+  cardResizeTransition,
   backFaceMotionStyle,
   flipAnimationTransition,
   frontCardDragConstraints,

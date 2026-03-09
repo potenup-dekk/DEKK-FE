@@ -5,6 +5,7 @@ import useCardStack from "../model/useCardStack";
 import CardStackContent from "./CardStackContent";
 import { useAuthGuard } from "@/shared/hooks";
 import { CardAuthProvider } from "../model/cardAuthContext";
+import type { CardDisplayOptions } from "../model/props.type";
 
 const APPEND_INTERVAL = 3;
 
@@ -14,7 +15,13 @@ const moveFrontCardToBack = <T,>(items: T[]) => {
   return [...rest, frontCard];
 };
 
-const Card = () => {
+const Card = ({
+  isCardCompressed,
+  isFocusMode,
+  compressedCardHeight,
+  expandedCardHeight,
+  onToggleFocusMode,
+}: CardDisplayOptions) => {
   const { isAuthenticated } = useAuthGuard();
   const cardStack = useCardStack(isAuthenticated);
   const swipeCycleCountRef = useRef(0);
@@ -38,6 +45,13 @@ const Card = () => {
       <CardStackContent
         cardStack={cardStack}
         onExitComplete={handleExitComplete}
+        displayOptions={{
+          isCardCompressed,
+          isFocusMode,
+          compressedCardHeight,
+          expandedCardHeight,
+          onToggleFocusMode,
+        }}
       />
     </CardAuthProvider>
   );

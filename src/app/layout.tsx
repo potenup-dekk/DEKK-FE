@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import LayoutBodyClient from "@/app/ui/LayoutBodyClient";
 import BottomTab from "@/shared/widgets/BottomTab";
 import Header from "@/shared/widgets/Header";
+import { LayoutChromeVisibilityProvider } from "@/shared/hooks";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,13 +20,15 @@ const RootLayout = ({
       <body
         className={`antialiased flex h-dvh w-full flex-col overflow-hidden`}
       >
-        <div className="mx-auto flex h-full w-full max-w-md flex-col">
-          <Header />
+        <LayoutChromeVisibilityProvider>
+          <div className="mx-auto flex h-full w-full max-w-md flex-col">
+            <Header />
 
-          <div className="flex min-h-0 flex-1 pb-20">{children}</div>
+            <LayoutBodyClient>{children}</LayoutBodyClient>
 
-          <BottomTab />
-        </div>
+            <BottomTab />
+          </div>
+        </LayoutChromeVisibilityProvider>
       </body>
     </html>
   );
