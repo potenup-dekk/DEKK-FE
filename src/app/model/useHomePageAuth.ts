@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { clearTokensAction } from "@/shared/api/actions";
+import { getMyInfo } from "@/features/profile";
+import { logout } from "@/shared/api/services";
 
 interface Me {
   email: string;
@@ -10,38 +11,21 @@ interface UseHomePageAuthResult {
   me: Me | null;
 }
 
-interface AuthGuardResponse {
-  authenticated: boolean;
-  user?: Me | null;
-}
-
 const useHomePageAuth = (): UseHomePageAuthResult => {
   const [me, setMe] = useState<Me | null>(null);
 
   useEffect(() => {
     const syncUser = async () => {
       try {
-        const response = await fetch("/api/auth/guard", {
-          method: "GET",
-          credentials: "include",
-          cache: "no-store",
-        });
+        const response = await getMyInfo();
+        const user = response.data;
 
-        if (!response.ok) {
-          setMe(null);
-          return;
-        }
-
-        const { authenticated, user } =
-          (await response.json()) as AuthGuardResponse;
-
-        if (!authenticated || !user) {
+        if (!user) {
           setMe(null);
           return;
         }
 
         if (user.status === "PENDING") {
-          await clearTokensAction();
           setMe(null);
           return;
         }

@@ -1,9 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { getMyInfo } from "@/features/profile";
 
 // development environment bypass for easier testing without authentication
-const isLocalEnvironment = process.env.NODE_ENV === "development";
+// const isLocalEnvironment = process.env.NODE_ENV === "development";
+const isLocalEnvironment = false;
 
 type UserStatus = "PENDING" | "ACTIVE";
 
@@ -16,11 +18,6 @@ interface GuardUser {
   gender?: "MALE" | "FEMALE" | "OTHER" | null;
 }
 
-interface GuardResponse {
-  authenticated: boolean;
-  user?: GuardUser | null;
-}
-
 interface UseAuthGuardResult {
   isLoading: boolean;
   isAuthenticated: boolean;
@@ -28,20 +25,6 @@ interface UseAuthGuardResult {
   error: string | null;
   refetch: () => Promise<void>;
 }
-
-const fetchAuthGuard = async (): Promise<GuardResponse> => {
-  const response = await fetch("/api/auth/guard", {
-    method: "GET",
-    credentials: "include",
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    throw new Error("로그인 상태 확인에 실패했습니다.");
-  }
-
-  return (await response.json()) as GuardResponse;
-};
 
 const useAuthGuard = (): UseAuthGuardResult => {
   const [isLoading, setIsLoading] = useState(true);
@@ -62,9 +45,11 @@ const useAuthGuard = (): UseAuthGuardResult => {
     setError(null);
 
     try {
-      const result = await fetchAuthGuard();
-      setIsAuthenticated(result.authenticated);
-      setUser(result.authenticated ? (result.user ?? null) : null);
+      const result = await getMyInfo();
+      const nextUser = result.data ?? null;
+
+      setIsAuthenticated(Boolean(nextUser));
+      setUser(nextUser);
     } catch (err) {
       setIsAuthenticated(false);
       setUser(null);

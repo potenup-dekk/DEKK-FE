@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { setTokensAction } from "@/shared/api/actions";
 import { getMyInfo } from "@/features/profile";
 
 const OAuthRedirectClient = () => {
@@ -17,17 +16,7 @@ const OAuthRedirectClient = () => {
         return;
       }
 
-      const accessToken = searchParams.get("accessToken");
-      const refreshToken = searchParams.get("refreshToken");
-
-      if (!accessToken || !refreshToken) {
-        router.replace("/login");
-        return;
-      }
-
       try {
-        await setTokensAction(accessToken, refreshToken);
-
         const res = await getMyInfo();
         const status = res.data?.status;
 

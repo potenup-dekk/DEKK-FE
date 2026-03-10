@@ -5,13 +5,15 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Profile } from "@/shared/components/Tab";
-import { useLayoutChromeVisibility } from "@/shared/hooks";
+import { useAuthGuard, useLayoutChromeVisibility } from "@/shared/hooks";
 import { headerVariants } from "../model/animate";
 import { headerStyle } from "../style";
+import { ActionButton } from "@/shared/components/Button";
 
 const Header = () => {
   const { isChromeVisible } = useLayoutChromeVisibility();
   const { root, left, center, right } = headerStyle();
+  const { isAuthenticated } = useAuthGuard();
 
   return (
     <motion.div
@@ -39,9 +41,20 @@ const Header = () => {
         </div>
 
         <div className={right()}>
-          <Link href="/me">
-            <Profile />
-          </Link>
+          {isAuthenticated ? (
+            <Link href="/me">
+              <Profile />
+            </Link>
+          ) : (
+            <Link href="/login">
+              <ActionButton
+                color="primary"
+                label="로그인"
+                type="button"
+                size="sm"
+              />
+            </Link>
+          )}
         </div>
       </div>
     </motion.div>

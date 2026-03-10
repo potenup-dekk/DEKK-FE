@@ -2,10 +2,8 @@ import { tv } from "tailwind-variants";
 
 const joinPageStyle = tv({
   slots: {
-    form: "flex flex-col items-center gap-4 max-w-md h-screen m-auto",
-    logoWrap: "mt-25",
-    submitArea: "mt-auto mb-11 w-full text-center",
-    skipButton: "text-[#525252] text-xs text-center mt-3",
+    form: "flex flex-col justify-between items-center gap-4 w-full h-full p-4",
+    submitArea: "flex w-full text-center gap-2",
   },
 });
 

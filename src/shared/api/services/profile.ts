@@ -15,7 +15,6 @@ const isSuccessCode = (code: string) => {
 
 const assertProfileResponse = <T>(response: ApiResponse<T>) => {
   switch (response.code) {
-    case "USER_PROFILE_OK":
     case "SU20001":
     case "SU20002": {
       return response;
@@ -44,22 +43,41 @@ const getMyInfo = async () => {
 };
 
 const updateMyProfile = async (payload: UpdateMyProfilePayload) => {
-  const response = await requestJson<ApiResponse<null>>("/w/v1/users/me", {
-    method: "PATCH",
-    body: JSON.stringify(payload),
-  });
+  const response = await requestJson<ApiResponse<null> | null>(
+    "/w/v1/users/me",
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    },
+  );
+
+  if (!response) {
+    return {
+      code: "HTTP_NO_CONTENT",
+      message: "프로필 수정이 완료되었습니다.",
+      data: null,
+    } satisfies ApiResponse<null>;
+  }
 
   return assertProfileResponse(response);
 };
 
 const completeOnboarding = async (payload: OnboardingPayload) => {
-  const response = await requestJson<ApiResponse<null>>(
+  const response = await requestJson<ApiResponse<null> | null>(
     "/w/v1/users/onboarding",
     {
       method: "POST",
       body: JSON.stringify(payload),
     },
   );
+
+  if (!response) {
+    return {
+      code: "HTTP_NO_CONTENT",
+      message: "온보딩이 완료되었습니다.",
+      data: null,
+    } satisfies ApiResponse<null>;
+  }
 
   return assertProfileResponse(response);
 };
