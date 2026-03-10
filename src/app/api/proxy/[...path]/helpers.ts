@@ -1,13 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { copyRequestHeaders, copyResponseHeaders } from "./headerHelpers";
-import {
-  ACCESS_TOKEN_COOKIE,
-  REFRESH_TOKEN_COOKIE,
-  requestRefreshTokens,
-  applyTokenCookies,
-  clearTokenCookies,
-  type TokenPair,
-} from "./authHelpers";
 
 const apiBaseUrl = () => {
   return (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").replace(/\/$/, "");
@@ -46,15 +38,8 @@ const buildProxyRequest = async (
 };
 
 export {
-  ACCESS_TOKEN_COOKIE,
-  REFRESH_TOKEN_COOKIE,
   copyRequestHeaders,
   copyResponseHeaders,
-  requestRefreshTokens,
   readRequestBody,
   buildProxyRequest,
-  applyTokenCookies,
-  clearTokenCookies,
 };
-
-export type { TokenPair };

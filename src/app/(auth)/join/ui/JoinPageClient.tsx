@@ -9,25 +9,26 @@ import { joinPageStyle } from "./style";
 const JoinPageClient = () => {
   const { form, errors, isSubmitting, handleChange, handleSubmit, cancelJoin } =
     useJoinForm();
-  const { form: formStyle, logoWrap, submitArea, skipButton } = joinPageStyle();
+  const { form: formStyle, submitArea } = joinPageStyle();
 
   return (
     <form onSubmit={handleSubmit} className={formStyle()}>
-      <div className={logoWrap()}>
-        <Image src="/logo_dekk.png" alt="DEKK" width={203} height={81} />
+      <div className="flex flex-col w-full gap-2">
+        <JoinFormFields form={form} errors={errors} onChange={handleChange} />
       </div>
 
-      <JoinFormFields form={form} errors={errors} onChange={handleChange} />
-
       <div className={submitArea()}>
+        <ActionButton
+          type="button"
+          color="secondary"
+          label="취소"
+          onClick={cancelJoin}
+        />
         <ActionButton
           type="submit"
           label={isSubmitting ? "가입 처리 중…" : "가입하기"}
           className="w-full"
         />
-        <button type="button" onClick={cancelJoin} className={skipButton()}>
-          다음에 할게요
-        </button>
       </div>
     </form>
   );

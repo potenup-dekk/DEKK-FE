@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { clearTokensAction } from "@/shared/api/actions";
 import {
   GoogleLoginButton,
   KakaoLoginButton,
@@ -24,7 +23,7 @@ const LoginPageClient = () => {
     }
 
     if (user.status === "PENDING") {
-      void clearTokensAction();
+      router.replace("/join");
     }
   }, [isAuthenticated, isLoading, router, user?.status]);
 

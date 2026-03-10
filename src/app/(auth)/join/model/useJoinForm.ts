@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { clearTokensAction } from "@/shared/api/actions";
 import { getValidationErrors, submitOnboarding } from "./joinFormHelpers";
 import type { JoinFormErrors, JoinFormValue } from "./joinForm.types";
 
@@ -61,7 +60,6 @@ const createSubmitHandler = (
 const createCancelHandler = (router: ReturnType<typeof useRouter>) => {
   return async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    await clearTokensAction();
     router.replace("/login");
   };
 };

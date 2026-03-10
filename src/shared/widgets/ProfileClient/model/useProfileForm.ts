@@ -36,20 +36,23 @@ const useProfileForm = ({
     [form.gender, form.height, form.weight],
   );
 
-  const setFormFromUser = createFormFromUserSetter(setForm);
-  const handleChange = createChangeHandler(
-    setForm,
-    setFormErrors,
-    setSubmitError,
+  const setFormFromUser = useMemo(() => createFormFromUserSetter(setForm), []);
+  const handleChange = useMemo(
+    () => createChangeHandler(setForm, setFormErrors, setSubmitError),
+    [],
   );
-  const handleSubmit = createSubmitHandler(
-    form,
-    refetch,
-    onUnauthorized,
-    isSubmitting,
-    setSubmitError,
-    setFormErrors,
-    setIsSubmitting,
+  const handleSubmit = useMemo(
+    () =>
+      createSubmitHandler(
+        form,
+        refetch,
+        onUnauthorized,
+        isSubmitting,
+        setSubmitError,
+        setFormErrors,
+        setIsSubmitting,
+      ),
+    [form, isSubmitting, onUnauthorized, refetch],
   );
 
   return {

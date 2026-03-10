@@ -9,10 +9,19 @@ const createFormFromUserSetter = (
   setForm: React.Dispatch<React.SetStateAction<ProfileFormValue>>,
 ) => {
   return (nextUser: ProfileFormUser) => {
-    setForm({
+    const nextForm: ProfileFormValue = {
       height: nextUser.height == null ? "" : String(nextUser.height),
       weight: nextUser.weight == null ? "" : String(nextUser.weight),
       gender: nextUser.gender ?? "",
+    };
+
+    setForm((previousForm) => {
+      const isSameForm =
+        previousForm.height === nextForm.height &&
+        previousForm.weight === nextForm.weight &&
+        previousForm.gender === nextForm.gender;
+
+      return isSameForm ? previousForm : nextForm;
     });
   };
 };

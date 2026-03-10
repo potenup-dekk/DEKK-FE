@@ -2,7 +2,6 @@ const HOP_BY_HOP_REQUEST_HEADERS = new Set([
   "host",
   "connection",
   "content-length",
-  "cookie",
 ]);
 
 const HOP_BY_HOP_RESPONSE_HEADERS = new Set([
@@ -15,7 +14,6 @@ const HOP_BY_HOP_RESPONSE_HEADERS = new Set([
   "trailer",
   "transfer-encoding",
   "upgrade",
-  "set-cookie",
 ]);
 
 const copyRequestHeaders = (headers: Headers) => {

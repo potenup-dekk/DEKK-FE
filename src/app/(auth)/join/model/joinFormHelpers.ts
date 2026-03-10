@@ -1,6 +1,5 @@
 import { ApiRequestError } from "@/shared/api/fetcher/client";
-import { completeOnboardingAction } from "@/shared/api/actions";
-import { getMyInfo } from "@/features/profile";
+import { completeOnboarding, getMyInfo } from "@/features/profile";
 import type {
   JoinFormErrors,
   JoinFormValue,
@@ -92,7 +91,7 @@ const submitOnboarding = async (
   setErrors: React.Dispatch<React.SetStateAction<JoinFormErrors>>,
 ) => {
   try {
-    await completeOnboardingAction(buildPayload(form));
+    await completeOnboarding(buildPayload(form));
     const me = await getMyInfo();
     const status = me.data?.status;
 

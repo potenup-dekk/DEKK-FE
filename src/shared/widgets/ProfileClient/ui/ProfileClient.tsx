@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthGuard } from "@/shared/hooks";
 import useProfileForm from "../model/useProfileForm";
@@ -25,11 +26,25 @@ const ProfileClient = () => {
     setFormFromUser: profileForm.setFormFromUser,
   });
 
+  useEffect(() => {
+    if (isLoading || !isAuthenticated) {
+      return;
+    }
+
+    if (user?.status === "PENDING") {
+      router.replace("/join");
+    }
+  }, [isAuthenticated, isLoading, router, user?.status]);
+
   if (isLoading) {
     return <div className={loading()}>로그인 상태 확인 중…</div>;
   }
 
   if (!isAuthenticated) {
+    return null;
+  }
+
+  if (user?.status === "PENDING") {
     return null;
   }
 
