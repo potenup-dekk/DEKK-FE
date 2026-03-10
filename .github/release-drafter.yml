@@ -1,0 +1,38 @@
+template: |
+  ## What's Changed 🚀
+  $CHANGES
+
+categories:
+  - title: "[Features]"
+    labels:
+      - "✨ FEATURE"
+  - title: "[Hotfixes]"
+    labels:
+      - "🔥 HOTFIX"
+  - title: "[Bugs]"
+    labels:
+      - "🐞 BUG"
+  - title: "[Refactoring & Chores]"
+    labels:
+      - "♻️ REFACTORING"
+      - "⚙️ CHORE"
+  - title: "[Documentation & Tests]"
+    labels:
+      - "📄 DOCS"
+      - "✅ TEST"
+
+version-resolver:
+  major:
+    labels:
+      - "major"
+  minor:
+    labels:
+      - "✨ FEATURE"
+  patch:
+    labels:
+      - "🐞 BUG"
+      - "🔥 HOTFIX"
+      - "♻️ REFACTORING"
+      - "⚙️ CHORE"
+
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
