@@ -26,7 +26,13 @@ const SocialButton = ({
       // display:flex;
       // }
     >
-      <Image src={iconSrc} alt={iconAlt} width={21} height={21} />
+      <Image
+        src={iconSrc}
+        alt={iconAlt}
+        width={21}
+        height={21}
+        style={{ width: "auto", height: "auto" }}
+      />
       <span className="text-sm">{label}</span>
     </button>
   );

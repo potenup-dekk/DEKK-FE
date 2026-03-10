@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { TabProps } from "../props.type";
-import Link from "next/link";
-import Profile from "./Profile";
 import { Children, isValidElement } from "react";
 import { TabItemProps } from "../props.type";
+import {
+  getTabIndicatorAnimate,
+  tabIndicatorTransition,
+} from "../model/animate";
 
 const Tab = ({ children }: TabProps) => {
   const tabItems = Children.toArray(children).filter((child) =>
@@ -24,11 +26,8 @@ const Tab = ({ children }: TabProps) => {
           <motion.div
             className="absolute inset-y-0 rounded-full bg-primary"
             style={{ width: `${100 / tabItems.length}%` }}
-            animate={{
-              x: `${activeIndex * 100}%`,
-              opacity: selectedIndex >= 0 ? 1 : 0,
-            }}
-            transition={{ type: "spring", stiffness: 450, damping: 35 }}
+            animate={getTabIndicatorAnimate(activeIndex, selectedIndex >= 0)}
+            transition={tabIndicatorTransition}
           />
         )}
 

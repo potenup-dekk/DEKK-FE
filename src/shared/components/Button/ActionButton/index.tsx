@@ -1,5 +1,3 @@
-"use client";
-
 import { ActionButtonProps } from "./props.type";
 import actionButtonStyle from "./style";
 

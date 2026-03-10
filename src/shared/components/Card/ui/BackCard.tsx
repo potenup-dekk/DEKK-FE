@@ -1,22 +1,43 @@
-"use client";
-
 import { motion, useSpring } from "framer-motion";
 import Image from "next/image";
 import React from "react";
+import { cardResizeTransition } from "../model/animate";
+import { cardStyle } from "../style";
 
 interface BackCardProps {
   backImage: string;
   backScale: ReturnType<typeof useSpring>;
+  isCardCompressed: boolean;
+  isFocusMode: boolean;
+  compressedCardHeight: number | null;
+  expandedCardHeight: number | null;
 }
 
-const BackCard = ({ backImage, backScale }: BackCardProps) => {
+const BackCard = ({
+  backImage,
+  backScale,
+  isCardCompressed,
+  isFocusMode,
+  compressedCardHeight,
+  expandedCardHeight,
+}: BackCardProps) => {
+  const { backRoot, backInner } = cardStyle();
+  const targetCardHeight = isCardCompressed
+    ? compressedCardHeight
+    : expandedCardHeight;
+
   return (
     <motion.div
       key={"back"}
-      className="absolute w-5/6 aspect-1/1.5 bg-gray-200 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden"
-      style={{ scale: backScale }}
+      initial={false}
+      className={backRoot({ isCardCompressed })}
+      animate={targetCardHeight ? { height: targetCardHeight } : undefined}
+      transition={cardResizeTransition}
+      style={{
+        scale: backScale,
+      }}
     >
-      <motion.div className="size-full">
+      <motion.div className={backInner()}>
         <Image
           src={backImage}
           className="size-full object-cover"
