@@ -46,6 +46,7 @@ const Deck = () => {
       <DeckFrame
         decks={deckState.decks}
         activeDeck={deckState.activeDeck}
+        selectedCardId={deckState.selectedCard?.id ?? null}
         mode={deckState.mode}
         radialOrigin={deckState.radialOrigin}
         defaultDeckFetchStatus={deckState.defaultDeckFetchStatus}

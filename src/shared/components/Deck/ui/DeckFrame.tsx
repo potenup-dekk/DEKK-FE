@@ -9,6 +9,7 @@ import DeckCardList from "./DeckCardList";
 interface DeckFrameProps {
   decks: DeckItem[];
   activeDeck: DeckItem | null;
+  selectedCardId: number | null;
   mode: "closed" | "open" | "hero" | "closing";
   radialOrigin: DeckOriginOffset;
   defaultDeckFetchStatus: DefaultDeckFetchStatus;
@@ -27,6 +28,7 @@ interface DeckGridLayerProps {
 
 interface OpenDeckLayerProps {
   deck: DeckItem;
+  selectedCardId: number | null;
   radialOrigin: DeckOriginOffset;
   isClosing: boolean;
   defaultDeckFetchStatus: DefaultDeckFetchStatus;
@@ -36,7 +38,11 @@ interface OpenDeckLayerProps {
   onSelectCard: (cardId: number) => void;
 }
 
-const DeckGridLayer = ({ decks, hiddenDeckId, onOpenDeck }: DeckGridLayerProps) => {
+const DeckGridLayer = ({
+  decks,
+  hiddenDeckId,
+  onOpenDeck,
+}: DeckGridLayerProps) => {
   const { deckGrid } = deckStyle();
 
   return (
@@ -54,6 +60,7 @@ const DeckGridLayer = ({ decks, hiddenDeckId, onOpenDeck }: DeckGridLayerProps) 
 
 const OpenDeckLayer = ({
   deck,
+  selectedCardId,
   radialOrigin,
   isClosing,
   defaultDeckFetchStatus,
@@ -69,8 +76,7 @@ const OpenDeckLayer = ({
     openHeader,
     openLayer,
     openTitle,
-  } =
-    deckStyle();
+  } = deckStyle();
 
   return (
     <motion.section
@@ -92,6 +98,7 @@ const OpenDeckLayer = ({
 
         <DeckCardList
           cards={deck.cards}
+          hiddenCardId={selectedCardId}
           radialOrigin={radialOrigin}
           isClosing={isClosing}
           isLoading={deck.isSystem && defaultDeckFetchStatus === "loading"}
@@ -107,6 +114,7 @@ const OpenDeckLayer = ({
 const DeckFrame = ({
   decks,
   activeDeck,
+  selectedCardId,
   mode,
   radialOrigin,
   defaultDeckFetchStatus,
@@ -131,6 +139,7 @@ const DeckFrame = ({
       {isOpenLayerVisible ? (
         <OpenDeckLayer
           deck={activeDeck}
+          selectedCardId={selectedCardId}
           radialOrigin={radialOrigin}
           isClosing={isClosing}
           defaultDeckFetchStatus={defaultDeckFetchStatus}

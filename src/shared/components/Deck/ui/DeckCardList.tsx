@@ -7,6 +7,7 @@ import DeckCard from "./DeckCard";
 
 interface DeckCardListProps {
   cards: DeckCardItem[];
+  hiddenCardId: number | null;
   radialOrigin: DeckOriginOffset;
   isClosing: boolean;
   isLoading: boolean;
@@ -17,6 +18,7 @@ interface DeckCardListProps {
 
 const DeckCardList = ({
   cards,
+  hiddenCardId,
   radialOrigin,
   isClosing,
   isLoading,
@@ -25,6 +27,7 @@ const DeckCardList = ({
   onSelectCard,
 }: DeckCardListProps) => {
   const { cardGrid, emptyMessage, statusRetryButton } = deckStyle();
+  const visibleCards = cards.filter((card) => card.id !== hiddenCardId);
 
   if (isLoading) {
     return <div className={emptyMessage()}>카드를 불러오는 중입니다.</div>;
@@ -41,13 +44,13 @@ const DeckCardList = ({
     );
   }
 
-  if (!cards.length) {
+  if (!visibleCards.length) {
     return <div className={emptyMessage()}>아직 카드가 없습니다.</div>;
   }
 
   return (
     <div className={cardGrid()}>
-      {cards.map((card, index) => {
+      {visibleCards.map((card, index) => {
         return (
           <DeckCard
             key={card.id}

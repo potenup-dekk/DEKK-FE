@@ -17,7 +17,7 @@ const deckStyle = tv({
     coverMeta: "text-center text-[10px] leading-[1.2] text-zinc-500",
     systemBadge:
       "inline-flex items-center rounded-full border border-emerald-300/40 bg-emerald-500/20 px-2 py-0.5 text-[11px] font-medium text-emerald-100",
-    openLayer: "fixed inset-0 z-40 overflow-y-auto px-4 pb-20 pt-8",
+    openLayer: "fixed inset-0 z-50 overflow-y-auto px-4 pb-20 pt-8",
     openContent: "mx-auto w-full max-w-md",
     openHeader: "sticky mb-5 flex w-full items-center justify-between",
     openTitle: "text-lg font-semibold text-white",
@@ -33,11 +33,12 @@ const deckStyle = tv({
       "col-span-full flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/30 bg-black/30 p-10 text-center text-sm text-zinc-300",
     statusRetryButton:
       "rounded-lg border border-white/25 bg-black/30 px-4 py-2 text-xs text-white transition-colors hover:bg-black/50",
-    backdrop: "fixed inset-0 z-30 bg-black/45 backdrop-blur-sm",
-    heroBackdrop: "fixed inset-0 z-50 bg-black/45 backdrop-blur-md",
+    backdrop: "fixed inset-0 z-40 bg-black/45 backdrop-blur-sm",
+    heroBackdrop: "fixed inset-0 z-60 bg-black/45 backdrop-blur-md",
     heroContainer:
-      "fixed inset-0 z-50 flex flex-col items-center justify-center px-4 pb-10 pt-20",
-    heroCardFrame: "relative w-5/6 aspect-1/1.5 perspective-[1000px]",
+      "fixed inset-0 z-60 flex flex-col items-center justify-center px-4 pb-10 pt-20",
+    heroCardFrame:
+      "relative w-5/6 aspect-1/1.5 cursor-grab perspective-[1000px]",
     heroInner: "relative aspect-1/1.5 w-full transform-3d",
     heroFace:
       "absolute inset-0 overflow-hidden rounded-lg bg-gray-200 shadow-2xl",
@@ -53,9 +54,9 @@ const deckStyle = tv({
     heroActions: "mt-5 flex items-center gap-3",
     heroActionButton:
       "inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white transition-colors hover:bg-black/65",
-    sheetBackdrop: "fixed inset-0 z-60 bg-black/45 backdrop-blur-sm",
+    sheetBackdrop: "fixed inset-0 z-70 bg-black/45 backdrop-blur-sm",
     sheetPanel:
-      "fixed inset-x-0 bottom-0 z-61 mx-auto w-full max-w-xl rounded-t-3xl border border-white/20 bg-zinc-900 p-6",
+      "fixed inset-x-0 bottom-0 z-71 mx-auto w-full max-w-xl rounded-t-3xl border border-white/20 bg-zinc-900 p-6",
     sheetTitle: "text-base font-semibold text-white",
     sheetDescription: "mt-1 text-sm text-zinc-300",
     sheetInput:
