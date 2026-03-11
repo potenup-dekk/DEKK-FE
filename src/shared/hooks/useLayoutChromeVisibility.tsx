@@ -50,7 +50,7 @@ const useLayoutChromeVisibility = () => {
 
   if (!context) {
     throw new Error(
-      "useLayoutChromeVisibility must be used within LayoutChromeVisibilityProvider",
+      "useLayoutChromeVisibility는 LayoutChromeVisibilityProvider에서만 사용 가능합니다.",
     );
   }
 
