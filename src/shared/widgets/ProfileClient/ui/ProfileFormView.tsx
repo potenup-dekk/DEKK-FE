@@ -28,21 +28,7 @@ interface ProfileFormViewProps {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
-const ProfileFormView = ({
-  form,
-  formErrors,
-  submitError,
-  authError,
-  settingsError,
-  isSubmitting,
-  isReady,
-  isLoggingOut,
-  email,
-  onLogout,
-  onWithdraw,
-  handleChange,
-  handleSubmit,
-}: ProfileFormViewProps) => {
+const ProfileFormView = (props: ProfileFormViewProps) => {
   const { layout } = profileClientStyle();
 
   return (
@@ -55,22 +41,22 @@ const ProfileFormView = ({
 
         <Section>
           <ProfileSection
-            form={form}
-            formErrors={formErrors}
-            submitError={submitError}
-            authError={authError}
-            isSubmitting={isSubmitting}
-            isReady={isReady}
-            email={email}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
+            form={props.form}
+            formErrors={props.formErrors}
+            submitError={props.submitError}
+            authError={props.authError}
+            isSubmitting={props.isSubmitting}
+            isReady={props.isReady}
+            email={props.email}
+            handleChange={props.handleChange}
+            handleSubmit={props.handleSubmit}
           />
 
           <SettingsSection
-            settingsError={settingsError}
-            isLoggingOut={isLoggingOut}
-            onLogout={onLogout}
-            onWithdraw={onWithdraw}
+            settingsError={props.settingsError}
+            isLoggingOut={props.isLoggingOut}
+            onLogout={props.onLogout}
+            onWithdraw={props.onWithdraw}
           />
         </Section>
       </SelectTab>

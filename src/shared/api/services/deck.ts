@@ -1,6 +1,7 @@
 import { ApiRequestError, requestJson } from "@/shared/api/fetcher/client";
-import type { DeckSummaryData, DefaultDeckCardsResponse } from "@/entities/deck";
+import type { DefaultDeckCardsResponse } from "@/entities/deck";
 import type { ApiResponse } from "@/shared/types/api";
+import { toDeckSummaryList } from "./deck.parsers";
 
 const DEFAULT_DECK_SUCCESS_CODE = "SD20003" as const;
 const DEFAULT_DECK_DELETE_SUCCESS_CODES = ["SD20004", "SD20005"] as const;
@@ -24,77 +25,6 @@ const assertDeckResponse = <T>(response: ApiResponse<T>) => {
     response.code,
     response.errors,
   );
-};
-
-const toDeckSummaryData = (
-  raw: Record<string, unknown>,
-): DeckSummaryData | null => {
-  const deckIdValue = raw.deckId;
-  const nameValue = raw.name;
-  const typeValue = raw.type;
-  const cardCountValue = raw.cardCount;
-  const previewImageUrlsValue = raw.previewImageUrls;
-
-  if (typeof deckIdValue !== "number") {
-    return null;
-  }
-
-  if (typeof nameValue !== "string") {
-    return null;
-  }
-
-  if (typeValue !== "DEFAULT" && typeValue !== "CUSTOM") {
-    return null;
-  }
-
-  const cardCount = typeof cardCountValue === "number" ? cardCountValue : 0;
-  const previewImageUrls = Array.isArray(previewImageUrlsValue)
-    ? previewImageUrlsValue.filter(
-        (imageUrl): imageUrl is string => typeof imageUrl === "string",
-      )
-    : [];
-
-  return {
-    deckId: deckIdValue,
-    name: nameValue,
-    type: typeValue,
-    cardCount,
-    previewImageUrls,
-  };
-};
-
-const toDeckSummaryList = (data: unknown): DeckSummaryData[] => {
-  if (Array.isArray(data)) {
-    return data
-      .map((item) => {
-        if (!item || typeof item !== "object") {
-          return null;
-        }
-
-        return toDeckSummaryData(item as Record<string, unknown>);
-      })
-      .filter((item): item is DeckSummaryData => item !== null);
-  }
-
-  if (!data || typeof data !== "object") {
-    return [];
-  }
-
-  const wrappedContent = (data as { content?: unknown }).content;
-
-  if (!Array.isArray(wrappedContent)) {
-    return [];
-  }
-
-  return wrappedContent
-    .map((item) => {
-      if (!item || typeof item !== "object") {
-        return null;
-      }
-
-      return toDeckSummaryData(item as Record<string, unknown>);
-    })
-    .filter((item): item is DeckSummaryData => item !== null);
 };
 
 const getDecks = async () => {
@@ -144,10 +74,7 @@ const getDefaultDeckCards = async (page = 0, size = 100) => {
   return assertDeckResponse(response);
 };
 
-const deleteDefaultDeckCard = async (
-  cardId: number,
-  cookieHeader?: string,
-) => {
+const deleteDefaultDeckCard = async (cardId: number, cookieHeader?: string) => {
   const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
 
   const response = await requestJson<ApiResponse<null>>(

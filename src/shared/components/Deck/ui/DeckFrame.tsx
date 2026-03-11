@@ -1,10 +1,7 @@
-import { X } from "lucide-react";
-import { motion } from "framer-motion";
 import type { DeckItem, DeckOriginOffset } from "../model/deckState.helpers";
 import type { DefaultDeckFetchStatus } from "../model/useDeckState.types";
-import deckStyle from "../style";
-import DeckCover from "./DeckCover";
-import DeckCardList from "./DeckCardList";
+import DeckGridLayer from "./DeckGridLayer";
+import DeckOpenLayer from "./DeckOpenLayer";
 
 interface DeckFrameProps {
   decks: DeckItem[];
@@ -19,110 +16,6 @@ interface DeckFrameProps {
   onCloseDeck: () => void;
   onSelectCard: (cardId: number) => void;
 }
-
-interface DeckGridLayerProps {
-  decks: DeckItem[];
-  hiddenDeckId: number | null;
-  onOpenDeck: (deckId: number, sourceRect: DOMRect) => void;
-}
-
-interface OpenDeckLayerProps {
-  deck: DeckItem;
-  selectedCardId: number | null;
-  radialOrigin: DeckOriginOffset;
-  isClosing: boolean;
-  defaultDeckFetchStatus: DefaultDeckFetchStatus;
-  defaultDeckFetchError: string | null;
-  onCloseDeck: () => void;
-  onRetryLoadDefaultDeck: () => void;
-  onSelectCard: (cardId: number) => void;
-}
-
-const DeckGridLayer = ({
-  decks,
-  hiddenDeckId,
-  onOpenDeck,
-}: DeckGridLayerProps) => {
-  const { coverMeta, coverStack, coverTitle, deckGrid, emptyCoverStack } =
-    deckStyle();
-
-  return (
-    <div className={deckGrid()}>
-      {decks.map((deck) => {
-        if (deck.id === hiddenDeckId) {
-          return (
-            <div
-              key={deck.id}
-              className="flex w-25 flex-col items-center gap-1 text-center"
-              aria-hidden
-            >
-              <div className={coverStack()}>
-                <div className={`${emptyCoverStack()} opacity-0`} />
-              </div>
-              <div className={`${coverTitle()} opacity-0`}>placeholder</div>
-              <div className={`${coverMeta()} opacity-0`}>placeholder</div>
-            </div>
-          );
-        }
-
-        return <DeckCover key={deck.id} deck={deck} onOpen={onOpenDeck} />;
-      })}
-    </div>
-  );
-};
-
-const OpenDeckLayer = ({
-  deck,
-  selectedCardId,
-  radialOrigin,
-  isClosing,
-  defaultDeckFetchStatus,
-  defaultDeckFetchError,
-  onCloseDeck,
-  onRetryLoadDefaultDeck,
-  onSelectCard,
-}: OpenDeckLayerProps) => {
-  const {
-    closeButton,
-    openContent,
-    openDescription,
-    openHeader,
-    openLayer,
-    openTitle,
-  } = deckStyle();
-
-  return (
-    <motion.section
-      className={openLayer()}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <div className={openContent()}>
-        <header className={openHeader()}>
-          <div>
-            <h2 className={openTitle()}>{deck.name}</h2>
-            <p className={openDescription()}>{`${deck.cardCount}장의 카드`}</p>
-          </div>
-          <button type="button" className={closeButton()} onClick={onCloseDeck}>
-            <X size={18} />
-          </button>
-        </header>
-
-        <DeckCardList
-          cards={deck.cards}
-          hiddenCardId={selectedCardId}
-          radialOrigin={radialOrigin}
-          isClosing={isClosing}
-          isLoading={deck.isSystem && defaultDeckFetchStatus === "loading"}
-          errorMessage={deck.isSystem ? defaultDeckFetchError : null}
-          onRetry={onRetryLoadDefaultDeck}
-          onSelectCard={onSelectCard}
-        />
-      </div>
-    </motion.section>
-  );
-};
 
 const DeckFrame = ({
   decks,
@@ -150,7 +43,7 @@ const DeckFrame = ({
       />
 
       {isOpenLayerVisible ? (
-        <OpenDeckLayer
+        <DeckOpenLayer
           deck={activeDeck}
           selectedCardId={selectedCardId}
           radialOrigin={radialOrigin}

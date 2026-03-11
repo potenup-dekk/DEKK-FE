@@ -26,25 +26,43 @@ interface DeckHeroCardProps {
   gestureBindings?: DeckHeroCardGestureBindings;
 }
 
+interface DeckHeroBackContentProps {
+  card: DeckCardItem;
+}
+
+const DeckHeroBackContent = ({ card }: DeckHeroBackContentProps) => {
+  const { heroBackContent, heroFallbackText, heroTagList } = deckStyle();
+  const backfaceProducts = card.products ?? [];
+  const backfaceTags = card.tags ?? [];
+  const hasProducts = backfaceProducts.length > 0;
+  const hasTags = backfaceTags.length > 0;
+
+  return (
+    <div className={heroBackContent()}>
+      {hasProducts ? (
+        <ProductList items={backfaceProducts} useCdn />
+      ) : (
+        <p className={heroFallbackText()}>상품 정보가 없습니다.</p>
+      )}
+
+      {hasTags ? (
+        <div className={heroTagList()}>
+          {backfaceTags.map((tag, index) => {
+            return <Tag key={`${card.id}-${tag}-${index}`} label={tag} />;
+          })}
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
 const DeckHeroCard = ({
   card,
   isFlipped,
   gestureBindings,
 }: DeckHeroCardProps) => {
-  const {
-    heroBack,
-    heroBackContent,
-    heroCardFrame,
-    heroFace,
-    heroFallbackText,
-    heroImage,
-    heroInner,
-    heroTagList,
-  } = deckStyle();
-  const backfaceProducts = card.products ?? [];
-  const backfaceTags = card.tags ?? [];
-  const hasProducts = backfaceProducts.length > 0;
-  const hasTags = backfaceTags.length > 0;
+  const { heroBack, heroCardFrame, heroFace, heroImage, heroInner } =
+    deckStyle();
 
   return (
     <motion.div
@@ -73,21 +91,7 @@ const DeckHeroCard = ({
           </div>
         </div>
         <div className={heroBack()}>
-          <div className={heroBackContent()}>
-            {hasProducts ? (
-              <ProductList items={backfaceProducts} useCdn />
-            ) : (
-              <p className={heroFallbackText()}>상품 정보가 없습니다.</p>
-            )}
-
-            {hasTags ? (
-              <div className={heroTagList()}>
-                {backfaceTags.map((tag, index) => {
-                  return <Tag key={`${card.id}-${tag}-${index}`} label={tag} />;
-                })}
-              </div>
-            ) : null}
-          </div>
+          <DeckHeroBackContent card={card} />
         </div>
       </motion.div>
     </motion.div>

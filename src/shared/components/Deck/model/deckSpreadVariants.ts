@@ -1,7 +1,7 @@
 import type { Variants } from "framer-motion";
 import type { DeckOriginOffset } from "./deckState.helpers";
 
-const getDeckSpreadHiddenVariant = (_origin: DeckOriginOffset) => {
+const getDeckSpreadHiddenVariant = () => {
   return {
     x: 0,
     y: 20,
@@ -27,10 +27,7 @@ const getDeckSpreadVisibleVariant = (index: number) => {
   };
 };
 
-const getDeckSpreadExitVariant = (
-  _origin: DeckOriginOffset,
-  _index: number,
-) => {
+const getDeckSpreadExitVariant = () => {
   return {
     x: 0,
     y: 12,
@@ -46,13 +43,16 @@ const getDeckSpreadExitVariant = (
 };
 
 const deckSpreadCardVariants = (origin: DeckOriginOffset): Variants => {
+  void origin;
+
   return {
-    hidden: getDeckSpreadHiddenVariant(origin),
+    hidden: getDeckSpreadHiddenVariant(),
     visible: (index: number) => {
       return getDeckSpreadVisibleVariant(index);
     },
     exit: (index: number) => {
-      return getDeckSpreadExitVariant(origin, index);
+      void index;
+      return getDeckSpreadExitVariant();
     },
   };
 };

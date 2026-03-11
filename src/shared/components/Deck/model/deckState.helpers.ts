@@ -3,65 +3,22 @@ import type {
   DeckProductData,
   DeckSummaryData,
 } from "@/entities/deck";
-
-interface DeckCardProductItem {
-  productId: number;
-  brand: string;
-  name: string;
-  productImageUrl: string;
-  productUrl: string;
-}
-
-interface DeckCardItem {
-  id: number;
-  cardId: number;
-  name: string;
-  imageSrc: string;
-  height: number | null;
-  weight: number | null;
-  tags: string[];
-  products: DeckCardProductItem[];
-}
-
-interface DeckOriginOffset {
-  x: number;
-  y: number;
-}
-
-interface DeckItem {
-  id: number;
-  name: string;
-  isSystem: boolean;
-  cardCount: number;
-  previewImageSrcList: string[];
-  cards: DeckCardItem[];
-}
-
-const PREVIEW_IMAGE_SRC_LIST = [
-  "/goods/top.webp",
-  "/goods/shirts.webp",
-  "/goods/sweater.webp",
-] as const;
-
-const CARD_IMAGE_BASE_URL =
-  "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/";
+import { createCustomDeck, createInitialDecks } from "./deckState.factories";
+import {
+  normalizeDeckPreviewImageSrcList,
+  resolveCdnImageUrl,
+  toDefaultDeckPreviewImageSrcList,
+} from "./deckState.images";
+import type {
+  DeckCardItem,
+  DeckCardProductItem,
+  DeckItem,
+  DeckOriginOffset,
+} from "./deckState.types";
 
 const toDeckCardLayoutId = (cardId: number) => {
   return `deck-card-${cardId}`;
 };
-
-const resolveCdnImageUrl = (imageUrl: string) => {
-  if (!imageUrl) {
-    return PREVIEW_IMAGE_SRC_LIST[0];
-  }
-
-  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
-    return imageUrl;
-  }
-
-  return `${CARD_IMAGE_BASE_URL}${imageUrl}`;
-};
-
 const mapDeckProducts = (
   products: DeckProductData[] | undefined,
   cardId: number,
@@ -99,34 +56,6 @@ const mapDefaultDeckCards = (
   });
 };
 
-const toDefaultDeckPreviewImageSrcList = (cards: DeckCardItem[]) => {
-  const remotePreviewImages = cards.slice(0, 3).map((card) => card.imageSrc);
-
-  if (!remotePreviewImages.length) {
-    return [...PREVIEW_IMAGE_SRC_LIST];
-  }
-
-  return remotePreviewImages;
-};
-
-const buildDeckCards = (deckId: number, count: number): DeckCardItem[] => {
-  return Array.from({ length: count }, (_, index) => {
-    const imageSrc =
-      PREVIEW_IMAGE_SRC_LIST[index % PREVIEW_IMAGE_SRC_LIST.length];
-
-    return {
-      id: deckId * 100 + index,
-      cardId: deckId * 100 + index,
-      name: `카드 ${index + 1}`,
-      imageSrc,
-      height: null,
-      weight: null,
-      tags: [],
-      products: [],
-    };
-  });
-};
-
 const patchDefaultDeckCards = (decks: DeckItem[], cards: DeckCardItem[]) => {
   return decks.map((deck) => {
     if (deck.id !== 0) {
@@ -140,14 +69,6 @@ const patchDefaultDeckCards = (decks: DeckItem[], cards: DeckCardItem[]) => {
       cards,
     };
   });
-};
-
-const normalizeDeckPreviewImageSrcList = (previewImageUrls: string[]) => {
-  if (!previewImageUrls.length) {
-    return [...PREVIEW_IMAGE_SRC_LIST];
-  }
-
-  return previewImageUrls.slice(0, 3).map((imageUrl) => resolveCdnImageUrl(imageUrl));
 };
 
 const mapDeckSummaries = (decks: DeckSummaryData[]): DeckItem[] => {
@@ -170,44 +91,11 @@ const mapDeckSummaries = (decks: DeckSummaryData[]): DeckItem[] => {
       if (left.isSystem && !right.isSystem) {
         return -1;
       }
-
       if (!left.isSystem && right.isSystem) {
         return 1;
       }
-
       return left.id - right.id;
     });
-};
-
-const createInitialDecks = (): DeckItem[] => {
-  return [
-    {
-      id: 0,
-      name: "모든 카드",
-      isSystem: true,
-      cardCount: 0,
-      previewImageSrcList: [...PREVIEW_IMAGE_SRC_LIST],
-      cards: buildDeckCards(0, 16),
-    },
-  ];
-};
-
-const createCustomDeck = (decks: DeckItem[], name: string): DeckItem[] => {
-  const nextId = decks.reduce((maxId, deck) => {
-    return Math.max(maxId, deck.id);
-  }, 0);
-
-  return [
-    ...decks,
-    {
-      id: nextId + 1,
-      name,
-      isSystem: false,
-      cardCount: 0,
-      previewImageSrcList: [...PREVIEW_IMAGE_SRC_LIST],
-      cards: [],
-    },
-  ];
 };
 
 export {

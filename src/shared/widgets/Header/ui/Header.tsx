@@ -10,6 +10,22 @@ import { headerVariants } from "../model/animate";
 import { headerStyle } from "../style";
 import { ActionButton } from "@/shared/components/Button";
 
+const renderAuthAction = (isAuthenticated: boolean) => {
+  if (isAuthenticated) {
+    return (
+      <Link href="/me">
+        <Profile />
+      </Link>
+    );
+  }
+
+  return (
+    <Link href="/login">
+      <ActionButton color="primary" label="로그인" type="button" size="sm" />
+    </Link>
+  );
+};
+
 const Header = () => {
   const { isChromeVisible } = useLayoutChromeVisibility();
   const { root, left, center, right } = headerStyle();
@@ -40,22 +56,7 @@ const Header = () => {
           </Link>
         </div>
 
-        <div className={right()}>
-          {isAuthenticated ? (
-            <Link href="/me">
-              <Profile />
-            </Link>
-          ) : (
-            <Link href="/login">
-              <ActionButton
-                color="primary"
-                label="로그인"
-                type="button"
-                size="sm"
-              />
-            </Link>
-          )}
-        </div>
+        <div className={right()}>{renderAuthAction(isAuthenticated)}</div>
       </div>
     </motion.div>
   );
