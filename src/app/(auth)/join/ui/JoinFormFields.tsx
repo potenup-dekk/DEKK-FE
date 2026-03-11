@@ -8,43 +8,52 @@ interface JoinFormFieldsProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+const JOIN_TEXT_FIELDS = [
+  {
+    id: "nickname",
+    name: "nickname",
+    label: "닉네임",
+    type: "text",
+    placeholder: "닉네임을 입력하세요",
+    maxLength: 10,
+    showCount: true,
+  },
+  {
+    id: "height",
+    name: "height",
+    label: "키",
+    type: "number",
+    placeholder: "174",
+  },
+  {
+    id: "weight",
+    name: "weight",
+    label: "몸무게",
+    type: "number",
+    placeholder: "74",
+  },
+] as const;
+
 const JoinFormFields = ({ form, errors, onChange }: JoinFormFieldsProps) => {
   return (
     <>
-      <InputField
-        id="nickname"
-        name="nickname"
-        label="닉네임"
-        type="text"
-        placeholder="닉네임을 입력하세요"
-        value={form.nickname}
-        onChange={onChange}
-        maxLength={10}
-        showCount
-        error={errors.nickname}
-      />
-
-      <InputField
-        id="height"
-        name="height"
-        label="키"
-        type="number"
-        placeholder="174"
-        value={form.height}
-        onChange={onChange}
-        error={errors.height}
-      />
-
-      <InputField
-        id="weight"
-        name="weight"
-        label="몸무게"
-        type="number"
-        placeholder="74"
-        value={form.weight}
-        onChange={onChange}
-        error={errors.weight}
-      />
+      {JOIN_TEXT_FIELDS.map((field) => {
+        return (
+          <InputField
+            key={field.id}
+            id={field.id}
+            name={field.name}
+            label={field.label}
+            type={field.type}
+            placeholder={field.placeholder}
+            value={form[field.name]}
+            onChange={onChange}
+            maxLength={field.maxLength}
+            showCount={field.showCount}
+            error={errors[field.name]}
+          />
+        );
+      })}
 
       <GenderField
         value={form.gender}

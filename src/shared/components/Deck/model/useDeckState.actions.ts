@@ -1,24 +1,6 @@
-import type { Dispatch, SetStateAction } from "react";
 import { getDeckOriginOffset } from "./deckPosition";
-import {
-  createCustomDeck,
-  type DeckItem,
-  type DeckOriginOffset,
-} from "./deckState.helpers";
-import type { DeckViewMode } from "./useDeckState.types";
-
-interface DeckStateActionsParams {
-  mode: DeckViewMode;
-  setMode: Dispatch<SetStateAction<DeckViewMode>>;
-  setDecks: Dispatch<SetStateAction<DeckItem[]>>;
-  setActiveDeckId: Dispatch<SetStateAction<number | null>>;
-  setSelectedCardId: Dispatch<SetStateAction<number | null>>;
-  setRadialOrigin: Dispatch<SetStateAction<DeckOriginOffset>>;
-  setIsCreateSheetOpen: Dispatch<SetStateAction<boolean>>;
-  setIsHeroFlipped: Dispatch<SetStateAction<boolean>>;
-  clearCloseTimeout: () => void;
-  scheduleCloseReset: () => void;
-}
+import { createCustomDeck } from "./deckState.helpers";
+import type { DeckStateActionsParams } from "./useDeckState.actions.types";
 
 const createDeckOpenActions = ({
   mode,
@@ -39,7 +21,6 @@ const createDeckOpenActions = ({
     setIsHeroFlipped(false);
     setMode("open");
   };
-
   const closeDeck = () => {
     if (mode === "closed") {
       return;
@@ -52,7 +33,6 @@ const createDeckOpenActions = ({
     setIsCreateSheetOpen(false);
     scheduleCloseReset();
   };
-
   return { openDeck, closeDeck };
 };
 
@@ -66,17 +46,14 @@ const createHeroActions = ({
     setIsHeroFlipped(false);
     setMode("hero");
   };
-
   const closeHero = () => {
     setSelectedCardId(null);
     setIsHeroFlipped(false);
     setMode("open");
   };
-
   const toggleHeroFlip = () => {
     setIsHeroFlipped((previous) => !previous);
   };
-
   return { closeHero, selectCard, toggleHeroFlip };
 };
 
@@ -87,11 +64,9 @@ const createSheetActions = ({
   const openCreateSheet = () => {
     setIsCreateSheetOpen(true);
   };
-
   const closeCreateSheet = () => {
     setIsCreateSheetOpen(false);
   };
-
   const createDeck = (name: string) => {
     const trimmedName = name.trim();
 
@@ -103,7 +78,6 @@ const createSheetActions = ({
     setIsCreateSheetOpen(false);
     return true;
   };
-
   return { closeCreateSheet, createDeck, openCreateSheet };
 };
 

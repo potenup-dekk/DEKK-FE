@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { SelectTabProps } from "../props.type";
 import { selectTabStyle } from "../style";
 import { SelectTabContext } from "./context";
@@ -16,12 +16,14 @@ const SelectTab = ({ children, defaultIndex = 0 }: SelectTabProps) => {
   const [previousIndex, setPreviousIndex] = useState(safeDefaultIndex);
   const { root } = selectTabStyle();
 
-  const setActiveIndex = (nextIndex: number) => {
+  const setActiveIndex = useCallback((nextIndex: number) => {
     const safeNextIndex = clampIndex(nextIndex);
 
-    setPreviousIndex(activeIndex);
-    setActiveIndexState(safeNextIndex);
-  };
+    setActiveIndexState((previousActiveIndex) => {
+      setPreviousIndex(previousActiveIndex);
+      return safeNextIndex;
+    });
+  }, []);
 
   const direction =
     activeIndex === previousIndex ? 0 : activeIndex > previousIndex ? 1 : -1;
@@ -32,7 +34,7 @@ const SelectTab = ({ children, defaultIndex = 0 }: SelectTabProps) => {
       direction,
       setActiveIndex,
     }),
-    [activeIndex, direction],
+    [activeIndex, direction, setActiveIndex],
   );
 
   return (

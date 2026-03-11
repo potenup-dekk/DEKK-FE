@@ -1,78 +1,24 @@
 "use client";
 
-import clsx from "clsx";
-import { motion } from "framer-motion";
-import { useRef } from "react";
-import {
-  getDeckPreviewCardMotion,
-  getDeckPreviewCardVisual,
-} from "../model/animate";
+import { useRef, type RefObject } from "react";
 import type { DeckItem } from "../model/deckState.helpers";
 import deckStyle from "../style";
-import DeckCardImage from "./DeckCardImage";
+import DeckPreviewStack from "./DeckPreviewStack";
+import { motion } from "framer-motion";
 
 interface DeckCoverProps {
   deck: DeckItem;
   onOpen: (deckId: number, sourceRect: DOMRect) => void;
 }
 
-interface DeckPreviewStackProps {
-  deckId: number;
-  deckName: string;
-  isEmpty: boolean;
-  previewImageSrcList: string[];
+interface DeckCoverButtonProps {
+  deck: DeckItem;
+  buttonRef: RefObject<HTMLButtonElement | null>;
+  onOpen: () => void;
 }
-
-const DeckPreviewStack = ({
-  deckId,
-  deckName,
-  isEmpty,
-  previewImageSrcList,
-}: DeckPreviewStackProps) => {
-  const { coverStack, emptyCoverStack, previewImage, previewImageBase } =
-    deckStyle();
-
-  if (isEmpty) {
-    return (
-      <div className={coverStack()}>
-        <div className={emptyCoverStack()} />
-      </div>
-    );
-  }
-
-  return (
-    <div className={coverStack()}>
-      {previewImageSrcList.slice(0, 3).map((imageSrc, index) => {
-        const previewCardMotion = getDeckPreviewCardMotion(index);
-        const previewCardVisual = getDeckPreviewCardVisual(index);
-
-        return (
-          <motion.div
-            key={`${deckId}-${imageSrc}`}
-            className={previewImageBase()}
-            initial={previewCardMotion.initial}
-            animate={previewCardMotion.animate}
-            style={{
-              width: previewCardVisual.width,
-              zIndex: previewCardVisual.zIndex,
-            }}
-          >
-            <DeckCardImage
-              src={imageSrc}
-              alt={`${deckName} 미리보기`}
-              className={previewImage()}
-            />
-          </motion.div>
-        );
-      })}
-    </div>
-  );
-};
 
 const DeckCover = ({ deck, onOpen }: DeckCoverProps) => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const { coverButton, coverMeta, coverTitle, systemBadge } = deckStyle();
-
   const handleOpen = () => {
     if (!buttonRef.current) {
       return;
@@ -82,11 +28,19 @@ const DeckCover = ({ deck, onOpen }: DeckCoverProps) => {
   };
 
   return (
+    <DeckCoverButton deck={deck} buttonRef={buttonRef} onOpen={handleOpen} />
+  );
+};
+
+const DeckCoverButton = ({ deck, buttonRef, onOpen }: DeckCoverButtonProps) => {
+  const { coverButton, coverMeta, coverTitle } = deckStyle();
+
+  return (
     <motion.button
       ref={buttonRef}
       type="button"
       className={coverButton()}
-      onClick={handleOpen}
+      onClick={onOpen}
       whileTap={{ scale: 0.98 }}
     >
       <DeckPreviewStack

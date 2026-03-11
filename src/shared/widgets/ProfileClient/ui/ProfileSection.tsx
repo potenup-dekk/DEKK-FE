@@ -18,17 +18,7 @@ interface ProfileSectionProps {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
-const ProfileSection = ({
-  form,
-  formErrors,
-  submitError,
-  authError,
-  isSubmitting,
-  isReady,
-  email,
-  handleChange,
-  handleSubmit,
-}: ProfileSectionProps) => {
+const ProfileSection = (props: ProfileSectionProps) => {
   const {
     form: formStyle,
     title,
@@ -38,27 +28,27 @@ const ProfileSection = ({
   } = profileClientStyle();
 
   return (
-    <form onSubmit={handleSubmit} className={formStyle()}>
+    <form onSubmit={props.handleSubmit} className={formStyle()}>
       <h1 className={title()}>프로필</h1>
 
       <ProfileFormFields
-        form={form}
-        formErrors={formErrors}
-        handleChange={handleChange}
+        form={props.form}
+        formErrors={props.formErrors}
+        handleChange={props.handleChange}
       />
 
-      {submitError || authError ? (
-        <p className={errorText()}>{submitError ?? authError}</p>
+      {props.submitError || props.authError ? (
+        <p className={errorText()}>{props.submitError ?? props.authError}</p>
       ) : null}
 
       <ActionButton
         type="submit"
-        label={isSubmitting ? "저장 중…" : "저장"}
+        label={props.isSubmitting ? "저장 중…" : "저장"}
         className="w-full mt-2"
       />
 
-      <div className={emailText()}>현재 이메일: {email ?? "-"}</div>
-      {!isReady ? (
+      <div className={emailText()}>현재 이메일: {props.email ?? "-"}</div>
+      {!props.isReady ? (
         <div className={hintText()}>
           키/몸무게/성별을 모두 입력하면 저장할 수 있어요.
         </div>

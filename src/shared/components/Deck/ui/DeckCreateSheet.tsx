@@ -21,16 +21,13 @@ const DeckCreateSheet = ({
   const [name, setName] = useState("");
 
   const isSubmitDisabled = !name.trim();
-
-  const handleClose = () => {
+  const resetAndClose = () => {
     setName("");
     onClose();
   };
 
   const handleCreate = () => {
-    const didCreate = onCreate(name.trim());
-
-    if (didCreate) {
+    if (onCreate(name.trim())) {
       setName("");
     }
   };
@@ -44,13 +41,13 @@ const DeckCreateSheet = ({
             initial={deckCreateSheetBackdropMotion.initial}
             animate={deckCreateSheetBackdropMotion.animate}
             exit={deckCreateSheetBackdropMotion.exit}
-            onClick={handleClose}
+            onClick={resetAndClose}
           />
           <DeckCreateSheetPanel
             name={name}
             isSubmitDisabled={isSubmitDisabled}
             onNameChange={setName}
-            onClose={handleClose}
+            onClose={resetAndClose}
             onCreate={handleCreate}
           />
         </>

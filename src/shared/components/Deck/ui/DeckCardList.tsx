@@ -3,7 +3,8 @@ import type {
   DeckOriginOffset,
 } from "../model/deckState.helpers";
 import deckStyle from "../style";
-import DeckCard from "./DeckCard";
+import DeckCardGrid from "./DeckCardGrid";
+import DeckStatusView from "./DeckStatusView";
 
 interface DeckCardListProps {
   cards: DeckCardItem[];
@@ -26,20 +27,19 @@ const DeckCardList = ({
   onRetry,
   onSelectCard,
 }: DeckCardListProps) => {
-  const { cardButton, cardGrid, emptyMessage, statusRetryButton } = deckStyle();
+  const { cardButton, emptyMessage, statusRetryButton } = deckStyle();
+  const cardButtonClassName = cardButton();
+  const shouldShowStatus = isLoading || Boolean(errorMessage);
 
-  if (isLoading) {
-    return <div className={emptyMessage()}>카드를 불러오는 중입니다.</div>;
-  }
-
-  if (errorMessage) {
+  if (shouldShowStatus) {
     return (
-      <div className={emptyMessage()}>
-        <p>{errorMessage}</p>
-        <button type="button" className={statusRetryButton()} onClick={onRetry}>
-          다시 시도
-        </button>
-      </div>
+      <DeckStatusView
+        isLoading={isLoading}
+        errorMessage={errorMessage}
+        onRetry={onRetry}
+        emptyMessageClassName={emptyMessage()}
+        retryButtonClassName={statusRetryButton()}
+      />
     );
   }
 
@@ -48,28 +48,14 @@ const DeckCardList = ({
   }
 
   return (
-    <div className={cardGrid()}>
-      {cards.map((card, index) => {
-        if (card.id === hiddenCardId) {
-          return (
-            <div key={card.id} className="w-full" aria-hidden>
-              <div className={`${cardButton()} opacity-0`} />
-            </div>
-          );
-        }
-
-        return (
-          <DeckCard
-            key={card.id}
-            card={card}
-            index={index}
-            radialOrigin={radialOrigin}
-            isClosing={isClosing}
-            onSelect={onSelectCard}
-          />
-        );
-      })}
-    </div>
+    <DeckCardGrid
+      cards={cards}
+      hiddenCardId={hiddenCardId}
+      radialOrigin={radialOrigin}
+      isClosing={isClosing}
+      onSelectCard={onSelectCard}
+      cardButtonClassName={cardButtonClassName}
+    />
   );
 };
 

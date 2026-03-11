@@ -1,14 +1,5 @@
-import { motion } from "framer-motion";
-import clsx from "clsx";
-import {
-  cardResizeTransition,
-  frontCardDragConstraints,
-  frontCardMotionStyle,
-  getFrontCardExit,
-} from "../model/animate";
-import { cardStyle } from "../style";
 import type { FrontCardProps } from "../model/props.type";
-import { Maximize2Icon, Minimize2Icon } from "lucide-react";
+import FrontCardMotionContainer from "./FrontCardMotionContainer";
 
 interface FrontCardFrameProps {
   cardId: string;
@@ -25,6 +16,30 @@ interface FrontCardFrameProps {
   children: React.ReactNode;
 }
 
+const createDragEndHandler = ({
+  setIsSwiping,
+  onLike,
+  onDislike,
+}: {
+  setIsSwiping: FrontCardProps["setIsSwiping"];
+  onLike: FrontCardProps["onLike"];
+  onDislike: FrontCardProps["onDislike"];
+}) => {
+  return (_: unknown, info: { offset: { x: number } }) => {
+    if (Math.abs(info.offset.x) > 100) {
+      setIsSwiping(true);
+      if (info.offset.x > 0) {
+        onLike();
+      } else {
+        onDislike();
+      }
+      return;
+    }
+
+    setIsSwiping(false);
+  };
+};
+
 const FrontCardFrame = ({
   cardId,
   x,
@@ -39,60 +54,28 @@ const FrontCardFrame = ({
   onToggleFocusMode,
   children,
 }: FrontCardFrameProps) => {
-  const { frontRoot, focusToggleButton } = cardStyle();
   const shouldShowFocusButton = isCardCompressed || isFocusMode;
   const shouldApplyCompressedCard =
     isCardCompressed && !isFocusMode && compressedCardHeight !== null;
   const targetCardHeight = shouldApplyCompressedCard
     ? compressedCardHeight
     : expandedCardHeight;
-  const FocusIcon = isFocusMode ? Minimize2Icon : Maximize2Icon;
+  const onDragEnd = createDragEndHandler({ setIsSwiping, onLike, onDislike });
 
   return (
-    <motion.div
-      key={cardId}
-      initial={false}
-      className={frontRoot({ isCardCompressed: shouldApplyCompressedCard })}
-      animate={targetCardHeight ? { height: targetCardHeight } : undefined}
-      transition={cardResizeTransition}
-      drag
-      dragSnapToOrigin
-      dragConstraints={frontCardDragConstraints}
-      style={{
-        x,
-        rotate,
-        ...frontCardMotionStyle,
-      }}
-      onDragEnd={(_, info) => {
-        if (Math.abs(info.offset.x) > 100) {
-          setIsSwiping(true);
-          if (info.offset.x > 0) {
-            onLike();
-          } else {
-            onDislike();
-          }
-          return;
-        }
-
-        setIsSwiping(false);
-      }}
-      exit={getFrontCardExit(x.get())}
+    <FrontCardMotionContainer
+      cardId={cardId}
+      x={x}
+      rotate={rotate}
+      targetCardHeight={targetCardHeight}
+      shouldApplyCompressedCard={shouldApplyCompressedCard}
+      shouldShowFocusButton={shouldShowFocusButton}
+      isFocusMode={isFocusMode}
+      onToggleFocusMode={onToggleFocusMode}
+      onDragEnd={onDragEnd}
     >
       {children}
-
-      {shouldShowFocusButton ? (
-        <button
-          type="button"
-          className={clsx(focusToggleButton())}
-          onClick={onToggleFocusMode}
-          aria-label={
-            isFocusMode ? "기본 화면으로 복귀" : "카드 집중 모드 열기"
-          }
-        >
-          <FocusIcon size={20} strokeWidth={2.2} />
-        </button>
-      ) : null}
-    </motion.div>
+    </FrontCardMotionContainer>
   );
 };
 

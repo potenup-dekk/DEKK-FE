@@ -8,7 +8,6 @@ interface BackCardProps {
   backImage: string;
   backScale: ReturnType<typeof useSpring>;
   isCardCompressed: boolean;
-  isFocusMode: boolean;
   compressedCardHeight: number | null;
   expandedCardHeight: number | null;
 }
@@ -17,7 +16,6 @@ const BackCard = ({
   backImage,
   backScale,
   isCardCompressed,
-  isFocusMode,
   compressedCardHeight,
   expandedCardHeight,
 }: BackCardProps) => {

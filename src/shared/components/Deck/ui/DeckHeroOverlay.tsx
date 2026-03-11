@@ -18,6 +18,50 @@ interface DeckHeroOverlayProps {
   onOpenCreateDeckSheet: () => void;
 }
 
+interface DeckHeroOverlayContentProps {
+  selectedCard: DeckCardItem;
+  isFlipped: boolean;
+  onClose: () => void;
+  onDeleteCard: () => void;
+  onTapFlip: () => void;
+  onOpenCreateDeckSheet: () => void;
+}
+
+const DeckHeroOverlayContent = ({
+  selectedCard,
+  isFlipped,
+  onClose,
+  onDeleteCard,
+  onTapFlip,
+  onOpenCreateDeckSheet,
+}: DeckHeroOverlayContentProps) => {
+  const { heroContainer } = deckStyle();
+  const { onDragEnd, onTap, x, y } = useDeckHeroGesture({
+    onSwipeClose: onClose,
+    onTapFlip,
+  });
+
+  return (
+    <motion.section
+      className={heroContainer()}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <DeckHeroCard
+        card={selectedCard}
+        isFlipped={isFlipped}
+        gestureBindings={{ x, y, onDragEnd, onTap }}
+      />
+      <DeckHeroActions
+        onClose={onClose}
+        onDeleteCard={onDeleteCard}
+        onOpenCreateDeckSheet={onOpenCreateDeckSheet}
+      />
+    </motion.section>
+  );
+};
+
 const DeckHeroOverlay = ({
   selectedCard,
   isOpen,
@@ -27,11 +71,7 @@ const DeckHeroOverlay = ({
   onFlip,
   onOpenCreateDeckSheet,
 }: DeckHeroOverlayProps) => {
-  const { heroBackdrop, heroContainer } = deckStyle();
-  const { onDragEnd, onTap, x, y } = useDeckHeroGesture({
-    onSwipeClose: onClose,
-    onTapFlip: onFlip,
-  });
+  const { heroBackdrop } = deckStyle();
 
   return (
     <AnimatePresence>
@@ -43,28 +83,14 @@ const DeckHeroOverlay = ({
             animate={deckHeroBackdropMotion.animate}
             exit={deckHeroBackdropMotion.exit}
           />
-          <motion.section
-            className={heroContainer()}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <DeckHeroCard
-              card={selectedCard}
-              isFlipped={isFlipped}
-              gestureBindings={{
-                x,
-                y,
-                onDragEnd,
-                onTap,
-              }}
-            />
-            <DeckHeroActions
-              onClose={onClose}
-              onDeleteCard={onDeleteCard}
-              onOpenCreateDeckSheet={onOpenCreateDeckSheet}
-            />
-          </motion.section>
+          <DeckHeroOverlayContent
+            selectedCard={selectedCard}
+            isFlipped={isFlipped}
+            onClose={onClose}
+            onDeleteCard={onDeleteCard}
+            onTapFlip={onFlip}
+            onOpenCreateDeckSheet={onOpenCreateDeckSheet}
+          />
         </>
       ) : null}
     </AnimatePresence>
