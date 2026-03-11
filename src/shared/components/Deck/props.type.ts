@@ -7,7 +7,7 @@ interface DeckCardItemProps {
 interface DeckItemProps {
   deckId: number;
   name: string;
-  isSystem: boolean;
+  isDefault: boolean;
   previewImageSrcList: string[];
   cards: DeckCardItemProps[];
 }
