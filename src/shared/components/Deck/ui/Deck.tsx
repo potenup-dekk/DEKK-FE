@@ -34,12 +34,11 @@ const DeckBackdropLayer = ({ isOpen, onClose }: DeckBackdropLayerProps) => {
 const Deck = () => {
   const deckState = useDeckState();
   const { root } = deckStyle();
-  const isDeckLayerOpen = deckState.mode !== "closed";
 
   return (
     <div className={root()}>
       <DeckBackdropLayer
-        isOpen={isDeckLayerOpen}
+        isOpen={deckState.mode !== "closed"}
         onClose={deckState.closeDeck}
       />
 

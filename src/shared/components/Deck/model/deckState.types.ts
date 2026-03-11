@@ -1,0 +1,34 @@
+interface DeckCardProductItem {
+  productId: number;
+  brand: string;
+  name: string;
+  productImageUrl: string;
+  productUrl: string;
+}
+
+interface DeckCardItem {
+  id: number;
+  cardId: number;
+  name: string;
+  imageSrc: string;
+  height: number | null;
+  weight: number | null;
+  tags: string[];
+  products: DeckCardProductItem[];
+}
+
+interface DeckOriginOffset {
+  x: number;
+  y: number;
+}
+
+interface DeckItem {
+  id: number;
+  name: string;
+  isSystem: boolean;
+  cardCount: number;
+  previewImageSrcList: string[];
+  cards: DeckCardItem[];
+}
+
+export type { DeckCardItem, DeckCardProductItem, DeckItem, DeckOriginOffset };

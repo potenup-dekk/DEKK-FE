@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { getMyInfo } from "@/features/profile";
-import { logout } from "@/shared/api/services";
 
 interface Me {
   email: string;

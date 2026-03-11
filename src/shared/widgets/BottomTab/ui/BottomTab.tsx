@@ -9,6 +9,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { bottomTabVariants } from "../model/animate";
 import { bottomTabStyle } from "../style";
 
+const BOTTOM_TAB_ITEMS = [
+  { icon: HomeIcon, label: "홈", route: APP_ROUTES.HOME },
+  { icon: LayersIcon, label: "덱", route: APP_ROUTES.DECK },
+  { icon: ShirtIcon, label: "등록", route: APP_ROUTES.UPLOAD },
+] as const;
+
 const BottomTab = () => {
   const { isChromeVisible } = useLayoutChromeVisibility();
   const pathname = usePathname();
@@ -27,32 +33,19 @@ const BottomTab = () => {
     >
       <div className={inner()}>
         <Tab>
-          <TabItem
-            icon={HomeIcon}
-            label="홈"
-            selected={pathname === APP_ROUTES.HOME}
-            onClick={() => {
-              router.push(APP_ROUTES.HOME);
-            }}
-          />
-
-          <TabItem
-            icon={LayersIcon}
-            label="덱"
-            selected={pathname === APP_ROUTES.DECK}
-            onClick={() => {
-              router.push(APP_ROUTES.DECK);
-            }}
-          />
-
-          <TabItem
-            icon={ShirtIcon}
-            label="등록"
-            selected={pathname === APP_ROUTES.UPLOAD}
-            onClick={() => {
-              router.push(APP_ROUTES.UPLOAD);
-            }}
-          />
+          {BOTTOM_TAB_ITEMS.map((item) => {
+            return (
+              <TabItem
+                key={item.route}
+                icon={item.icon}
+                label={item.label}
+                selected={pathname === item.route}
+                onClick={() => {
+                  router.push(item.route);
+                }}
+              />
+            );
+          })}
         </Tab>
       </div>
     </motion.div>

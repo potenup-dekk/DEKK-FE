@@ -30,12 +30,10 @@ const useProfileForm = ({
     useState<ProfileFormErrors>(INITIAL_FORM_ERRORS);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
   const isReady = useMemo(
     () => !!form.height.trim() && !!form.weight.trim() && !!form.gender.trim(),
     [form.gender, form.height, form.weight],
   );
-
   const setFormFromUser = useMemo(() => createFormFromUserSetter(setForm), []);
   const handleChange = useMemo(
     () => createChangeHandler(setForm, setFormErrors, setSubmitError),

@@ -41,7 +41,6 @@ const CardStackLayers = ({
           backScale={backScale}
           compressedCardHeight={displayOptions.compressedCardHeight}
           expandedCardHeight={displayOptions.expandedCardHeight}
-          isFocusMode={displayOptions.isFocusMode}
           isCardCompressed={shouldApplyCompressedCard}
         />
       ) : null}

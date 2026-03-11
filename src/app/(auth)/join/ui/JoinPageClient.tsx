@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { ActionButton } from "@/shared/components/Button";
 import useJoinForm from "../model/useJoinForm";
 import JoinFormFields from "./JoinFormFields";

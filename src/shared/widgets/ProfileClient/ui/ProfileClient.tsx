@@ -1,19 +1,57 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { logout } from "@/shared/api/services";
 import { useAuthGuard } from "@/shared/hooks";
 import useProfileForm from "../model/useProfileForm";
 import useProfileClientSync from "../model/useProfileClientSync";
+import useProfilePendingRedirect from "../model/useProfilePendingRedirect";
+import useProfileSettingsActions from "../model/useProfileSettingsActions";
 import { profileClientStyle } from "../style";
 import ProfileFormView from "./ProfileFormView";
+
+interface ProfileClientContentProps {
+  profileForm: ReturnType<typeof useProfileForm>;
+  authError: string | null;
+  settingsError: string | null;
+  isLoggingOut: boolean;
+  email?: string;
+  onLogout: () => Promise<void>;
+  onWithdraw: () => void;
+}
+
+const ProfileClientContent = ({
+  profileForm,
+  authError,
+  settingsError,
+  isLoggingOut,
+  email,
+  onLogout,
+  onWithdraw,
+}: ProfileClientContentProps) => {
+  return (
+    <ProfileFormView
+      form={profileForm.form}
+      formErrors={profileForm.formErrors}
+      submitError={profileForm.submitError}
+      authError={authError}
+      settingsError={settingsError}
+      isSubmitting={profileForm.isSubmitting}
+      isReady={profileForm.isReady}
+      isLoggingOut={isLoggingOut}
+      email={email}
+      onLogout={onLogout}
+      onWithdraw={onWithdraw}
+      handleChange={profileForm.handleChange}
+      handleSubmit={profileForm.handleSubmit}
+    />
+  );
+};
 
 const ProfileClient = () => {
   const router = useRouter();
   const { isLoading, isAuthenticated, user, error, refetch } = useAuthGuard();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [settingsError, setSettingsError] = useState<string | null>(null);
+  const { handleLogout, handleWithdraw, isLoggingOut, settingsError } =
+    useProfileSettingsActions();
 
   const profileForm = useProfileForm({
     refetch,
@@ -29,15 +67,7 @@ const ProfileClient = () => {
     setFormFromUser: profileForm.setFormFromUser,
   });
 
-  useEffect(() => {
-    if (isLoading || !isAuthenticated) {
-      return;
-    }
-
-    if (user?.status === "PENDING") {
-      router.replace("/join");
-    }
-  }, [isAuthenticated, isLoading, router, user?.status]);
+  useProfilePendingRedirect(router, isLoading, isAuthenticated, user?.status);
 
   if (isLoading) {
     return <div className={loading()}>로그인 상태 확인 중…</div>;
@@ -51,47 +81,15 @@ const ProfileClient = () => {
     return null;
   }
 
-  const handleLogout = async () => {
-    if (isLoggingOut) {
-      return;
-    }
-
-    setSettingsError(null);
-    setIsLoggingOut(true);
-
-    try {
-      await logout();
-      router.replace("/login");
-    } catch (logoutError) {
-      setSettingsError(
-        logoutError instanceof Error
-          ? logoutError.message
-          : "로그아웃 처리 중 오류가 발생했습니다.",
-      );
-    } finally {
-      setIsLoggingOut(false);
-    }
-  };
-
-  const handleWithdraw = () => {
-    setSettingsError("회원탈퇴 기능은 준비 중입니다.");
-  };
-
   return (
-    <ProfileFormView
-      form={profileForm.form}
-      formErrors={profileForm.formErrors}
-      submitError={profileForm.submitError}
+    <ProfileClientContent
+      profileForm={profileForm}
       authError={error}
       settingsError={settingsError}
-      isSubmitting={profileForm.isSubmitting}
-      isReady={profileForm.isReady}
       isLoggingOut={isLoggingOut}
       email={user?.email}
       onLogout={handleLogout}
       onWithdraw={handleWithdraw}
-      handleChange={profileForm.handleChange}
-      handleSubmit={profileForm.handleSubmit}
     />
   );
 };

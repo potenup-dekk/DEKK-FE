@@ -26,6 +26,18 @@ interface UseAuthGuardResult {
   refetch: () => Promise<void>;
 }
 
+const applyLocalAuthState = (
+  setIsAuthenticated: (value: boolean) => void,
+  setUser: (value: GuardUser | null) => void,
+  setError: (value: string | null) => void,
+  setIsLoading: (value: boolean) => void,
+) => {
+  setIsAuthenticated(true);
+  setUser(null);
+  setError(null);
+  setIsLoading(false);
+};
+
 const useAuthGuard = (): UseAuthGuardResult => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,10 +46,7 @@ const useAuthGuard = (): UseAuthGuardResult => {
 
   const refetch = useCallback(async () => {
     if (isLocalEnvironment) {
-      setIsAuthenticated(true);
-      setUser(null);
-      setError(null);
-      setIsLoading(false);
+      applyLocalAuthState(setIsAuthenticated, setUser, setError, setIsLoading);
       return;
     }
 
