@@ -26,3 +26,13 @@ export interface DefaultDeckCardsResponse {
   totalPages: number;
   hasNext: boolean;
 }
+
+export type DeckType = "DEFAULT" | "CUSTOM";
+
+export interface DeckSummaryData {
+  deckId: number;
+  name: string;
+  type: DeckType;
+  cardCount: number;
+  previewImageUrls: string[];
+}

@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from "react";
 import { deleteDefaultDeckCardAction } from "@/shared/api/actions";
-import { getDefaultDeckCards } from "@/shared/api/services";
+import { getDecks, getDefaultDeckCards } from "@/shared/api/services";
 import {
+  mapDeckSummaries,
   mapDefaultDeckCards,
   patchDefaultDeckCards,
   type DeckItem,
@@ -155,6 +156,21 @@ const useDeckState = (): UseDeckStateResult => {
     }
   };
 
+  const loadDeckSummaries = async () => {
+    try {
+      const response = await getDecks();
+      const deckSummaries = response.data ?? [];
+
+      if (!deckSummaries.length) {
+        return;
+      }
+
+      store.setDecks(mapDeckSummaries(deckSummaries));
+    } catch {
+      return;
+    }
+  };
+
   const openDeck: UseDeckStateResult["openDeck"] = (deckId, sourceRect) => {
     actions.openDeck(deckId, sourceRect);
 
@@ -197,6 +213,7 @@ const useDeckState = (): UseDeckStateResult => {
 
           return {
             ...deck,
+            cardCount: Math.max(deck.cardCount - 1, 0),
             cards: nextCards,
             previewImageSrcList: nextCards
               .slice(0, 3)
@@ -209,6 +226,10 @@ const useDeckState = (): UseDeckStateResult => {
 
       return true;
     };
+
+  useEffect(() => {
+    void loadDeckSummaries();
+  }, []);
 
   useEffect(() => {
     return () => {

@@ -9,6 +9,7 @@ import DeckCardList from "./DeckCardList";
 interface DeckFrameProps {
   decks: DeckItem[];
   activeDeck: DeckItem | null;
+  selectedCardId: number | null;
   mode: "closed" | "open" | "hero" | "closing";
   radialOrigin: DeckOriginOffset;
   defaultDeckFetchStatus: DefaultDeckFetchStatus;
@@ -27,6 +28,7 @@ interface DeckGridLayerProps {
 
 interface OpenDeckLayerProps {
   deck: DeckItem;
+  selectedCardId: number | null;
   radialOrigin: DeckOriginOffset;
   isClosing: boolean;
   defaultDeckFetchStatus: DefaultDeckFetchStatus;
@@ -36,14 +38,31 @@ interface OpenDeckLayerProps {
   onSelectCard: (cardId: number) => void;
 }
 
-const DeckGridLayer = ({ decks, hiddenDeckId, onOpenDeck }: DeckGridLayerProps) => {
-  const { deckGrid } = deckStyle();
+const DeckGridLayer = ({
+  decks,
+  hiddenDeckId,
+  onOpenDeck,
+}: DeckGridLayerProps) => {
+  const { coverMeta, coverStack, coverTitle, deckGrid, emptyCoverStack } =
+    deckStyle();
 
   return (
     <div className={deckGrid()}>
       {decks.map((deck) => {
         if (deck.id === hiddenDeckId) {
-          return null;
+          return (
+            <div
+              key={deck.id}
+              className="flex w-25 flex-col items-center gap-1 text-center"
+              aria-hidden
+            >
+              <div className={coverStack()}>
+                <div className={`${emptyCoverStack()} opacity-0`} />
+              </div>
+              <div className={`${coverTitle()} opacity-0`}>placeholder</div>
+              <div className={`${coverMeta()} opacity-0`}>placeholder</div>
+            </div>
+          );
         }
 
         return <DeckCover key={deck.id} deck={deck} onOpen={onOpenDeck} />;
@@ -54,6 +73,7 @@ const DeckGridLayer = ({ decks, hiddenDeckId, onOpenDeck }: DeckGridLayerProps) 
 
 const OpenDeckLayer = ({
   deck,
+  selectedCardId,
   radialOrigin,
   isClosing,
   defaultDeckFetchStatus,
@@ -69,8 +89,7 @@ const OpenDeckLayer = ({
     openHeader,
     openLayer,
     openTitle,
-  } =
-    deckStyle();
+  } = deckStyle();
 
   return (
     <motion.section
@@ -83,7 +102,7 @@ const OpenDeckLayer = ({
         <header className={openHeader()}>
           <div>
             <h2 className={openTitle()}>{deck.name}</h2>
-            <p className={openDescription()}>{`${deck.cards.length}개의 카드`}</p>
+            <p className={openDescription()}>{`${deck.cardCount}장의 카드`}</p>
           </div>
           <button type="button" className={closeButton()} onClick={onCloseDeck}>
             <X size={18} />
@@ -92,6 +111,7 @@ const OpenDeckLayer = ({
 
         <DeckCardList
           cards={deck.cards}
+          hiddenCardId={selectedCardId}
           radialOrigin={radialOrigin}
           isClosing={isClosing}
           isLoading={deck.isSystem && defaultDeckFetchStatus === "loading"}
@@ -107,6 +127,7 @@ const OpenDeckLayer = ({
 const DeckFrame = ({
   decks,
   activeDeck,
+  selectedCardId,
   mode,
   radialOrigin,
   defaultDeckFetchStatus,
@@ -131,6 +152,7 @@ const DeckFrame = ({
       {isOpenLayerVisible ? (
         <OpenDeckLayer
           deck={activeDeck}
+          selectedCardId={selectedCardId}
           radialOrigin={radialOrigin}
           isClosing={isClosing}
           defaultDeckFetchStatus={defaultDeckFetchStatus}

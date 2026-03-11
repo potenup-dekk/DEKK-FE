@@ -1,4 +1,8 @@
-import type { DeckCardContentData, DeckProductData } from "@/entities/deck";
+import type {
+  DeckCardContentData,
+  DeckProductData,
+  DeckSummaryData,
+} from "@/entities/deck";
 
 interface DeckCardProductItem {
   productId: number;
@@ -28,6 +32,7 @@ interface DeckItem {
   id: number;
   name: string;
   isSystem: boolean;
+  cardCount: number;
   previewImageSrcList: string[];
   cards: DeckCardItem[];
 }
@@ -130,10 +135,48 @@ const patchDefaultDeckCards = (decks: DeckItem[], cards: DeckCardItem[]) => {
 
     return {
       ...deck,
+      cardCount: cards.length,
       previewImageSrcList: toDefaultDeckPreviewImageSrcList(cards),
       cards,
     };
   });
+};
+
+const normalizeDeckPreviewImageSrcList = (previewImageUrls: string[]) => {
+  if (!previewImageUrls.length) {
+    return [...PREVIEW_IMAGE_SRC_LIST];
+  }
+
+  return previewImageUrls.slice(0, 3).map((imageUrl) => resolveCdnImageUrl(imageUrl));
+};
+
+const mapDeckSummaries = (decks: DeckSummaryData[]): DeckItem[] => {
+  return decks
+    .map((deck) => {
+      const isSystem = deck.type === "DEFAULT";
+
+      return {
+        id: deck.deckId,
+        name: deck.name,
+        isSystem,
+        cardCount: deck.cardCount,
+        previewImageSrcList: normalizeDeckPreviewImageSrcList(
+          deck.previewImageUrls,
+        ),
+        cards: [],
+      } satisfies DeckItem;
+    })
+    .sort((left, right) => {
+      if (left.isSystem && !right.isSystem) {
+        return -1;
+      }
+
+      if (!left.isSystem && right.isSystem) {
+        return 1;
+      }
+
+      return left.id - right.id;
+    });
 };
 
 const createInitialDecks = (): DeckItem[] => {
@@ -142,6 +185,7 @@ const createInitialDecks = (): DeckItem[] => {
       id: 0,
       name: "모든 카드",
       isSystem: true,
+      cardCount: 0,
       previewImageSrcList: [...PREVIEW_IMAGE_SRC_LIST],
       cards: buildDeckCards(0, 16),
     },
@@ -159,6 +203,7 @@ const createCustomDeck = (decks: DeckItem[], name: string): DeckItem[] => {
       id: nextId + 1,
       name,
       isSystem: false,
+      cardCount: 0,
       previewImageSrcList: [...PREVIEW_IMAGE_SRC_LIST],
       cards: [],
     },
@@ -168,6 +213,7 @@ const createCustomDeck = (decks: DeckItem[], name: string): DeckItem[] => {
 export {
   createCustomDeck,
   createInitialDecks,
+  mapDeckSummaries,
   mapDefaultDeckCards,
   patchDefaultDeckCards,
   toDeckCardLayoutId,

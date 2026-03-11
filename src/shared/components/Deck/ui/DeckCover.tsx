@@ -19,15 +19,26 @@ interface DeckCoverProps {
 interface DeckPreviewStackProps {
   deckId: number;
   deckName: string;
+  isEmpty: boolean;
   previewImageSrcList: string[];
 }
 
 const DeckPreviewStack = ({
   deckId,
   deckName,
+  isEmpty,
   previewImageSrcList,
 }: DeckPreviewStackProps) => {
-  const { coverStack, previewImage, previewImageBase } = deckStyle();
+  const { coverStack, emptyCoverStack, previewImage, previewImageBase } =
+    deckStyle();
+
+  if (isEmpty) {
+    return (
+      <div className={coverStack()}>
+        <div className={emptyCoverStack()} />
+      </div>
+    );
+  }
 
   return (
     <div className={coverStack()}>
@@ -81,14 +92,12 @@ const DeckCover = ({ deck, onOpen }: DeckCoverProps) => {
       <DeckPreviewStack
         deckId={deck.id}
         deckName={deck.name}
+        isEmpty={deck.cardCount === 0}
         previewImageSrcList={deck.previewImageSrcList}
       />
 
       <div className={coverTitle()}>{deck.name}</div>
-      <div className={coverMeta()}>{`${deck.cards.length}개의 카드`}</div>
-      {deck.isSystem ? (
-        <span className={clsx("mt-1", systemBadge())}>고정 덱</span>
-      ) : null}
+      <div className={coverMeta()}>{`${deck.cardCount}장의 카드`}</div>
     </motion.button>
   );
 };
