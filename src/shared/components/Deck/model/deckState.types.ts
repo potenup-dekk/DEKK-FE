@@ -25,7 +25,7 @@ interface DeckOriginOffset {
 interface DeckItem {
   id: number;
   name: string;
-  isSystem: boolean;
+  isDefault: boolean;
   cardCount: number;
   previewImageSrcList: string[];
   cards: DeckCardItem[];

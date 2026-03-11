@@ -58,7 +58,7 @@ const mapDefaultDeckCards = (
 
 const patchDefaultDeckCards = (decks: DeckItem[], cards: DeckCardItem[]) => {
   return decks.map((deck) => {
-    if (deck.id !== 0) {
+    if (!deck.isDefault) {
       return deck;
     }
 
@@ -74,12 +74,13 @@ const patchDefaultDeckCards = (decks: DeckItem[], cards: DeckCardItem[]) => {
 const mapDeckSummaries = (decks: DeckSummaryData[]): DeckItem[] => {
   return decks
     .map((deck) => {
-      const isSystem = deck.type === "DEFAULT";
+      // Backend DEFAULT type is normalized to the UI-friendly boolean flag.
+      const isDefault = deck.type === "DEFAULT";
 
       return {
         id: deck.deckId,
         name: deck.name,
-        isSystem,
+        isDefault,
         cardCount: deck.cardCount,
         previewImageSrcList: normalizeDeckPreviewImageSrcList(
           deck.previewImageUrls,
@@ -88,10 +89,10 @@ const mapDeckSummaries = (decks: DeckSummaryData[]): DeckItem[] => {
       } satisfies DeckItem;
     })
     .sort((left, right) => {
-      if (left.isSystem && !right.isSystem) {
+      if (left.isDefault && !right.isDefault) {
         return -1;
       }
-      if (!left.isSystem && right.isSystem) {
+      if (!left.isDefault && right.isDefault) {
         return 1;
       }
       return left.id - right.id;

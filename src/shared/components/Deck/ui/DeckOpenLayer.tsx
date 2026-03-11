@@ -75,8 +75,8 @@ const DeckOpenLayer = ({
           hiddenCardId={selectedCardId}
           radialOrigin={radialOrigin}
           isClosing={isClosing}
-          isLoading={deck.isSystem && defaultDeckFetchStatus === "loading"}
-          errorMessage={deck.isSystem ? defaultDeckFetchError : null}
+          isLoading={deck.isDefault && defaultDeckFetchStatus === "loading"}
+          errorMessage={deck.isDefault ? defaultDeckFetchError : null}
           onRetry={onRetryLoadDefaultDeck}
           onSelectCard={onSelectCard}
         />

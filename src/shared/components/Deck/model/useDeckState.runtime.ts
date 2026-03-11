@@ -35,7 +35,11 @@ const useDeckStateRuntime = () => {
     scheduleCloseReset,
   });
   const loadDefaultDeckCards = createLoadDefaultDeckCards(store);
-  const openDeck = createOpenDeckHandler(actions, loadDefaultDeckCards);
+  const openDeck = createOpenDeckHandler(
+    store,
+    actions,
+    loadDefaultDeckCards,
+  );
   const retryLoadDefaultDeck = createRetryLoadDefaultDeckHandler(
     store,
     loadDefaultDeckCards,
