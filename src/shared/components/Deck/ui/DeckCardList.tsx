@@ -26,8 +26,7 @@ const DeckCardList = ({
   onRetry,
   onSelectCard,
 }: DeckCardListProps) => {
-  const { cardGrid, emptyMessage, statusRetryButton } = deckStyle();
-  const visibleCards = cards.filter((card) => card.id !== hiddenCardId);
+  const { cardButton, cardGrid, emptyMessage, statusRetryButton } = deckStyle();
 
   if (isLoading) {
     return <div className={emptyMessage()}>카드를 불러오는 중입니다.</div>;
@@ -44,13 +43,21 @@ const DeckCardList = ({
     );
   }
 
-  if (!visibleCards.length) {
+  if (!cards.length) {
     return <div className={emptyMessage()}>아직 카드가 없습니다.</div>;
   }
 
   return (
     <div className={cardGrid()}>
-      {visibleCards.map((card, index) => {
+      {cards.map((card, index) => {
+        if (card.id === hiddenCardId) {
+          return (
+            <div key={card.id} className="w-full" aria-hidden>
+              <div className={`${cardButton()} opacity-0`} />
+            </div>
+          );
+        }
+
         return (
           <DeckCard
             key={card.id}

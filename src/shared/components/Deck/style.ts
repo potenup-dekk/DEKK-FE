@@ -38,7 +38,7 @@ const deckStyle = tv({
     heroContainer:
       "fixed inset-0 z-60 flex flex-col items-center justify-center px-4 pb-10 pt-20",
     heroCardFrame:
-      "relative w-5/6 aspect-1/1.5 cursor-grab perspective-[1000px]",
+      "relative w-5/6 max-w-md aspect-1/1.5 cursor-grab perspective-[1000px]",
     heroInner: "relative aspect-1/1.5 w-full transform-3d",
     heroFace:
       "absolute inset-0 overflow-hidden rounded-lg bg-gray-200 shadow-2xl",

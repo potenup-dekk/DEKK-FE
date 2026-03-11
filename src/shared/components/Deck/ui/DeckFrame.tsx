@@ -43,13 +43,26 @@ const DeckGridLayer = ({
   hiddenDeckId,
   onOpenDeck,
 }: DeckGridLayerProps) => {
-  const { deckGrid } = deckStyle();
+  const { coverMeta, coverStack, coverTitle, deckGrid, emptyCoverStack } =
+    deckStyle();
 
   return (
     <div className={deckGrid()}>
       {decks.map((deck) => {
         if (deck.id === hiddenDeckId) {
-          return null;
+          return (
+            <div
+              key={deck.id}
+              className="flex w-25 flex-col items-center gap-1 text-center"
+              aria-hidden
+            >
+              <div className={coverStack()}>
+                <div className={`${emptyCoverStack()} opacity-0`} />
+              </div>
+              <div className={`${coverTitle()} opacity-0`}>placeholder</div>
+              <div className={`${coverMeta()} opacity-0`}>placeholder</div>
+            </div>
+          );
         }
 
         return <DeckCover key={deck.id} deck={deck} onOpen={onOpenDeck} />;

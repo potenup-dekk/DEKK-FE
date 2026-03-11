@@ -5,6 +5,17 @@ const PICSUM_LIMIT = 5;
 const CARD_IMAGE_BASE_URL =
   "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/";
 
+const toCardImageUrl = (cardImageUrl: string) => {
+  if (
+    cardImageUrl.startsWith("http://") ||
+    cardImageUrl.startsWith("https://")
+  ) {
+    return cardImageUrl;
+  }
+
+  return `${CARD_IMAGE_BASE_URL}${cardImageUrl}`;
+};
+
 const mapCards = (
   page: number,
   items: NonNullable<Awaited<ReturnType<typeof getCards>>["data"]>["content"],
@@ -12,7 +23,7 @@ const mapCards = (
   return items.map((item, index) => ({
     id: `${page}-${item.cardId}-${index}`,
     cardId: item.cardId,
-    imageUrl: `${CARD_IMAGE_BASE_URL}${item.cardImageUrl || ""}`,
+    imageUrl: toCardImageUrl(item.cardImageUrl || ""),
     products: item.products ?? [],
     height: item.height,
     weight: item.weight,
