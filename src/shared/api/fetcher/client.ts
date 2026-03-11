@@ -1,4 +1,3 @@
-import { USE_MOCK } from "@/shared/constants/config";
 import { API_BASE } from "@/shared/config/env";
 
 const resolveUrl = (input: RequestInfo) => {
@@ -35,34 +34,6 @@ export class ApiRequestError extends Error {
   }
 }
 
-type UserStatus = "PENDING" | "ACTIVE";
-
-const getMockUserMe = <T>(input: RequestInfo): T | null => {
-  const raw =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("mock_status")
-      : null;
-
-  if (!USE_MOCK || typeof input !== "string" || input !== "/w/v1/users/me") {
-    return null;
-  }
-
-  return {
-    code: "SU20002",
-    message: "내 정보 조회에 성공했습니다.",
-    data: {
-      id: 1,
-      email: "test@example.com",
-      nickname: null,
-      height: null,
-      weight: null,
-      gender: null,
-      status: (raw === "ACTIVE" ? "ACTIVE" : "PENDING") as UserStatus,
-      role: "USER",
-    },
-  } as T;
-};
-
 const ensureContentType = (init: RequestInit, headers: Headers) => {
   if (!headers.has("Content-Type") && init.body) {
     headers.set("Content-Type", "application/json");
@@ -86,9 +57,6 @@ export async function requestJson<T>(
   input: RequestInfo,
   init: RequestInit = {},
 ): Promise<T> {
-  const mockResult = getMockUserMe<T>(input);
-  if (mockResult) return mockResult;
-
   const headers = new Headers(init.headers);
   ensureContentType(init, headers);
 

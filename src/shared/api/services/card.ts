@@ -29,7 +29,7 @@ const assertCardResponse = <T>(response: ApiResponse<T>) => {
 
 const getCards = async (page: number, size: number) => {
   const response = await requestJson<ApiResponse<CardListResponse>>(
-    `/w/v1/cards?page=${page}&size=${size}`,
+    `/api/cards?page=${page}&size=${size}`,
     { method: "GET" },
   );
 
@@ -41,7 +41,7 @@ const saveCardSwipeEvaluation = async (
   payload: SwipePayload,
 ) => {
   const response = await requestJson<ApiResponse<null>>(
-    `/w/v1/cards/${cardId}/swipe`,
+    `/api/cards/${cardId}/swipe`,
     {
       method: "POST",
       body: JSON.stringify(payload),
