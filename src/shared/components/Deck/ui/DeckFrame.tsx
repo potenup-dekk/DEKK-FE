@@ -83,7 +83,7 @@ const OpenDeckLayer = ({
         <header className={openHeader()}>
           <div>
             <h2 className={openTitle()}>{deck.name}</h2>
-            <p className={openDescription()}>{`${deck.cards.length}개의 카드`}</p>
+            <p className={openDescription()}>{`${deck.cardCount}장의 카드`}</p>
           </div>
           <button type="button" className={closeButton()} onClick={onCloseDeck}>
             <X size={18} />

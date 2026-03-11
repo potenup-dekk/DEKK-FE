@@ -1,5 +1,5 @@
 import { animate, type MotionValue } from "framer-motion";
-import { saveCardSwipeEvaluationAction } from "@/shared/api/actions";
+import { saveCardSwipeEvaluation } from "@/features/card-swipe";
 import { swipeAnimationTransition } from "./animate";
 import type { SwipeType } from "@/entities/card";
 import type { CardItem } from "./useCardStack.types";
@@ -14,7 +14,7 @@ const saveSwipeEvaluation = (
   const topCard = cards[0];
   if (!isLoggedIn || !topCard?.cardId) return;
 
-  void saveCardSwipeEvaluationAction(topCard.cardId, { swipeType }).catch(
+  void saveCardSwipeEvaluation(topCard.cardId, { swipeType }).catch(
     () => {
       return;
     },
