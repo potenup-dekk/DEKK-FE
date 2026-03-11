@@ -2,13 +2,11 @@ import { USE_MOCK } from "@/shared/constants/config";
 import { API_BASE } from "@/shared/config/env";
 
 const resolveUrl = (input: RequestInfo) => {
-  const isServer = typeof window === "undefined";
-
   if (typeof input !== "string") return input;
   if (input.startsWith("http://") || input.startsWith("https://")) return input;
   if (input.startsWith("/api/")) return input;
   if (input.startsWith("/")) {
-    return isServer ? `${API_BASE}${input}` : `/api/proxy${input}`;
+    return `${API_BASE}${input}`;
   }
   return input;
 };
