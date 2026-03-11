@@ -23,9 +23,22 @@ const assertAuthResponse = <T>(response: ApiResponse<T>) => {
 };
 
 const logout = async () => {
-  const response = await requestJson<ApiResponse<null>>("/w/v1/auth/logout", {
-    method: "POST",
-  });
+  const response = await requestJson<ApiResponse<null> | null>(
+    "/w/v1/auth/logout",
+    {
+      method: "POST",
+    },
+  );
+
+  console.log(response);
+
+  if (!response) {
+    return {
+      code: "HTTP_NO_CONTENT",
+      message: "로그아웃이 완료되었습니다.",
+      data: null,
+    } satisfies ApiResponse<null>;
+  }
 
   return assertAuthResponse(response);
 };
