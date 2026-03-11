@@ -7,6 +7,8 @@ const deckStyle = tv({
     coverButton:
       "group flex w-25 flex-col items-center gap-1 overflow-visible bg-transparent text-center transition-transform hover:scale-[1.02]",
     coverStack: "relative h-37.5 w-25",
+    emptyCoverStack:
+      "h-full w-full rounded-lg border border-dashed border-primary/40 bg-transparent",
     previewImageBase:
       "absolute left-1/2 top-0 aspect-1/1.5 -translate-x-1/2 overflow-hidden rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.25)]",
     previewImage: "h-full w-full object-cover",
@@ -17,7 +19,7 @@ const deckStyle = tv({
       "inline-flex items-center rounded-full border border-emerald-300/40 bg-emerald-500/20 px-2 py-0.5 text-[11px] font-medium text-emerald-100",
     openLayer: "fixed inset-0 z-40 overflow-y-auto px-4 pb-20 pt-8",
     openContent: "mx-auto w-full max-w-md",
-    openHeader: "mb-5 flex w-full items-center justify-between",
+    openHeader: "sticky mb-5 flex w-full items-center justify-between",
     openTitle: "text-lg font-semibold text-white",
     openDescription: "text-xs text-zinc-300",
     closeButton:
@@ -35,12 +37,12 @@ const deckStyle = tv({
     heroBackdrop: "fixed inset-0 z-50 bg-black/45 backdrop-blur-md",
     heroContainer:
       "fixed inset-0 z-50 flex flex-col items-center justify-center px-4 pb-10 pt-20",
-    heroCardFrame: "relative w-full max-w-[18rem] perspective-[1000px]",
+    heroCardFrame: "relative w-5/6 aspect-1/1.5 perspective-[1000px]",
     heroInner: "relative aspect-1/1.5 w-full transform-3d",
     heroFace:
-      "absolute inset-0 overflow-hidden rounded-2xl border border-white/30 bg-zinc-900 shadow-2xl",
+      "absolute inset-0 overflow-hidden rounded-lg bg-gray-200 shadow-2xl",
     heroBack:
-      "absolute inset-0 rounded-2xl border border-white/30 bg-zinc-800 p-5 text-sm text-white backface-hidden transform-[rotateY(180deg)]",
+      "absolute inset-0 rounded-lg bg-white p-5 text-sm text-white backface-hidden transform-[rotateY(180deg)]",
     heroBackContent: "flex h-full flex-col gap-4 overflow-y-auto",
     heroFallbackText: "m-auto text-sm text-zinc-200",
     heroImage: "h-full w-full object-cover",

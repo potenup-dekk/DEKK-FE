@@ -5,5 +5,5 @@ export {
   type OnboardingPayload,
 } from "./profile";
 export { getCards, saveCardSwipeEvaluation } from "./card";
-export { deleteDefaultDeckCard, getDefaultDeckCards } from "./deck";
+export { deleteDefaultDeckCard, getDecks, getDefaultDeckCards } from "./deck";
 export { logout } from "./auth";

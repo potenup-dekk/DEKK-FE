@@ -48,7 +48,7 @@ const deckHeroCardTransition = {
 } as const;
 
 const deckCardFlipTransition = {
-  duration: 0.25,
+  duration: 0.2,
   ease: "easeInOut",
 } as const;
 
