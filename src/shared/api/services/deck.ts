@@ -144,10 +144,18 @@ const getDefaultDeckCards = async (page = 0, size = 100) => {
   return assertDeckResponse(response);
 };
 
-const deleteDefaultDeckCard = async (cardId: number) => {
+const deleteDefaultDeckCard = async (
+  cardId: number,
+  cookieHeader?: string,
+) => {
+  const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
+
   const response = await requestJson<ApiResponse<null>>(
     `/w/v1/decks/default/cards/${cardId}`,
-    { method: "DELETE" },
+    {
+      method: "DELETE",
+      headers,
+    },
   );
 
   return assertDefaultDeckDeleteResponse(response);
