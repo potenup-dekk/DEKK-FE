@@ -1,14 +1,13 @@
 import type {
   DeckCardContentData,
   DeckProductData,
-  DeckSummaryData,
 } from "@/entities/deck";
 import { createCustomDeck, createInitialDecks } from "./deckState.factories";
 import {
-  normalizeDeckPreviewImageSrcList,
   resolveCdnImageUrl,
   toDefaultDeckPreviewImageSrcList,
 } from "./deckState.images";
+import { mapDeckSummaries } from "./deckState.summary";
 import type {
   DeckCardItem,
   DeckCardProductItem,
@@ -69,34 +68,6 @@ const patchDefaultDeckCards = (decks: DeckItem[], cards: DeckCardItem[]) => {
       cards,
     };
   });
-};
-
-const mapDeckSummaries = (decks: DeckSummaryData[]): DeckItem[] => {
-  return decks
-    .map((deck) => {
-      // Backend DEFAULT type is normalized to the UI-friendly boolean flag.
-      const isDefault = deck.type === "DEFAULT";
-
-      return {
-        id: deck.deckId,
-        name: deck.name,
-        isDefault,
-        cardCount: deck.cardCount,
-        previewImageSrcList: normalizeDeckPreviewImageSrcList(
-          deck.previewImageUrls,
-        ),
-        cards: [],
-      } satisfies DeckItem;
-    })
-    .sort((left, right) => {
-      if (left.isDefault && !right.isDefault) {
-        return -1;
-      }
-      if (!left.isDefault && right.isDefault) {
-        return 1;
-      }
-      return left.id - right.id;
-    });
 };
 
 export {

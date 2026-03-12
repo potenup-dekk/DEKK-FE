@@ -11,26 +11,28 @@ import FrontCardFocusToggle from "./FrontCardFocusToggle";
 
 interface FrontCardMotionContainerProps {
   cardId: string;
+  cardNumericId: number;
   x: FrontCardProps["x"];
   rotate: FrontCardProps["rotate"];
   targetCardHeight: number | null;
   shouldApplyCompressedCard: boolean;
-  shouldShowFocusButton: boolean;
   isFocusMode: boolean;
   onToggleFocusMode: () => void;
+  onOpenCustomDeckSheet: (cardId: number) => void;
   onDragEnd: (_: unknown, info: { offset: { x: number } }) => void;
   children: React.ReactNode;
 }
 
 const FrontCardMotionContainer = ({
   cardId,
+  cardNumericId,
   x,
   rotate,
   targetCardHeight,
   shouldApplyCompressedCard,
-  shouldShowFocusButton,
   isFocusMode,
   onToggleFocusMode,
+  onOpenCustomDeckSheet,
   onDragEnd,
   children,
 }: FrontCardMotionContainerProps) => {
@@ -51,12 +53,12 @@ const FrontCardMotionContainer = ({
       exit={getFrontCardExit(x.get())}
     >
       {children}
-      {shouldShowFocusButton ? (
-        <FrontCardFocusToggle
-          isFocusMode={isFocusMode}
-          onToggleFocusMode={onToggleFocusMode}
-        />
-      ) : null}
+      <FrontCardFocusToggle
+        cardId={cardNumericId}
+        isFocusMode={isFocusMode}
+        onToggleFocusMode={onToggleFocusMode}
+        onOpenCustomDeckSheet={onOpenCustomDeckSheet}
+      />
     </motion.div>
   );
 };

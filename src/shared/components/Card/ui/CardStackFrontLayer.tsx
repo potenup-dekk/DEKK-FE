@@ -19,6 +19,7 @@ const CardStackFrontLayer = ({
   return (
     <FrontCard
       cardId={frontCard.id}
+      cardNumericId={frontCard.cardId}
       frontImage={frontImage}
       products={frontCard.products}
       height={frontCard.height}
@@ -40,6 +41,7 @@ const CardStackFrontLayer = ({
       compressedCardHeight={displayOptions.compressedCardHeight}
       expandedCardHeight={displayOptions.expandedCardHeight}
       onToggleFocusMode={displayOptions.onToggleFocusMode}
+      onOpenCustomDeckSheet={displayOptions.onOpenCustomDeckSheet}
     />
   );
 };

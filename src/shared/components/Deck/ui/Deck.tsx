@@ -1,12 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import DeckCreateSheet from "@/shared/components/Deck/ui/DeckCreateSheet";
-import DeckHeroOverlay from "@/shared/components/Deck/ui/DeckHeroOverlay";
 import { deckBackdropMotion } from "../model/animate";
 import useDeckState from "../model/useDeckState";
 import deckStyle from "../style";
-import DeckFrame from "./DeckFrame";
+import DeckContent from "./DeckContent";
 
 interface DeckBackdropLayerProps {
   isOpen: boolean;
@@ -41,38 +39,7 @@ const Deck = () => {
         isOpen={deckState.mode !== "closed"}
         onClose={deckState.closeDeck}
       />
-
-      <DeckFrame
-        decks={deckState.decks}
-        activeDeck={deckState.activeDeck}
-        selectedCardId={deckState.selectedCard?.id ?? null}
-        mode={deckState.mode}
-        radialOrigin={deckState.radialOrigin}
-        defaultDeckFetchStatus={deckState.defaultDeckFetchStatus}
-        defaultDeckFetchError={deckState.defaultDeckFetchError}
-        onOpenDeck={deckState.openDeck}
-        onRetryLoadDefaultDeck={deckState.retryLoadDefaultDeck}
-        onCloseDeck={deckState.closeDeck}
-        onSelectCard={deckState.selectCard}
-      />
-
-      <DeckHeroOverlay
-        selectedCard={deckState.selectedCard}
-        isOpen={deckState.mode === "hero"}
-        isFlipped={deckState.isHeroFlipped}
-        onClose={deckState.closeHero}
-        onDeleteCard={() => {
-          void deckState.deleteSelectedCard();
-        }}
-        onFlip={deckState.toggleHeroFlip}
-        onOpenCreateDeckSheet={deckState.openCreateSheet}
-      />
-
-      <DeckCreateSheet
-        isOpen={deckState.isCreateSheetOpen}
-        onClose={deckState.closeCreateSheet}
-        onCreate={deckState.createDeck}
-      />
+      <DeckContent deckState={deckState} />
     </div>
   );
 };

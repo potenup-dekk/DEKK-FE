@@ -12,8 +12,9 @@ const cardStyle = tv({
     backRoot:
       "absolute w-5/6 aspect-1/1.5 bg-gray-200 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden",
     backInner: "relative size-full",
-    focusToggleButton:
-      "absolute bottom-3 right-3 z-50 rounded-full p-3 bg-primary/25 text-white backdrop-blur-md transition-colors hover:bg-primary/35",
+    focusActionGroup: "absolute right-3 top-3 z-50 flex items-center gap-2",
+    focusActionButton:
+      "rounded-full p-3 bg-primary/25 text-white backdrop-blur-md transition-colors hover:bg-primary/35",
   },
   variants: {
     isCardCompressed: {

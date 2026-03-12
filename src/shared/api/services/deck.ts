@@ -65,6 +65,7 @@ const assertDefaultDeckDeleteResponse = (response: ApiResponse<null>) => {
   );
 };
 
+
 const getDefaultDeckCards = async (page = 0, size = 100) => {
   const response = await requestJson<ApiResponse<DefaultDeckCardsResponse>>(
     `/api/decks/default/cards?page=${page}&size=${size}`,

@@ -1,36 +1,55 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
 import { deckCreateSheetBackdropMotion } from "../model/animate";
+import useDeckCreateSheet from "../model/useDeckCreateSheet";
 import deckStyle from "../style";
 import DeckCreateSheetPanel from "./DeckCreateSheetPanel";
 
 interface DeckCreateSheetProps {
   isOpen: boolean;
+  targetCardId?: number | null;
   onClose: () => void;
-  onCreate: (name: string) => boolean;
+  onSaved?: () => void;
 }
+
+const toDeckCreateSheetPanelProps = (
+  sheetState: ReturnType<typeof useDeckCreateSheet>,
+) => {
+  return {
+    customDecks: sheetState.customDecks,
+    isDecksLoading: sheetState.isDecksLoading,
+    statusMessage: sheetState.statusMessage,
+    errorMessage: sheetState.errorMessage,
+    name: sheetState.name,
+    isCreateDisabled: sheetState.isCreateDisabled,
+    isSaving: sheetState.isSaving,
+    isCreating: sheetState.isCreating,
+    onDeckSelect: (deckId: number) => {
+      void sheetState.saveToCustomDeck(deckId);
+    },
+    onNameChange: sheetState.setName,
+    onClose: sheetState.resetAndClose,
+    onCreateAndSave: () => {
+      void sheetState.createAndSave();
+    },
+  };
+};
 
 const DeckCreateSheet = ({
   isOpen,
+  targetCardId = null,
   onClose,
-  onCreate,
+  onSaved,
 }: DeckCreateSheetProps) => {
   const { sheetBackdrop } = deckStyle();
-  const [name, setName] = useState("");
-
-  const isSubmitDisabled = !name.trim();
-  const resetAndClose = () => {
-    setName("");
-    onClose();
-  };
-
-  const handleCreate = () => {
-    if (onCreate(name.trim())) {
-      setName("");
-    }
-  };
+  const sheetState = useDeckCreateSheet({
+    isOpen,
+    targetCardId,
+    onClose,
+    onSaved,
+  });
+  const panelProps = toDeckCreateSheetPanelProps(sheetState);
 
   return (
     <AnimatePresence>
@@ -41,15 +60,9 @@ const DeckCreateSheet = ({
             initial={deckCreateSheetBackdropMotion.initial}
             animate={deckCreateSheetBackdropMotion.animate}
             exit={deckCreateSheetBackdropMotion.exit}
-            onClick={resetAndClose}
+            onClick={sheetState.resetAndClose}
           />
-          <DeckCreateSheetPanel
-            name={name}
-            isSubmitDisabled={isSubmitDisabled}
-            onNameChange={setName}
-            onClose={resetAndClose}
-            onCreate={handleCreate}
-          />
+          <DeckCreateSheetPanel {...panelProps} />
         </>
       ) : null}
     </AnimatePresence>
