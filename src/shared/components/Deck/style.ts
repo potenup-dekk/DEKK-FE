@@ -54,18 +54,26 @@ const deckStyle = tv({
     heroActions: "mt-5 flex items-center gap-3",
     heroActionButton:
       "inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white transition-colors hover:bg-black/65",
-    sheetBackdrop: "fixed inset-0 z-70 bg-black/45 backdrop-blur-sm",
+    sheetBackdrop: "fixed inset-0 z-70 bg-black/30 backdrop-blur-sm",
     sheetPanel:
-      "fixed inset-x-0 bottom-0 z-71 mx-auto w-full max-w-xl rounded-t-3xl border border-white/20 bg-zinc-900 p-6",
-    sheetTitle: "text-base font-semibold text-white",
-    sheetDescription: "mt-1 text-sm text-zinc-300",
+      "fixed inset-x-0 bottom-0 z-71 mx-auto w-full max-w-xl rounded-t-3xl border border-zinc-200 bg-white p-6",
+    sheetTitle: "text-base font-semibold text-zinc-900",
+    sheetDescription: "mt-1 text-sm text-zinc-600",
+    sheetSectionTitle: "mt-4 text-xs font-semibold text-zinc-500",
+    sheetDeckList: "mt-2 flex max-h-50 flex-col gap-2 overflow-y-auto pr-1",
+    sheetDeckItem:
+      "flex w-full items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2 text-left transition-colors hover:bg-zinc-100",
+    sheetDeckName: "text-sm font-medium text-zinc-900",
+    sheetDeckMeta: "text-xs text-zinc-500",
     sheetInput:
-      "mt-4 w-full rounded-xl border border-white/20 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-zinc-400 focus:border-white/40 focus:outline-none",
+      "mt-4 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-primary/60 focus:outline-none",
+    sheetErrorText: "mt-2 text-xs text-rose-500",
+    sheetStatusText: "mt-2 text-xs text-zinc-500",
     sheetActionRow: "mt-5 flex items-center justify-end gap-2",
     sheetButton:
-      "rounded-lg border border-white/20 bg-black/30 px-4 py-2 text-sm text-white transition-colors hover:bg-black/50",
+      "rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm text-zinc-700 transition-colors hover:bg-zinc-100",
     sheetButtonPrimary:
-      "rounded-lg border border-emerald-300/30 bg-emerald-500/20 px-4 py-2 text-sm text-emerald-50 transition-colors hover:bg-emerald-500/35 disabled:cursor-not-allowed disabled:opacity-50",
+      "rounded-lg border border-primary/70 bg-primary px-4 py-2 text-sm text-white transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50",
   },
 });
 

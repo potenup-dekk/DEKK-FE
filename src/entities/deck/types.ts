@@ -36,3 +36,14 @@ export interface DeckSummaryData {
   cardCount: number;
   previewImageUrls: string[];
 }
+
+export interface CustomDeckData {
+  deckId: number;
+  name: string;
+  cardCount: number;
+  imageUrl: string;
+}
+
+export interface CreateCustomDeckPayload {
+  name: string;
+}

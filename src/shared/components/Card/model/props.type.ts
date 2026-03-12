@@ -7,10 +7,12 @@ interface CardDisplayOptions {
   compressedCardHeight: number | null;
   expandedCardHeight: number | null;
   onToggleFocusMode: () => void;
+  onOpenCustomDeckSheet: (cardId: number) => void;
 }
 
 interface FrontCardProps {
   cardId: CardItem["id"];
+  cardNumericId: CardItem["cardId"];
   frontImage: string;
   x: ReturnType<typeof useMotionValue<number>>;
   rotate: MotionValue<number>;
@@ -32,6 +34,7 @@ interface FrontCardProps {
   compressedCardHeight: CardDisplayOptions["compressedCardHeight"];
   expandedCardHeight: CardDisplayOptions["expandedCardHeight"];
   onToggleFocusMode: CardDisplayOptions["onToggleFocusMode"];
+  onOpenCustomDeckSheet: CardDisplayOptions["onOpenCustomDeckSheet"];
 }
 
 interface CardStackContentProps {

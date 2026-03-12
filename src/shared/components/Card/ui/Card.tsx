@@ -21,6 +21,7 @@ const Card = ({
   compressedCardHeight,
   expandedCardHeight,
   onToggleFocusMode,
+  onOpenCustomDeckSheet,
 }: CardDisplayOptions) => {
   const { isAuthenticated } = useAuthGuard();
   const cardStack = useCardStack(isAuthenticated);
@@ -51,6 +52,7 @@ const Card = ({
           compressedCardHeight,
           expandedCardHeight,
           onToggleFocusMode,
+          onOpenCustomDeckSheet,
         }}
       />
     </CardAuthProvider>

@@ -3,4 +3,8 @@ export {
   updateMyProfileAction,
   type OnboardingPayload,
 } from "./profile";
-export { deleteDefaultDeckCardAction } from "./deck";
+export {
+  createCustomDeckAction,
+  deleteDefaultDeckCardAction,
+  saveCardToCustomDeckAction,
+} from "./deck";

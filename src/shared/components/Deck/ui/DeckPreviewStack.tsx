@@ -1,10 +1,5 @@
-import { motion } from "framer-motion";
-import {
-  getDeckPreviewCardMotion,
-  getDeckPreviewCardVisual,
-} from "../model/animate";
 import deckStyle from "../style";
-import DeckCardImage from "./DeckCardImage";
+import DeckPreviewCard from "./DeckPreviewCard";
 
 interface DeckPreviewStackProps {
   deckId: number;
@@ -19,8 +14,7 @@ const DeckPreviewStack = ({
   isEmpty,
   previewImageSrcList,
 }: DeckPreviewStackProps) => {
-  const { coverStack, emptyCoverStack, previewImage, previewImageBase } =
-    deckStyle();
+  const { coverStack, emptyCoverStack } = deckStyle();
 
   if (isEmpty) {
     return (
@@ -33,26 +27,13 @@ const DeckPreviewStack = ({
   return (
     <div className={coverStack()}>
       {previewImageSrcList.slice(0, 3).map((imageSrc, index) => {
-        const previewCardMotion = getDeckPreviewCardMotion(index);
-        const previewCardVisual = getDeckPreviewCardVisual(index);
-
         return (
-          <motion.div
+          <DeckPreviewCard
             key={`${deckId}-${imageSrc}`}
-            className={previewImageBase()}
-            initial={previewCardMotion.initial}
-            animate={previewCardMotion.animate}
-            style={{
-              width: previewCardVisual.width,
-              zIndex: previewCardVisual.zIndex,
-            }}
-          >
-            <DeckCardImage
-              src={imageSrc}
-              alt={`${deckName} 미리보기`}
-              className={previewImage()}
-            />
-          </motion.div>
+            deckName={deckName}
+            imageSrc={imageSrc}
+            index={index}
+          />
         );
       })}
     </div>
