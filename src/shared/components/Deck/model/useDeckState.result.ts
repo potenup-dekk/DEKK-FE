@@ -9,7 +9,11 @@ const toUseDeckStateResult = (
   actions: ReturnType<typeof createDeckStateActions>,
   openDeck: UseDeckStateResult["openDeck"],
   retryLoadDefaultDeck: UseDeckStateResult["retryLoadDefaultDeck"],
+  createDeck: UseDeckStateResult["createDeck"],
+  saveSelectedCardToCustomDeck: UseDeckStateResult["saveSelectedCardToCustomDeck"],
   deleteSelectedCard: UseDeckStateResult["deleteSelectedCard"],
+  updateActiveDeckName: UseDeckStateResult["updateActiveDeckName"],
+  deleteActiveDeck: UseDeckStateResult["deleteActiveDeck"],
 ): UseDeckStateResult => {
   return {
     decks: store.decks,
@@ -29,8 +33,11 @@ const toUseDeckStateResult = (
     toggleHeroFlip: actions.toggleHeroFlip,
     openCreateSheet: actions.openCreateSheet,
     closeCreateSheet: actions.closeCreateSheet,
-    createDeck: actions.createDeck,
+    createDeck,
+    saveSelectedCardToCustomDeck,
     deleteSelectedCard,
+    updateActiveDeckName,
+    deleteActiveDeck,
   };
 };
 

@@ -17,14 +17,17 @@ const deckStyle = tv({
     coverMeta: "text-center text-[10px] leading-[1.2] text-zinc-500",
     systemBadge:
       "inline-flex items-center rounded-full border border-emerald-300/40 bg-emerald-500/20 px-2 py-0.5 text-[11px] font-medium text-emerald-100",
-    openLayer: "fixed inset-0 z-50 overflow-y-auto px-4 pb-20 pt-8",
+    openLayer: "fixed inset-0 z-50 overflow-y-auto px-4 pb-3 pt-12",
     openContent: "mx-auto w-full max-w-md",
-    openHeader: "sticky mb-5 flex w-full items-center justify-between",
+    openHeader: "sticky mb-5 flex w-full items-end justify-between",
+    openHeaderActions: "self-end flex items-center gap-2",
     openTitle: "text-lg font-semibold text-white",
     openDescription: "text-xs text-zinc-300",
+    openEditButton:
+      "rounded-full border border-white/25 bg-black/40 p-2 text-white transition-colors hover:bg-black/60",
     closeButton:
       "rounded-full border border-white/25 bg-black/40 p-2 text-white transition-colors hover:bg-black/60",
-    cardGrid: "mx-auto grid w-fit grid-cols-3 gap-3",
+    cardGrid: "mx-auto grid w-fit grid-cols-3 gap-3 pb-3",
     cardButton:
       "group relative block w-25 aspect-1/1.5 overflow-hidden rounded-lg bg-zinc-900",
     cardImage: "h-full w-full object-cover",
@@ -56,16 +59,27 @@ const deckStyle = tv({
       "inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white transition-colors hover:bg-black/65",
     sheetBackdrop: "fixed inset-0 z-70 bg-black/45 backdrop-blur-sm",
     sheetPanel:
-      "fixed inset-x-0 bottom-0 z-71 mx-auto w-full max-w-xl rounded-t-3xl border border-white/20 bg-zinc-900 p-6",
-    sheetTitle: "text-base font-semibold text-white",
-    sheetDescription: "mt-1 text-sm text-zinc-300",
+      "fixed inset-x-0 bottom-0 z-71 mx-auto w-full max-w-xl translate-y-3 rounded-t-3xl border border-zinc-200 bg-white p-6 shadow-[0_-8px_24px_rgba(0,0,0,0.08)]",
+    sheetTitle: "text-base font-semibold text-zinc-900",
+    sheetDescription: "mt-1 text-sm text-zinc-600",
+    sheetSectionTitle: "mt-4 text-xs font-semibold text-zinc-500",
+    sheetDeckList: "mt-2 flex max-h-50 flex-col gap-2 overflow-y-auto pr-1",
+    sheetDeckItem:
+      "flex w-full items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-left text-zinc-900 transition-colors hover:bg-zinc-100 disabled:opacity-60",
+    sheetDeckName: "text-sm font-medium text-zinc-900",
+    sheetDeckMeta: "text-xs text-zinc-500",
     sheetInput:
-      "mt-4 w-full rounded-xl border border-white/20 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-zinc-400 focus:border-white/40 focus:outline-none",
+      "mt-4 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-zinc-400 focus:outline-none",
+    sheetErrorText: "mt-2 text-xs text-rose-400",
+    sheetStatusText: "mt-2 text-xs text-zinc-500",
     sheetActionRow: "mt-5 flex items-center justify-end gap-2",
+    sheetActionRowBetween: "mt-5 flex items-center justify-between gap-2",
     sheetButton:
-      "rounded-lg border border-white/20 bg-black/30 px-4 py-2 text-sm text-white transition-colors hover:bg-black/50",
+      "rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm text-zinc-800 transition-colors hover:bg-zinc-100",
+    sheetDangerButton:
+      "rounded-lg border border-error bg-error px-4 py-2 text-sm text-white transition-colors hover:bg-error/90 disabled:cursor-not-allowed disabled:opacity-50",
     sheetButtonPrimary:
-      "rounded-lg border border-emerald-300/30 bg-emerald-500/20 px-4 py-2 text-sm text-emerald-50 transition-colors hover:bg-emerald-500/35 disabled:cursor-not-allowed disabled:opacity-50",
+      "rounded-lg border border-primary bg-primary px-4 py-2 text-sm text-white transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50",
   },
 });
 

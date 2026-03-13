@@ -1,6 +1,11 @@
 import type { Variants } from "framer-motion";
 import type { DeckOriginOffset } from "./deckState.helpers";
 
+interface DeckSpreadCardCustom {
+  index: number;
+  shouldStagger: boolean;
+}
+
 const getDeckSpreadHiddenVariant = () => {
   return {
     x: 0,
@@ -11,7 +16,12 @@ const getDeckSpreadHiddenVariant = () => {
   };
 };
 
-const getDeckSpreadVisibleVariant = (index: number) => {
+const getDeckSpreadVisibleVariant = ({
+  index,
+  shouldStagger,
+}: DeckSpreadCardCustom) => {
+  const delay = shouldStagger ? index * 0.03 : 0;
+
   return {
     x: 0,
     y: 0,
@@ -22,7 +32,7 @@ const getDeckSpreadVisibleVariant = (index: number) => {
       type: "spring" as const,
       damping: 20,
       stiffness: 320,
-      delay: index * 0.03,
+      delay,
     },
   };
 };
@@ -47,11 +57,10 @@ const deckSpreadCardVariants = (origin: DeckOriginOffset): Variants => {
 
   return {
     hidden: getDeckSpreadHiddenVariant(),
-    visible: (index: number) => {
-      return getDeckSpreadVisibleVariant(index);
+    visible: (custom: DeckSpreadCardCustom) => {
+      return getDeckSpreadVisibleVariant(custom);
     },
-    exit: (index: number) => {
-      void index;
+    exit: (_custom: DeckSpreadCardCustom) => {
       return getDeckSpreadExitVariant();
     },
   };

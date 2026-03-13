@@ -6,11 +6,15 @@ const useDeckState = (): UseDeckStateResult => {
   const {
     actions,
     activeDeck,
+    createDeck,
+    deleteActiveDeck,
     deleteSelectedCard,
     openDeck,
     retryLoadDefaultDeck,
+    saveSelectedCardToCustomDeck,
     selectedCard,
     store,
+    updateActiveDeckName,
   } = useDeckStateRuntime();
 
   return toUseDeckStateResult(
@@ -20,7 +24,11 @@ const useDeckState = (): UseDeckStateResult => {
     actions,
     openDeck,
     retryLoadDefaultDeck,
+    createDeck,
+    saveSelectedCardToCustomDeck,
     deleteSelectedCard,
+    updateActiveDeckName,
+    deleteActiveDeck,
   );
 };
 

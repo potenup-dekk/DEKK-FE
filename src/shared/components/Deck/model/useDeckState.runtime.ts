@@ -1,13 +1,8 @@
-import {
-  createDeleteSelectedCardHandler,
-  createLoadDefaultDeckCards,
-  createOpenDeckHandler,
-  createRetryLoadDefaultDeckHandler,
-} from "./useDeckState.handlers";
 import createDeckStateActions from "./useDeckState.actions";
 import useDeckCloseTimeout from "./useDeckCloseTimeout";
 import useDeckDerivedState from "./useDeckState.derived";
 import useDeckInitialization from "./useDeckState.initialization";
+import { createDeckStateRuntimeHandlers } from "./useDeckState.runtime.helpers";
 import useDeckStateStore from "./useDeckState.store";
 
 const useDeckStateRuntime = () => {
@@ -34,29 +29,30 @@ const useDeckStateRuntime = () => {
     clearCloseTimeout,
     scheduleCloseReset,
   });
-  const loadDefaultDeckCards = createLoadDefaultDeckCards(store);
-  const openDeck = createOpenDeckHandler(actions, loadDefaultDeckCards);
-  const retryLoadDefaultDeck = createRetryLoadDefaultDeckHandler(
-    store,
-    loadDefaultDeckCards,
-  );
-  const deleteSelectedCard = createDeleteSelectedCardHandler(
-    store,
-    actions,
-    activeDeck,
-    selectedCard,
-  );
+  const {
+    createDeck,
+    deleteActiveDeck,
+    deleteSelectedCard,
+    openDeck,
+    retryLoadDefaultDeck,
+    saveSelectedCardToCustomDeck,
+    updateActiveDeckName,
+  } = createDeckStateRuntimeHandlers(store, actions, activeDeck, selectedCard);
 
   useDeckInitialization(store.setDecks, clearCloseTimeout);
 
   return {
     actions,
     activeDeck,
+    createDeck,
+    deleteActiveDeck,
     deleteSelectedCard,
     openDeck,
     retryLoadDefaultDeck,
+    saveSelectedCardToCustomDeck,
     selectedCard,
     store,
+    updateActiveDeckName,
   };
 };
 
