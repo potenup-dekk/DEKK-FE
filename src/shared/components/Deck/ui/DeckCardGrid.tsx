@@ -10,6 +10,7 @@ interface DeckCardGridProps {
   hiddenCardId: number | null;
   radialOrigin: DeckOriginOffset;
   isClosing: boolean;
+  shouldStagger: boolean;
   onSelectCard: (cardId: number) => void;
   cardButtonClassName: string;
 }
@@ -19,6 +20,7 @@ const DeckCardGrid = ({
   hiddenCardId,
   radialOrigin,
   isClosing,
+  shouldStagger,
   onSelectCard,
   cardButtonClassName,
 }: DeckCardGridProps) => {
@@ -35,6 +37,7 @@ const DeckCardGrid = ({
             index={index}
             radialOrigin={radialOrigin}
             isClosing={isClosing}
+            shouldStagger={shouldStagger}
             onSelectCard={onSelectCard}
             cardButtonClassName={cardButtonClassName}
           />

@@ -4,6 +4,7 @@ import LayoutBodyClient from "@/app/ui/LayoutBodyClient";
 import BottomTab from "@/shared/widgets/BottomTab";
 import Header from "@/shared/widgets/Header";
 import { LayoutChromeVisibilityProvider } from "@/shared/hooks";
+import ToastProvider from "@/shared/components/ToastProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,6 +29,7 @@ const RootLayout = ({
 
             <BottomTab />
           </div>
+          <ToastProvider />
         </LayoutChromeVisibilityProvider>
       </body>
     </html>

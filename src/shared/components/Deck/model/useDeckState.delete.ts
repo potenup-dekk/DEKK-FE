@@ -1,4 +1,7 @@
-import { deleteDefaultDeckCardAction } from "@/shared/api/actions";
+import {
+  deleteCardFromCustomDeckAction,
+  deleteDefaultDeckCardAction,
+} from "@/shared/api/actions";
 import type createDeckStateActions from "./useDeckState.actions";
 import useDeckStateStore from "./useDeckState.store";
 import type { UseDeckStateResult } from "./useDeckState.types";
@@ -10,11 +13,22 @@ const createDeleteSelectedCardHandler = (
   selectedCard: UseDeckStateResult["selectedCard"],
 ): UseDeckStateResult["deleteSelectedCard"] => {
   return async () => {
-    if (!activeDeck || !selectedCard || !activeDeck.isSystem) {
+    if (!activeDeck || !selectedCard) {
       return false;
     }
 
-    await deleteDefaultDeckCardAction(selectedCard.cardId);
+    try {
+      if (activeDeck.isSystem) {
+        await deleteDefaultDeckCardAction(selectedCard.cardId);
+      } else {
+        await deleteCardFromCustomDeckAction(
+          activeDeck.id,
+          selectedCard.cardId,
+        );
+      }
+    } catch {
+      return false;
+    }
 
     store.setDecks((previousDecks) => {
       return previousDecks.map((deck) => {

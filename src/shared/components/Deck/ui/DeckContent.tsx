@@ -1,47 +1,15 @@
-"use client";
-
-import { AnimatePresence, motion } from "framer-motion";
 import DeckCreateSheet from "@/shared/components/Deck/ui/DeckCreateSheet";
-import DeckHeroOverlay from "@/shared/components/Deck/ui/DeckHeroOverlay";
-import { deckBackdropMotion } from "../model/animate";
-import useDeckState from "../model/useDeckState";
-import deckStyle from "../style";
+import type { UseDeckStateResult } from "../model/useDeckState.types";
 import DeckFrame from "./DeckFrame";
+import DeckHeroOverlay from "./DeckHeroOverlay";
 
-interface DeckBackdropLayerProps {
-  isOpen: boolean;
-  onClose: () => void;
+interface DeckContentProps {
+  deckState: UseDeckStateResult;
 }
 
-const DeckBackdropLayer = ({ isOpen, onClose }: DeckBackdropLayerProps) => {
-  const { backdrop } = deckStyle();
-
+const DeckContent = ({ deckState }: DeckContentProps) => {
   return (
-    <AnimatePresence>
-      {isOpen ? (
-        <motion.div
-          className={backdrop()}
-          initial={deckBackdropMotion.initial}
-          animate={deckBackdropMotion.animate}
-          exit={deckBackdropMotion.exit}
-          onClick={onClose}
-        />
-      ) : null}
-    </AnimatePresence>
-  );
-};
-
-const Deck = () => {
-  const deckState = useDeckState();
-  const { root } = deckStyle();
-
-  return (
-    <div className={root()}>
-      <DeckBackdropLayer
-        isOpen={deckState.mode !== "closed"}
-        onClose={deckState.closeDeck}
-      />
-
+    <>
       <DeckFrame
         decks={deckState.decks}
         activeDeck={deckState.activeDeck}
@@ -76,8 +44,8 @@ const Deck = () => {
         onCreate={deckState.createDeck}
         onSaveCardToDeck={deckState.saveSelectedCardToCustomDeck}
       />
-    </div>
+    </>
   );
 };
 
-export default Deck;
+export default DeckContent;

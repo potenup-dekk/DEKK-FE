@@ -1,4 +1,4 @@
-import { getDefaultDeckCards } from "@/shared/api/services";
+import { getCustomDeckCards, getDefaultDeckCards } from "@/shared/api/services";
 import {
   mapDefaultDeckCards,
   patchDefaultDeckCards,
@@ -67,18 +67,65 @@ const createLoadDefaultDeckCards = (
   };
 };
 
+const createLoadCustomDeckCards = (
+  store: ReturnType<typeof useDeckStateStore>,
+) => {
+  return async (customDeckId: number) => {
+    try {
+      let currentPage = 0;
+      let hasNext = true;
+      const allCards: DeckCardItem[] = [];
+
+      while (hasNext) {
+        const response = await getCustomDeckCards(
+          customDeckId,
+          currentPage,
+          DEFAULT_DECK_PAGE_SIZE,
+        );
+        const responseData = response.data;
+
+        if (!responseData) {
+          break;
+        }
+
+        allCards.push(...mapDefaultDeckCards(responseData.content));
+        hasNext = responseData.hasNext;
+        currentPage += 1;
+      }
+
+      store.setDecks((previousDecks) => {
+        return previousDecks.map((deck) => {
+          if (deck.id !== customDeckId) {
+            return deck;
+          }
+
+          return {
+            ...deck,
+            cardCount: allCards.length,
+            cards: allCards,
+          };
+        });
+      });
+    } catch {
+      return;
+    }
+  };
+};
+
 const createOpenDeckHandler = (
   actions: ReturnType<typeof createDeckStateActions>,
   loadDefaultDeckCards: () => Promise<void>,
+  loadCustomDeckCards: (customDeckId: number) => Promise<void>,
 ): UseDeckStateResult["openDeck"] => {
   return (deckId, sourceRect) => {
     actions.openDeck(deckId, sourceRect);
 
-    if (deckId !== DEFAULT_DECK_ID) {
+    if (deckId === DEFAULT_DECK_ID) {
+      void loadDefaultDeckCards();
       return;
     }
 
-    void loadDefaultDeckCards();
+    void loadCustomDeckCards(deckId);
   };
 };
 
@@ -97,6 +144,7 @@ const createRetryLoadDefaultDeckHandler = (
 
 export {
   createDeleteSelectedCardHandler,
+  createLoadCustomDeckCards,
   createLoadDefaultDeckCards,
   createOpenDeckHandler,
   createRetryLoadDefaultDeckHandler,

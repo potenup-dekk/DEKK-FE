@@ -11,6 +11,7 @@ interface DeckCardListProps {
   hiddenCardId: number | null;
   radialOrigin: DeckOriginOffset;
   isClosing: boolean;
+  shouldStagger: boolean;
   isLoading: boolean;
   errorMessage: string | null;
   onRetry: () => void;
@@ -22,6 +23,7 @@ const DeckCardList = ({
   hiddenCardId,
   radialOrigin,
   isClosing,
+  shouldStagger,
   isLoading,
   errorMessage,
   onRetry,
@@ -53,6 +55,7 @@ const DeckCardList = ({
       hiddenCardId={hiddenCardId}
       radialOrigin={radialOrigin}
       isClosing={isClosing}
+      shouldStagger={shouldStagger}
       onSelectCard={onSelectCard}
       cardButtonClassName={cardButtonClassName}
     />

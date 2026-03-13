@@ -4,4 +4,7 @@ export {
   type DeckProductData,
   type DeckCardContentData,
   type DefaultDeckCardsResponse,
+  type CustomDeckData,
+  type CreateCustomDeckPayload,
+  type UpdateCustomDeckPayload,
 } from "./types";

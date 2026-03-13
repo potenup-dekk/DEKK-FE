@@ -25,8 +25,11 @@ interface UseDeckStateResult {
   toggleHeroFlip: () => void;
   openCreateSheet: () => void;
   closeCreateSheet: () => void;
-  createDeck: (name: string) => boolean;
+  createDeck: (name: string) => Promise<boolean>;
+  saveSelectedCardToCustomDeck: (customDeckId: number) => Promise<boolean>;
   deleteSelectedCard: () => Promise<boolean>;
+  updateActiveDeckName: (name: string) => Promise<boolean>;
+  deleteActiveDeck: () => Promise<boolean>;
 }
 
 const DEFAULT_ORIGIN_OFFSET: DeckOriginOffset = { x: 0, y: 0 };
