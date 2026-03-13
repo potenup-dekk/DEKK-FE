@@ -35,7 +35,7 @@ const assertProfileResponse = <T>(response: ApiResponse<T>) => {
 };
 
 const getMyInfo = async () => {
-  const response = await requestJson<ApiResponse<UserMe>>("/w/v1/users/me", {
+  const response = await requestJson<ApiResponse<UserMe>>("/api/users/me", {
     method: "GET",
   });
 

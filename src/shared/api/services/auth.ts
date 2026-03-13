@@ -4,6 +4,7 @@ import type { ApiResponse } from "@/shared/types/api";
 const assertAuthResponse = <T>(response: ApiResponse<T>) => {
   switch (response.code) {
     case "SU20000":
+    case "SU20010":
     case "AUTH_LOGOUT_OK": {
       return response;
     }
@@ -20,6 +21,25 @@ const assertAuthResponse = <T>(response: ApiResponse<T>) => {
       );
     }
   }
+};
+
+const refreshAuthSession = async () => {
+  const response = await requestJson<ApiResponse<null> | null>(
+    "/api/auth/refresh",
+    {
+      method: "POST",
+    },
+  );
+
+  if (!response) {
+    return {
+      code: "HTTP_NO_CONTENT",
+      message: "세션이 갱신되었습니다.",
+      data: null,
+    } satisfies ApiResponse<null>;
+  }
+
+  return assertAuthResponse(response);
 };
 
 const logout = async () => {
@@ -43,4 +63,4 @@ const logout = async () => {
   return assertAuthResponse(response);
 };
 
-export { logout };
+export { logout, refreshAuthSession };
