@@ -9,11 +9,21 @@ import { usePathname, useRouter } from "next/navigation";
 import { bottomTabVariants } from "../model/animate";
 import { bottomTabStyle } from "../style";
 
+const HOME_TAB_ROUTE = "/main";
+
 const BOTTOM_TAB_ITEMS = [
-  { icon: HomeIcon, label: "홈", route: APP_ROUTES.HOME },
+  { icon: HomeIcon, label: "홈", route: HOME_TAB_ROUTE },
   { icon: LayersIcon, label: "덱", route: APP_ROUTES.DECK },
   { icon: ShirtIcon, label: "등록", route: APP_ROUTES.UPLOAD },
 ] as const;
+
+const isBottomTabItemSelected = (pathname: string, route: string) => {
+  if (route === HOME_TAB_ROUTE) {
+    return pathname === HOME_TAB_ROUTE || pathname === APP_ROUTES.HOME;
+  }
+
+  return pathname === route;
+};
 
 const BottomTab = () => {
   const { isChromeVisible } = useLayoutChromeVisibility();
@@ -39,7 +49,7 @@ const BottomTab = () => {
                 key={item.route}
                 icon={item.icon}
                 label={item.label}
-                selected={pathname === item.route}
+                selected={isBottomTabItemSelected(pathname, item.route)}
                 onClick={() => {
                   router.push(item.route);
                 }}
