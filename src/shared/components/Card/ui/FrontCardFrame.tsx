@@ -62,7 +62,9 @@ const FrontCardFrame = ({
 }: FrontCardFrameProps) => {
   const shouldApplyCompressedCard =
     isCardCompressed && !isFocusMode && compressedCardHeight !== null;
-  const targetCardHeight = shouldApplyCompressedCard ? compressedCardHeight : expandedCardHeight;
+  const targetCardHeight = shouldApplyCompressedCard
+    ? compressedCardHeight
+    : expandedCardHeight;
   const onDragEnd = createDragEndHandler({ setIsSwiping, onLike, onDislike });
 
   return (
@@ -72,6 +74,7 @@ const FrontCardFrame = ({
       rotate={rotate}
       rotateYSpring={rotateYSpring}
       targetCardHeight={targetCardHeight}
+      isCardCompressed={isCardCompressed}
       shouldApplyCompressedCard={shouldApplyCompressedCard}
       isFocusMode={isFocusMode}
       onToggleFocusMode={onToggleFocusMode}

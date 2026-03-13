@@ -18,6 +18,7 @@ interface FrontCardMotionContainerProps {
   rotate: FrontCardProps["rotate"];
   rotateYSpring: FrontCardProps["rotateYSpring"];
   targetCardHeight: number | null;
+  isCardCompressed: boolean;
   shouldApplyCompressedCard: boolean;
   isFocusMode: boolean;
   onToggleFocusMode: () => void;
@@ -33,6 +34,7 @@ const FrontCardMotionContainer = ({
   rotate,
   rotateYSpring,
   targetCardHeight,
+  isCardCompressed,
   shouldApplyCompressedCard,
   isFocusMode,
   onToggleFocusMode,
@@ -74,6 +76,7 @@ const FrontCardMotionContainer = ({
           <FrontCardFocusToggle
             cardId={cardNumericId}
             isFocusMode={isFocusMode}
+            shouldShowFocusModeButton={isFocusMode || isCardCompressed}
             onToggleFocusMode={onToggleFocusMode}
             onOpenCustomDeckSheet={onOpenCustomDeckSheet}
           />
