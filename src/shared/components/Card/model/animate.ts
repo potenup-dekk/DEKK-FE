@@ -15,6 +15,11 @@ const frontCardFlipStyle = {
   WebkitTransformStyle: "preserve-3d",
 } as const;
 
+const frontFaceOnlyStyle = {
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+} as const;
+
 const backFaceMotionStyle = {
   rotateY: 180,
   backfaceVisibility: "hidden",
@@ -61,6 +66,7 @@ export {
   backCardScaleAnimation,
   cardResizeTransition,
   backFaceMotionStyle,
+  frontFaceOnlyStyle,
   flipAnimationTransition,
   frontCardDragConstraints,
   frontCardFlipStyle,

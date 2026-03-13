@@ -6,6 +6,7 @@ interface FrontCardFrameProps {
   cardNumericId: number;
   x: FrontCardProps["x"];
   rotate: FrontCardProps["rotate"];
+  rotateYSpring: FrontCardProps["rotateYSpring"];
   setIsSwiping: FrontCardProps["setIsSwiping"];
   onLike: FrontCardProps["onLike"];
   onDislike: FrontCardProps["onDislike"];
@@ -47,6 +48,7 @@ const FrontCardFrame = ({
   cardNumericId,
   x,
   rotate,
+  rotateYSpring,
   setIsSwiping,
   onLike,
   onDislike,
@@ -68,6 +70,7 @@ const FrontCardFrame = ({
       cardId={cardId}
       x={x}
       rotate={rotate}
+      rotateYSpring={rotateYSpring}
       targetCardHeight={targetCardHeight}
       shouldApplyCompressedCard={shouldApplyCompressedCard}
       isFocusMode={isFocusMode}
