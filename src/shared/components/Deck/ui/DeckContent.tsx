@@ -22,6 +22,8 @@ const DeckContent = ({ deckState }: DeckContentProps) => {
         onRetryLoadDefaultDeck={deckState.retryLoadDefaultDeck}
         onCloseDeck={deckState.closeDeck}
         onSelectCard={deckState.selectCard}
+        onUpdateDeckName={deckState.updateActiveDeckName}
+        onDeleteDeck={deckState.deleteActiveDeck}
       />
 
       <DeckHeroOverlay
@@ -38,9 +40,9 @@ const DeckContent = ({ deckState }: DeckContentProps) => {
 
       <DeckCreateSheet
         isOpen={deckState.isCreateSheetOpen}
-        targetCardId={deckState.selectedCard?.cardId ?? null}
         onClose={deckState.closeCreateSheet}
-        onSaved={deckState.retryLoadDefaultDeck}
+        onCreate={deckState.createDeck}
+        onSaveCardToDeck={deckState.saveSelectedCardToCustomDeck}
       />
     </>
   );

@@ -15,6 +15,7 @@ interface DeckCardProps {
   index: number;
   radialOrigin: DeckOriginOffset;
   isClosing: boolean;
+  shouldStagger: boolean;
   onSelect: (cardId: number) => void;
 }
 
@@ -23,6 +24,7 @@ const DeckCard = ({
   index,
   radialOrigin,
   isClosing,
+  shouldStagger,
   onSelect,
 }: DeckCardProps) => {
   const { cardButton, cardImage } = deckStyle();
@@ -31,7 +33,7 @@ const DeckCard = ({
   return (
     <motion.div
       className="w-full"
-      custom={index}
+      custom={{ index, shouldStagger }}
       variants={variants}
       initial="hidden"
       animate={isClosing ? "exit" : "visible"}

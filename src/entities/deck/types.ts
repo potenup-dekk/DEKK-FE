@@ -47,3 +47,7 @@ export interface CustomDeckData {
 export interface CreateCustomDeckPayload {
   name: string;
 }
+
+export interface UpdateCustomDeckPayload {
+  name: string;
+}

@@ -10,6 +10,7 @@ interface DeckCardCellProps {
   index: number;
   radialOrigin: DeckOriginOffset;
   isClosing: boolean;
+  shouldStagger: boolean;
   onSelectCard: (cardId: number) => void;
   cardButtonClassName: string;
 }
@@ -20,6 +21,7 @@ const DeckCardCell = ({
   index,
   radialOrigin,
   isClosing,
+  shouldStagger,
   onSelectCard,
   cardButtonClassName,
 }: DeckCardCellProps) => {
@@ -37,6 +39,7 @@ const DeckCardCell = ({
       index={index}
       radialOrigin={radialOrigin}
       isClosing={isClosing}
+      shouldStagger={shouldStagger}
       onSelect={onSelectCard}
     />
   );

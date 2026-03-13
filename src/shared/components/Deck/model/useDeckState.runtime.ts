@@ -29,19 +29,30 @@ const useDeckStateRuntime = () => {
     clearCloseTimeout,
     scheduleCloseReset,
   });
-  const { deleteSelectedCard, openDeck, retryLoadDefaultDeck } =
-    createDeckStateRuntimeHandlers(store, actions, activeDeck, selectedCard);
+  const {
+    createDeck,
+    deleteActiveDeck,
+    deleteSelectedCard,
+    openDeck,
+    retryLoadDefaultDeck,
+    saveSelectedCardToCustomDeck,
+    updateActiveDeckName,
+  } = createDeckStateRuntimeHandlers(store, actions, activeDeck, selectedCard);
 
   useDeckInitialization(store.setDecks, clearCloseTimeout);
 
   return {
     actions,
     activeDeck,
+    createDeck,
+    deleteActiveDeck,
     deleteSelectedCard,
     openDeck,
     retryLoadDefaultDeck,
+    saveSelectedCardToCustomDeck,
     selectedCard,
     store,
+    updateActiveDeckName,
   };
 };
 

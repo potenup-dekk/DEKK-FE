@@ -15,6 +15,8 @@ interface DeckFrameProps {
   onRetryLoadDefaultDeck: () => void;
   onCloseDeck: () => void;
   onSelectCard: (cardId: number) => void;
+  onUpdateDeckName: (name: string) => Promise<boolean>;
+  onDeleteDeck: () => Promise<boolean>;
 }
 
 const DeckFrame = ({
@@ -29,6 +31,8 @@ const DeckFrame = ({
   onRetryLoadDefaultDeck,
   onCloseDeck,
   onSelectCard,
+  onUpdateDeckName,
+  onDeleteDeck,
 }: DeckFrameProps) => {
   const isOpenLayerVisible = mode !== "closed" && activeDeck;
   const isClosing = mode === "closing";
@@ -53,6 +57,8 @@ const DeckFrame = ({
           onCloseDeck={onCloseDeck}
           onRetryLoadDefaultDeck={onRetryLoadDefaultDeck}
           onSelectCard={onSelectCard}
+          onUpdateDeckName={onUpdateDeckName}
+          onDeleteDeck={onDeleteDeck}
         />
       ) : null}
     </>

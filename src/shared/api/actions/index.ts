@@ -5,6 +5,9 @@ export {
 } from "./profile";
 export {
   createCustomDeckAction,
+  deleteCardFromCustomDeckAction,
+  deleteCustomDeckAction,
   deleteDefaultDeckCardAction,
   saveCardToCustomDeckAction,
+  updateCustomDeckNameAction,
 } from "./deck";
