@@ -12,6 +12,7 @@ import { GoogleLoginButton, KakaoLoginButton } from "../../Button";
 
 const BackFace = ({ products, tags }: BackFaceProps) => {
   const { isLoggedIn } = useCardAuth();
+  const guestPreviewProducts = MOCK_PRODUCTS.slice(0, 1);
 
   return (
     <motion.div
@@ -20,13 +21,19 @@ const BackFace = ({ products, tags }: BackFaceProps) => {
     >
       <div className="flex flex-col flex-1 gap-5">
         {!isLoggedIn ? (
-          <div className="flex relative flex-col flex-1 w-full">
-            <ProductList items={MOCK_PRODUCTS} />
-            <div className="flex flex-col justify-center items-center absolute text-primary size-full p-2 backdrop-blur-xs scale-105 bg-primary/30 rounded-md">
-              <div className="flex flex-col text-white font-bold">
-                로그인 후 코디 상세 정보를 확인할 수 있어요!
+          <div className="flex flex-col flex-1 w-full gap-3">
+            <div className="relative overflow-hidden rounded-md">
+              <div className="h-11 overflow-hidden">
+                <ProductList items={guestPreviewProducts} />
               </div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-b from-transparent via-white/70 to-white" />
+            </div>
 
+            <p className="text-center text-sm font-bold text-primary">
+              로그인 후 코디 상세 정보를 확인할 수 있어요!
+            </p>
+
+            <div className="flex flex-col items-center gap-2">
               <GoogleLoginButton />
               <KakaoLoginButton />
             </div>
