@@ -9,13 +9,38 @@ import DeckBottomSheet from "./DeckBottomSheet";
 
 interface DeckCreateSheetProps {
   isOpen: boolean;
+  targetCardId?: number | null;
   onClose: () => void;
   onCreate: (name: string) => Promise<boolean>;
   onSaveCardToDeck: (customDeckId: number) => Promise<boolean>;
 }
 
+const toDeckCreateSheetPanelProps = (
+  sheetState: ReturnType<typeof useDeckCreateSheet>,
+) => {
+  return {
+    customDecks: sheetState.customDecks,
+    isDecksLoading: sheetState.isDecksLoading,
+    statusMessage: sheetState.statusMessage,
+    errorMessage: sheetState.errorMessage,
+    name: sheetState.name,
+    isCreateDisabled: sheetState.isCreateDisabled,
+    isSaving: sheetState.isSaving,
+    isCreating: sheetState.isCreating,
+    onDeckSelect: (deckId: number) => {
+      void sheetState.saveToCustomDeck(deckId);
+    },
+    onNameChange: sheetState.setName,
+    onClose: sheetState.resetAndClose,
+    onCreateAndSave: () => {
+      void sheetState.createAndSave();
+    },
+  };
+};
+
 const DeckCreateSheet = ({
   isOpen,
+  targetCardId = null,
   onClose,
   onCreate,
   onSaveCardToDeck,

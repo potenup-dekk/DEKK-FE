@@ -1,12 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import DeckCreateSheet from "@/shared/components/Deck/ui/DeckCreateSheet";
-import DeckHeroOverlay from "@/shared/components/Deck/ui/DeckHeroOverlay";
 import { deckBackdropMotion } from "../model/animate";
 import useDeckState from "../model/useDeckState";
 import deckStyle from "../style";
-import DeckFrame from "./DeckFrame";
+import DeckContent from "./DeckContent";
 
 interface DeckBackdropLayerProps {
   isOpen: boolean;

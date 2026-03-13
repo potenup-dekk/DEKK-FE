@@ -48,8 +48,8 @@ const JoinFormFields = ({ form, errors, onChange }: JoinFormFieldsProps) => {
             placeholder={field.placeholder}
             value={form[field.name]}
             onChange={onChange}
-            maxLength={"maxLength" in field ? field.maxLength : undefined}
-            showCount={"showCount" in field ? field.showCount : undefined}
+            maxLength={10}
+            showCount
             error={errors[field.name]}
           />
         );

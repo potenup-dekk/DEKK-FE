@@ -3,6 +3,7 @@ import FrontCardMotionContainer from "./FrontCardMotionContainer";
 
 interface FrontCardFrameProps {
   cardId: string;
+  cardNumericId: number;
   x: FrontCardProps["x"];
   rotate: FrontCardProps["rotate"];
   setIsSwiping: FrontCardProps["setIsSwiping"];
@@ -13,6 +14,7 @@ interface FrontCardFrameProps {
   compressedCardHeight: FrontCardProps["compressedCardHeight"];
   expandedCardHeight: FrontCardProps["expandedCardHeight"];
   onToggleFocusMode: FrontCardProps["onToggleFocusMode"];
+  onOpenCustomDeckSheet: FrontCardProps["onOpenCustomDeckSheet"];
   children: React.ReactNode;
 }
 
@@ -42,6 +44,7 @@ const createDragEndHandler = ({
 
 const FrontCardFrame = ({
   cardId,
+  cardNumericId,
   x,
   rotate,
   setIsSwiping,
@@ -52,14 +55,12 @@ const FrontCardFrame = ({
   compressedCardHeight,
   expandedCardHeight,
   onToggleFocusMode,
+  onOpenCustomDeckSheet,
   children,
 }: FrontCardFrameProps) => {
-  const shouldShowFocusButton = isCardCompressed || isFocusMode;
   const shouldApplyCompressedCard =
     isCardCompressed && !isFocusMode && compressedCardHeight !== null;
-  const targetCardHeight = shouldApplyCompressedCard
-    ? compressedCardHeight
-    : expandedCardHeight;
+  const targetCardHeight = shouldApplyCompressedCard ? compressedCardHeight : expandedCardHeight;
   const onDragEnd = createDragEndHandler({ setIsSwiping, onLike, onDislike });
 
   return (
@@ -69,9 +70,10 @@ const FrontCardFrame = ({
       rotate={rotate}
       targetCardHeight={targetCardHeight}
       shouldApplyCompressedCard={shouldApplyCompressedCard}
-      shouldShowFocusButton={shouldShowFocusButton}
       isFocusMode={isFocusMode}
       onToggleFocusMode={onToggleFocusMode}
+      cardNumericId={cardNumericId}
+      onOpenCustomDeckSheet={onOpenCustomDeckSheet}
       onDragEnd={onDragEnd}
     >
       {children}

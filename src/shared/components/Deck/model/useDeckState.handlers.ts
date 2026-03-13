@@ -2,6 +2,7 @@ import { getCustomDeckCards, getDefaultDeckCards } from "@/shared/api/services";
 import {
   mapDefaultDeckCards,
   patchDefaultDeckCards,
+  type DeckItem,
   type DeckCardItem,
 } from "./deckState.helpers";
 import createDeleteSelectedCardHandler from "./useDeckState.delete";
@@ -9,8 +10,17 @@ import type createDeckStateActions from "./useDeckState.actions";
 import useDeckStateStore from "./useDeckState.store";
 import type { UseDeckStateResult } from "./useDeckState.types";
 
-const DEFAULT_DECK_ID = 0;
 const DEFAULT_DECK_PAGE_SIZE = 100;
+
+const isDefaultDeck = (decks: DeckItem[], deckId: number | null) => {
+  if (deckId === null) {
+    return false;
+  }
+
+  const selectedDeck = decks.find((deck) => deck.id === deckId);
+
+  return selectedDeck?.isDefault ?? false;
+};
 
 const toErrorMessage = (error: unknown) => {
   if (error instanceof Error) {
@@ -113,6 +123,7 @@ const createLoadCustomDeckCards = (
 };
 
 const createOpenDeckHandler = (
+  store: ReturnType<typeof useDeckStateStore>,
   actions: ReturnType<typeof createDeckStateActions>,
   loadDefaultDeckCards: () => Promise<void>,
   loadCustomDeckCards: (customDeckId: number) => Promise<void>,
@@ -120,8 +131,7 @@ const createOpenDeckHandler = (
   return (deckId, sourceRect) => {
     actions.openDeck(deckId, sourceRect);
 
-    if (deckId === DEFAULT_DECK_ID) {
-      void loadDefaultDeckCards();
+    if (!isDefaultDeck(store.decks, deckId)) {
       return;
     }
 
@@ -134,7 +144,7 @@ const createRetryLoadDefaultDeckHandler = (
   loadDefaultDeckCards: () => Promise<void>,
 ): UseDeckStateResult["retryLoadDefaultDeck"] => {
   return () => {
-    if (store.activeDeckId !== DEFAULT_DECK_ID) {
+    if (!isDefaultDeck(store.decks, store.activeDeckId)) {
       return;
     }
 

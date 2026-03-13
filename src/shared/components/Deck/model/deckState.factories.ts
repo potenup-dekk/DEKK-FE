@@ -23,8 +23,8 @@ const createInitialDecks = (): DeckItem[] => {
   return [
     {
       id: 0,
-      name: "나의 모든 카드",
-      isSystem: true,
+      name: "나의 모든 보관함",
+      isDefault: true,
       cardCount: 0,
       previewImageSrcList: [...PREVIEW_IMAGE_SRC_LIST],
       cards: buildDeckCards(0, 16),
@@ -42,7 +42,7 @@ const createCustomDeck = (decks: DeckItem[], name: string): DeckItem[] => {
     {
       id: nextId + 1,
       name,
-      isSystem: false,
+      isDefault: false,
       cardCount: 0,
       previewImageSrcList: [...PREVIEW_IMAGE_SRC_LIST],
       cards: [],

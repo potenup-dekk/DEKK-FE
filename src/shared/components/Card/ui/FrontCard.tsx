@@ -13,6 +13,7 @@ const FrontCard = (props: FrontCardProps) => {
   return (
     <FrontCardFrame
       cardId={cardId}
+      cardNumericId={props.cardNumericId}
       x={x}
       rotate={props.rotate}
       setIsSwiping={props.setIsSwiping}
@@ -23,6 +24,7 @@ const FrontCard = (props: FrontCardProps) => {
       compressedCardHeight={props.compressedCardHeight}
       expandedCardHeight={props.expandedCardHeight}
       onToggleFocusMode={props.onToggleFocusMode}
+      onOpenCustomDeckSheet={props.onOpenCustomDeckSheet}
     >
       <FrontCardOverlay
         background={props.background}

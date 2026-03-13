@@ -33,8 +33,7 @@ const toCardStackResult = (params: {
 
 const useCardStack = (isLoggedIn = false) => {
   const x = useMotionValue(0);
-  const { cards, setCards, frontImage, backImage, appendNextPage } =
-    useCardData();
+  const { cards, setCards, frontImage, backImage, appendNextPage } = useCardData();
   const {
     isSwiping,
     setIsSwiping,
@@ -44,11 +43,8 @@ const useCardStack = (isLoggedIn = false) => {
     onDislike,
     dislikeAnimation,
   } = useCardSwipe(cards, isLoggedIn, x);
-  const { rotate, background, backdropFilter, opacity, filter, backScale } =
-    useCardMotion(x, removingCardId);
-  const { rotateYSpring, animateFlip, resetFlipState } = useCardFlip(
-    cards[0]?.id,
-  );
+  const { rotate, background, backdropFilter, opacity, filter, backScale } = useCardMotion(x, removingCardId);
+  const { rotateYSpring, animateFlip, resetFlipState } = useCardFlip(cards[0]?.id);
 
   return toCardStackResult({
     frontImage,

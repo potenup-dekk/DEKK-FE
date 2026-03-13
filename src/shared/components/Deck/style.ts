@@ -57,7 +57,7 @@ const deckStyle = tv({
     heroActions: "mt-5 flex items-center gap-3",
     heroActionButton:
       "inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white transition-colors hover:bg-black/65",
-    sheetBackdrop: "fixed inset-0 z-70 bg-black/45 backdrop-blur-sm",
+    sheetBackdrop: "fixed inset-0 z-70 bg-black/30 backdrop-blur-sm",
     sheetPanel:
       "fixed inset-x-0 bottom-0 z-71 mx-auto w-full max-w-xl translate-y-3 rounded-t-3xl border border-zinc-200 bg-white p-6 shadow-[0_-8px_24px_rgba(0,0,0,0.08)]",
     sheetTitle: "text-base font-semibold text-zinc-900",

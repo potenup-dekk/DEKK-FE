@@ -1,14 +1,13 @@
 import type {
   DeckCardContentData,
   DeckProductData,
-  DeckSummaryData,
 } from "@/entities/deck";
 import { createCustomDeck, createInitialDecks } from "./deckState.factories";
 import {
-  normalizeDeckPreviewImageSrcList,
   resolveCdnImageUrl,
   toDefaultDeckPreviewImageSrcList,
 } from "./deckState.images";
+import { mapDeckSummaries } from "./deckState.summary";
 import type {
   DeckCardItem,
   DeckCardProductItem,
@@ -58,7 +57,7 @@ const mapDefaultDeckCards = (
 
 const patchDefaultDeckCards = (decks: DeckItem[], cards: DeckCardItem[]) => {
   return decks.map((deck) => {
-    if (deck.id !== 0) {
+    if (!deck.isDefault) {
       return deck;
     }
 
@@ -69,33 +68,6 @@ const patchDefaultDeckCards = (decks: DeckItem[], cards: DeckCardItem[]) => {
       cards,
     };
   });
-};
-
-const mapDeckSummaries = (decks: DeckSummaryData[]): DeckItem[] => {
-  return decks
-    .map((deck) => {
-      const isSystem = deck.type === "DEFAULT";
-
-      return {
-        id: deck.deckId,
-        name: deck.name,
-        isSystem,
-        cardCount: deck.cardCount,
-        previewImageSrcList: normalizeDeckPreviewImageSrcList(
-          deck.previewImageUrls,
-        ),
-        cards: [],
-      } satisfies DeckItem;
-    })
-    .sort((left, right) => {
-      if (left.isSystem && !right.isSystem) {
-        return -1;
-      }
-      if (!left.isSystem && right.isSystem) {
-        return 1;
-      }
-      return left.id - right.id;
-    });
 };
 
 export {
