@@ -171,7 +171,7 @@ const DeckOpenLayer = ({
         <DeckOpenHeader
           deckName={deck.name}
           cardCount={deck.cardCount}
-          canManageDeck={!deck.isSystem}
+          canManageDeck={!deck.isDefault}
           onOpenManageSheet={openManageSheet}
           onCloseDeck={onCloseDeck}
         />
@@ -182,8 +182,8 @@ const DeckOpenLayer = ({
           radialOrigin={radialOrigin}
           isClosing={isClosing}
           shouldStagger={shouldStaggerCards}
-          isLoading={deck.isSystem && defaultDeckFetchStatus === "loading"}
-          errorMessage={deck.isSystem ? defaultDeckFetchError : null}
+          isLoading={deck.isDefault && defaultDeckFetchStatus === "loading"}
+          errorMessage={deck.isDefault ? defaultDeckFetchError : null}
           onRetry={onRetryLoadDefaultDeck}
           onSelectCard={onSelectCard}
         />
@@ -212,7 +212,7 @@ const DeckOpenLayer = ({
             onClick={() => {
               void handleDeleteDeck();
             }}
-            disabled={deck.isSystem || isManagePending}
+            disabled={deck.isDefault || isManagePending}
           >
             삭제
           </button>

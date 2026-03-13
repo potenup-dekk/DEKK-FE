@@ -145,7 +145,7 @@ const createDeckStateRuntimeHandlers = (
       return false;
     }
 
-    if (activeDeck.isSystem) {
+    if (activeDeck.isDefault) {
       return false;
     }
 
@@ -172,7 +172,7 @@ const createDeckStateRuntimeHandlers = (
   };
 
   const deleteActiveDeck = async () => {
-    if (!activeDeck || activeDeck.isSystem) {
+    if (!activeDeck || activeDeck.isDefault) {
       return false;
     }
 
@@ -200,12 +200,15 @@ const createDeckStateRuntimeHandlers = (
       selectedCard,
     ),
     openDeck: createOpenDeckHandler(
+      store,
       actions,
       loadDefaultDeckCards,
       loadCustomDeckCards,
     ),
+
     retryLoadDefaultDeck: createRetryLoadDefaultDeckHandler(
       store,
+
       loadDefaultDeckCards,
     ),
     saveSelectedCardToCustomDeck,

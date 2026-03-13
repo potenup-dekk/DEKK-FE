@@ -131,7 +131,8 @@ const createOpenDeckHandler = (
   return (deckId, sourceRect) => {
     actions.openDeck(deckId, sourceRect);
 
-    if (!isDefaultDeck(store.decks, deckId)) {
+    if (isDefaultDeck(store.decks, deckId)) {
+      void loadDefaultDeckCards();
       return;
     }
 

@@ -13,12 +13,12 @@ const createDeleteSelectedCardHandler = (
   selectedCard: UseDeckStateResult["selectedCard"],
 ): UseDeckStateResult["deleteSelectedCard"] => {
   return async () => {
-    if (!activeDeck || !selectedCard || !activeDeck.isDefault) {
+    if (!activeDeck || !selectedCard) {
       return false;
     }
 
     try {
-      if (activeDeck.isSystem) {
+      if (activeDeck.isDefault) {
         await deleteDefaultDeckCardAction(selectedCard.cardId);
       } else {
         await deleteCardFromCustomDeckAction(

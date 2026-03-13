@@ -11,32 +11,9 @@ interface DeckCreateSheetProps {
   isOpen: boolean;
   targetCardId?: number | null;
   onClose: () => void;
-  onCreate: (name: string) => Promise<boolean>;
-  onSaveCardToDeck: (customDeckId: number) => Promise<boolean>;
+  onCreate?: (name: string) => Promise<boolean>;
+  onSaveCardToDeck?: (customDeckId: number) => Promise<boolean>;
 }
-
-const toDeckCreateSheetPanelProps = (
-  sheetState: ReturnType<typeof useDeckCreateSheet>,
-) => {
-  return {
-    customDecks: sheetState.customDecks,
-    isDecksLoading: sheetState.isDecksLoading,
-    statusMessage: sheetState.statusMessage,
-    errorMessage: sheetState.errorMessage,
-    name: sheetState.name,
-    isCreateDisabled: sheetState.isCreateDisabled,
-    isSaving: sheetState.isSaving,
-    isCreating: sheetState.isCreating,
-    onDeckSelect: (deckId: number) => {
-      void sheetState.saveToCustomDeck(deckId);
-    },
-    onNameChange: sheetState.setName,
-    onClose: sheetState.resetAndClose,
-    onCreateAndSave: () => {
-      void sheetState.createAndSave();
-    },
-  };
-};
 
 const DeckCreateSheet = ({
   isOpen,
@@ -153,6 +130,10 @@ const DeckCreateSheet = ({
   };
 
   const handleCreate = async () => {
+    if (!onCreate) {
+      return;
+    }
+
     if (isCreatePending) {
       return;
     }
@@ -192,6 +173,12 @@ const DeckCreateSheet = ({
       return;
     }
 
+    if (!onSaveCardToDeck) {
+      toast.success("커스텀 덱을 생성했습니다.");
+      setName("");
+      return;
+    }
+
     setIsSavePending(true);
     const didSave = await onSaveCardToDeck(createdDeckId);
     setIsSavePending(false);
@@ -207,6 +194,10 @@ const DeckCreateSheet = ({
   };
 
   const handleSaveCardToDeck = async (customDeckId: number) => {
+    if (!onSaveCardToDeck) {
+      return;
+    }
+
     if (isSavePending) {
       return;
     }
@@ -249,7 +240,7 @@ const DeckCreateSheet = ({
         <button
           type="button"
           className={sheetButtonPrimary()}
-          disabled={isSubmitDisabled}
+          disabled={isSubmitDisabled || !onCreate}
           onClick={() => {
             void handleCreate();
           }}
@@ -274,7 +265,7 @@ const DeckCreateSheet = ({
                   key={deck.deckId}
                   type="button"
                   className={sheetDeckItem()}
-                  disabled={isSavePending}
+                  disabled={isSavePending || !onSaveCardToDeck}
                   onClick={() => {
                     void handleSaveCardToDeck(deck.deckId);
                   }}
