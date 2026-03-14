@@ -13,6 +13,7 @@ interface ProfileSectionProps {
   authError: string | null;
   isSubmitting: boolean;
   isReady: boolean;
+  isDirty: boolean;
   email?: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -26,6 +27,7 @@ const ProfileSection = (props: ProfileSectionProps) => {
     emailText,
     hintText,
   } = profileClientStyle();
+  const isSaveDisabled = !props.isReady || !props.isDirty || props.isSubmitting;
 
   return (
     <form onSubmit={props.handleSubmit} className={formStyle()}>
@@ -45,12 +47,13 @@ const ProfileSection = (props: ProfileSectionProps) => {
         type="submit"
         label={props.isSubmitting ? "저장 중…" : "저장"}
         className="w-full mt-2"
+        disabled={isSaveDisabled}
       />
 
       <div className={emailText()}>현재 이메일: {props.email ?? "-"}</div>
       {!props.isReady ? (
         <div className={hintText()}>
-          키/몸무게/성별을 모두 입력하면 저장할 수 있어요.
+          닉네임/키/몸무게/성별을 모두 입력하면 저장할 수 있어요.
         </div>
       ) : null}
     </form>

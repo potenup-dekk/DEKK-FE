@@ -4,6 +4,7 @@ import type { Gender } from "@/entities/user";
 
 interface ProfileUser {
   email?: string | null;
+  nickname?: string | null;
   height?: number | null;
   weight?: number | null;
   gender?: Gender | null;

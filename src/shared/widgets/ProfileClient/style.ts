@@ -13,6 +13,12 @@ const profileClientStyle = tv({
     errorText: "text-xs text-red-500",
     emailText: "text-xs text-[#737373]",
     hintText: "text-xs text-[#737373]",
+    genderFieldRoot: "flex flex-col items-start text-black w-full",
+    genderFieldRow: "flex justify-between items-center w-full",
+    genderFieldOptions: "flex gap-6 my-1",
+    genderFieldOptionLabel: "flex items-center gap-2",
+    genderFieldOptionText: "text-xs",
+    genderFieldHelperRow: "flex justify-between text-sm self-end min-h-4",
   },
 });
 
