@@ -23,6 +23,11 @@ const CardStackLayers = ({
     displayOptions.isCardCompressed &&
     !displayOptions.isFocusMode &&
     displayOptions.compressedCardHeight !== null;
+  const targetCardHeight = shouldApplyCompressedCard
+    ? displayOptions.compressedCardHeight
+    : displayOptions.expandedCardHeight;
+  const shouldUseViewportFallbackHeight =
+    !displayOptions.isFocusMode && targetCardHeight === null;
 
   return (
     <>
@@ -36,7 +41,13 @@ const CardStackLayers = ({
         ) : null}
       </AnimatePresence>
 
-      {!hasFrontCard ? <CardLoadingPlaceholder /> : null}
+      {!hasFrontCard ? (
+        <CardLoadingPlaceholder
+          shouldApplyCompressedCard={shouldApplyCompressedCard}
+          targetCardHeight={targetCardHeight}
+          shouldUseViewportFallbackHeight={shouldUseViewportFallbackHeight}
+        />
+      ) : null}
 
       {cards.length > 1 ? (
         <BackCard
