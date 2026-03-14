@@ -54,12 +54,9 @@ const backCardScaleAnimation = {
 } as const;
 
 const cardResizeTransition = {
-  type: "spring",
-  stiffness: 145,
-  damping: 36,
-  mass: 1,
-  restDelta: 0.08,
-  restSpeed: 0.08,
+  type: "tween",
+  duration: 0.3,
+  ease: "easeInOut",
 } as const;
 
 export {

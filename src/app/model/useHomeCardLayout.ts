@@ -2,12 +2,15 @@ import {
   type Dispatch,
   type SetStateAction,
   useCallback,
+  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import {
   BOTTOM_TAB_HEIGHT_FALLBACK,
   CONTROLS_HEIGHT_FALLBACK,
+  FOCUS_LAYOUT_STABILIZE_MS,
   HEADER_HEIGHT_FALLBACK,
 } from "./homeCardLayout.constants";
 import {
@@ -84,8 +87,15 @@ const useHomeCardLayout = (
   const [compressedCardHeight, setCompressedCardHeight] = useState<
     number | null
   >(null);
+  const [transitionOffsetY, setTransitionOffsetY] = useState(0);
+  const wasFocusTransitioningRef = useRef(isFocusTransitioning);
+  const stabilizeUntilRef = useRef(0);
 
   const measureCardLayout = useCallback(() => {
+    if (performance.now() < stabilizeUntilRef.current) {
+      return;
+    }
+
     measureHomeCardLayout({
       isFocusMode,
       isFocusTransitioning,
@@ -97,6 +107,52 @@ const useHomeCardLayout = (
     });
   }, [isFocusMode, isFocusTransitioning]);
 
+  useEffect(() => {
+    const wasTransitioning = wasFocusTransitioningRef.current;
+    wasFocusTransitioningRef.current = isFocusTransitioning;
+
+    if (!wasTransitioning || isFocusTransitioning) {
+      return;
+    }
+
+    stabilizeUntilRef.current = performance.now() + FOCUS_LAYOUT_STABILIZE_MS;
+
+    const timeoutId = window.setTimeout(() => {
+      measureCardLayout();
+    }, FOCUS_LAYOUT_STABILIZE_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [isFocusTransitioning, measureCardLayout]);
+
+  useLayoutEffect(() => {
+    if (!isFocusTransitioning) {
+      setTransitionOffsetY(0);
+      return;
+    }
+
+    const wrapElement = cardWrapRef.current;
+    if (!wrapElement) {
+      return;
+    }
+
+    const anchorTop = wrapElement.getBoundingClientRect().top;
+    const rafId = window.requestAnimationFrame(() => {
+      const nextWrapElement = cardWrapRef.current;
+      if (!nextWrapElement) {
+        return;
+      }
+
+      const nextTop = nextWrapElement.getBoundingClientRect().top;
+      setTransitionOffsetY(anchorTop - nextTop);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+    };
+  }, [isFocusMode, isFocusTransitioning]);
+
   return {
     cardWrapRef,
     controlsRef,
@@ -104,6 +160,7 @@ const useHomeCardLayout = (
     expandedCardHeight,
     isCardCompressed,
     measureCardLayout,
+    transitionOffsetY,
   };
 };
 

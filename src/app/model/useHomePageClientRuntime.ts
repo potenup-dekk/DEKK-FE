@@ -16,8 +16,14 @@ const useHomePageClientRuntime = () => {
   } = useHomeCustomDeckSheet();
 
   const pageRef = useRef<HTMLDivElement>(null);
-  const { isFocusMode, isFocusTransitioning, setIsFocusTransitioning, toggleFocusMode } =
-    useHomeFocusMode();
+  const {
+    focusTransitionDirection,
+    isFocusMode,
+    isFocusTransitioning,
+    setFocusTransitionDirection,
+    setIsFocusTransitioning,
+    toggleFocusMode,
+  } = useHomeFocusMode();
   const cardLayout = useHomeCardLayout(isFocusMode, isFocusTransitioning);
 
   const handleToggleFocusMode = useCallback(() => {
@@ -27,9 +33,11 @@ const useHomePageClientRuntime = () => {
   }, [cardLayout.isCardCompressed, isFocusMode, toggleFocusMode]);
 
   useHomePageClientEffects({
+    focusTransitionDirection,
     measureCardLayout: cardLayout.measureCardLayout,
     isFocusMode,
     isFocusTransitioning,
+    setFocusTransitionDirection,
     setIsFocusTransitioning,
   });
 
@@ -39,6 +47,7 @@ const useHomePageClientRuntime = () => {
     handleToggleFocusMode,
     isCustomDeckSheetOpen,
     isFocusMode,
+    isFocusTransitioning,
     openCustomDeckSheet,
     pageRef,
     ...cardLayout,

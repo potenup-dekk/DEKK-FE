@@ -12,6 +12,7 @@ interface FrontCardFrameProps {
   onDislike: FrontCardProps["onDislike"];
   isCardCompressed: FrontCardProps["isCardCompressed"];
   isFocusMode: FrontCardProps["isFocusMode"];
+  isFocusTransitioning: FrontCardProps["isFocusTransitioning"];
   compressedCardHeight: FrontCardProps["compressedCardHeight"];
   expandedCardHeight: FrontCardProps["expandedCardHeight"];
   onToggleFocusMode: FrontCardProps["onToggleFocusMode"];
@@ -54,6 +55,7 @@ const FrontCardFrame = ({
   onDislike,
   isCardCompressed,
   isFocusMode,
+  isFocusTransitioning,
   compressedCardHeight,
   expandedCardHeight,
   onToggleFocusMode,
@@ -61,7 +63,9 @@ const FrontCardFrame = ({
   children,
 }: FrontCardFrameProps) => {
   const shouldApplyCompressedCard =
-    isCardCompressed && !isFocusMode && compressedCardHeight !== null;
+    isCardCompressed &&
+    !isFocusMode &&
+    compressedCardHeight !== null;
   const targetCardHeight = shouldApplyCompressedCard
     ? compressedCardHeight
     : expandedCardHeight;

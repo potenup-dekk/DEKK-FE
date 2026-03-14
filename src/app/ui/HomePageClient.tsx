@@ -12,6 +12,8 @@ const HomePageClient = () => {
       cardWrapRef={runtime.cardWrapRef}
       controlsRef={runtime.controlsRef}
       isFocusMode={runtime.isFocusMode}
+      isFocusTransitioning={runtime.isFocusTransitioning}
+      transitionOffsetY={runtime.transitionOffsetY}
       isCardCompressed={runtime.isCardCompressed}
       expandedCardHeight={runtime.expandedCardHeight}
       compressedCardHeight={runtime.compressedCardHeight}

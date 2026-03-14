@@ -22,6 +22,7 @@ const FrontCard = (props: FrontCardProps) => {
       onDislike={props.onDislike}
       isCardCompressed={props.isCardCompressed}
       isFocusMode={props.isFocusMode}
+      isFocusTransitioning={props.isFocusTransitioning}
       compressedCardHeight={props.compressedCardHeight}
       expandedCardHeight={props.expandedCardHeight}
       onToggleFocusMode={props.onToggleFocusMode}
