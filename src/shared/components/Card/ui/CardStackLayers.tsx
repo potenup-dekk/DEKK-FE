@@ -3,6 +3,7 @@ import BackCard from "./BackCard";
 import type { UseCardStackResult } from "../model/useCardStack.types";
 import CardStackFrontLayer from "./CardStackFrontLayer";
 import type { CardDisplayOptions } from "../model/props.type";
+import CardLoadingPlaceholder from "./CardLoadingPlaceholder";
 
 interface CardStackLayersProps {
   cardStack: UseCardStackResult;
@@ -34,6 +35,8 @@ const CardStackLayers = ({
           />
         ) : null}
       </AnimatePresence>
+
+      {!hasFrontCard ? <CardLoadingPlaceholder /> : null}
 
       {cards.length > 1 ? (
         <BackCard
