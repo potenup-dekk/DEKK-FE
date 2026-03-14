@@ -5,7 +5,9 @@ export const inputFieldStyle = tv({
   slots: {
     root: clsx("flex flex-col items-start text-black w-full"),
     label: clsx("text-xs"),
-    input: clsx("border rounded-sm px-3 py-1.5 my-1 w-full"),
+    input: clsx(
+      "border rounded-sm px-3 py-1.5 my-1 w-full outline-none",
+    ),
     bottom: clsx("flex justify-between text-sm self-end min-h-4"),
     message: clsx("text-xs"),
     count: clsx("text-gray-500 text-xs"),

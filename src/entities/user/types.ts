@@ -14,6 +14,7 @@ export interface UserMe {
 }
 
 export interface UpdateMyProfilePayload {
+  nickname: string;
   height: number;
   weight: number;
   gender: Gender;

@@ -14,6 +14,7 @@ import {
 } from "./useProfileForm.handlers";
 
 const INITIAL_FORM: ProfileFormValue = {
+  nickname: "",
   height: "",
   weight: "",
   gender: "",
@@ -26,14 +27,32 @@ const useProfileForm = ({
   onUnauthorized,
 }: UseProfileFormParams): UseProfileFormResult => {
   const [form, setForm] = useState<ProfileFormValue>(INITIAL_FORM);
-  const [formErrors, setFormErrors] = useState<ProfileFormErrors>(INITIAL_FORM_ERRORS);
+  const [baselineForm, setBaselineForm] =
+    useState<ProfileFormValue>(INITIAL_FORM);
+  const [formErrors, setFormErrors] = useState<ProfileFormErrors>(
+    INITIAL_FORM_ERRORS,
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const isReady = useMemo(
-    () => !!form.height.trim() && !!form.weight.trim() && !!form.gender.trim(),
-    [form.gender, form.height, form.weight],
+    () =>
+      !!form.nickname.trim() &&
+      !!form.height.trim() &&
+      !!form.weight.trim() &&
+      !!form.gender.trim(),
+    [form.gender, form.height, form.nickname, form.weight],
   );
-  const setFormFromUser = useMemo(() => createFormFromUserSetter(setForm), []);
+  const isDirty = useMemo(() => {
+    return (
+      form.nickname !== baselineForm.nickname ||
+      form.height !== baselineForm.height ||
+      form.weight !== baselineForm.weight ||
+      form.gender !== baselineForm.gender
+    );
+  }, [baselineForm, form]);
+  const setFormFromUser = useMemo(() => {
+    return createFormFromUserSetter(setForm, setBaselineForm);
+  }, []);
   const handleChange = useMemo(
     () => createChangeHandler(setForm, setFormErrors, setSubmitError),
     [],
@@ -57,6 +76,7 @@ const useProfileForm = ({
     isSubmitting,
     submitError,
     isReady,
+    isDirty,
     setFormFromUser,
     handleChange,
     handleSubmit,

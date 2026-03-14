@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import type { UpdateMyProfilePayload } from "@/entities/user";
 import {
   completeOnboarding,
@@ -8,11 +9,17 @@ import {
 } from "@/shared/api/services/profile";
 
 const updateMyProfileAction = async (payload: UpdateMyProfilePayload) => {
-  return updateMyProfile(payload);
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+
+  return updateMyProfile(payload, cookieHeader || undefined);
 };
 
 const completeOnboardingAction = async (payload: OnboardingPayload) => {
-  return completeOnboarding(payload);
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+
+  return completeOnboarding(payload, cookieHeader || undefined);
 };
 
 export {

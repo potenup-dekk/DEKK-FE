@@ -1,4 +1,5 @@
 import InputField from "@/shared/components/Input";
+import ProfileGenderField from "./ProfileGenderField";
 import type {
   ProfileFormErrors,
   ProfileFormValue,
@@ -17,6 +18,19 @@ const ProfileFormFields = ({
 }: ProfileFormFieldsProps) => {
   return (
     <>
+      <InputField
+        id="nickname"
+        name="nickname"
+        label="닉네임"
+        type="text"
+        placeholder="닉네임을 입력하세요"
+        value={form.nickname}
+        onChange={handleChange}
+        maxLength={10}
+        showCount
+        error={formErrors.nickname}
+      />
+
       <InputField
         id="height"
         name="height"
@@ -39,12 +53,7 @@ const ProfileFormFields = ({
         error={formErrors.weight}
       />
 
-      <InputField
-        id="gender"
-        name="gender"
-        label="성별"
-        type="text"
-        placeholder="MALE / FEMALE / OTHER"
+      <ProfileGenderField
         value={form.gender}
         onChange={handleChange}
         error={formErrors.gender}

@@ -8,12 +8,16 @@ const ActionButton = ({
   onClick,
   type = "button",
   className,
+  disabled = false,
 }: ActionButtonProps) => {
+  const resolvedColor = disabled ? "disabled" : color;
+
   return (
     <button
       type={type}
-      className={actionButtonStyle({ color, size, className })}
+      className={actionButtonStyle({ color: resolvedColor, size, className })}
       onClick={onClick}
+      disabled={disabled}
     >
       {label}
     </button>

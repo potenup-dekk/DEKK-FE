@@ -14,6 +14,7 @@ type UserStatus = "PENDING" | "ACTIVE";
 interface GuardUser {
   id?: number;
   email?: string;
+  nickname?: string | null;
   status?: UserStatus;
   height?: number | null;
   weight?: number | null;

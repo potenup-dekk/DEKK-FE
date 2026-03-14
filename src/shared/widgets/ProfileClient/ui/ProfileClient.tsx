@@ -37,6 +37,7 @@ const ProfileClientContent = ({
       settingsError={settingsError}
       isSubmitting={profileForm.isSubmitting}
       isReady={profileForm.isReady}
+      isDirty={profileForm.isDirty}
       isLoggingOut={isLoggingOut}
       email={email}
       onLogout={onLogout}
