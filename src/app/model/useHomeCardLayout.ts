@@ -47,7 +47,10 @@ const measureHomeCardLayout = ({
     controlsElement.getBoundingClientRect().height,
     CONTROLS_HEIGHT_FALLBACK,
   );
-  const nextExpandedHeight = getExpandedCardHeight(cardWrapWidth, controlsHeight);
+  const nextExpandedHeight = getExpandedCardHeight(
+    cardWrapWidth,
+    controlsHeight,
+  );
 
   setExpandedCardHeight((prev) =>
     shouldUpdateHeight(prev, nextExpandedHeight) ? nextExpandedHeight : prev,

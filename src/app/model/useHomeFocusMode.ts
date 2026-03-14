@@ -8,15 +8,18 @@ const useHomeFocusMode = () => {
   const [focusTransitionDirection, setFocusTransitionDirection] =
     useState<FocusTransitionDirection>(null);
 
-  const toggleFocusMode = useCallback((canToggle: boolean) => {
-    if (!canToggle && !isFocusMode) {
-      return;
-    }
+  const toggleFocusMode = useCallback(
+    (canToggle: boolean) => {
+      if (!canToggle && !isFocusMode) {
+        return;
+      }
 
-    setFocusTransitionDirection(isFocusMode ? "exit" : "enter");
-    setIsFocusTransitioning(true);
-    setIsFocusMode((prev) => !prev);
-  }, [isFocusMode]);
+      setFocusTransitionDirection(isFocusMode ? "exit" : "enter");
+      setIsFocusTransitioning(true);
+      setIsFocusMode((prev) => !prev);
+    },
+    [isFocusMode],
+  );
 
   return {
     focusTransitionDirection,

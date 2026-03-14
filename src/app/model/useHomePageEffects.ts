@@ -61,7 +61,11 @@ const useFocusTransitionReset = (
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [isFocusTransitioning, setFocusTransitionDirection, setIsFocusTransitioning]);
+  }, [
+    isFocusTransitioning,
+    setFocusTransitionDirection,
+    setIsFocusTransitioning,
+  ]);
 };
 
 const useFocusModeChromeVisibility = (

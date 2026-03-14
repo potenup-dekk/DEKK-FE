@@ -63,9 +63,7 @@ const FrontCardFrame = ({
   children,
 }: FrontCardFrameProps) => {
   const shouldApplyCompressedCard =
-    isCardCompressed &&
-    !isFocusMode &&
-    compressedCardHeight !== null;
+    isCardCompressed && !isFocusMode && compressedCardHeight !== null;
   const targetCardHeight = shouldApplyCompressedCard
     ? compressedCardHeight
     : expandedCardHeight;
