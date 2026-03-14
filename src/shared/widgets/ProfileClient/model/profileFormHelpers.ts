@@ -49,7 +49,10 @@ const validateForm = (form: ProfileFormValue) => {
   }
 
   const normalizedGender = form.gender.trim().toUpperCase();
-  if (form.gender.trim() && !GENDER_VALUES.includes(normalizedGender as Gender)) {
+  if (
+    form.gender.trim() &&
+    !GENDER_VALUES.includes(normalizedGender as Gender)
+  ) {
     nextErrors.gender = "성별을 다시 선택해주세요.";
   }
 

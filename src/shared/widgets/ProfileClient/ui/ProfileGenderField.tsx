@@ -52,9 +52,7 @@ const ProfileGenderField = ({
       </div>
 
       <div className={genderFieldHelperRow()}>
-        <span className={error ? errorText() : hintText()}>
-          {error ?? " "}
-        </span>
+        <span className={error ? errorText() : hintText()}>{error ?? " "}</span>
       </div>
     </div>
   );

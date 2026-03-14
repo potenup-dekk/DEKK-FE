@@ -29,9 +29,8 @@ const useProfileForm = ({
   const [form, setForm] = useState<ProfileFormValue>(INITIAL_FORM);
   const [baselineForm, setBaselineForm] =
     useState<ProfileFormValue>(INITIAL_FORM);
-  const [formErrors, setFormErrors] = useState<ProfileFormErrors>(
-    INITIAL_FORM_ERRORS,
-  );
+  const [formErrors, setFormErrors] =
+    useState<ProfileFormErrors>(INITIAL_FORM_ERRORS);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const isReady = useMemo(
@@ -57,16 +56,17 @@ const useProfileForm = ({
     () => createChangeHandler(setForm, setFormErrors, setSubmitError),
     [],
   );
-  const handleSubmit = useMemo(() =>
-    createSubmitHandler(
-      form,
-      refetch,
-      onUnauthorized,
-      isSubmitting,
-      setSubmitError,
-      setFormErrors,
-      setIsSubmitting,
-    ),
+  const handleSubmit = useMemo(
+    () =>
+      createSubmitHandler(
+        form,
+        refetch,
+        onUnauthorized,
+        isSubmitting,
+        setSubmitError,
+        setFormErrors,
+        setIsSubmitting,
+      ),
     [form, isSubmitting, onUnauthorized, refetch],
   );
 
