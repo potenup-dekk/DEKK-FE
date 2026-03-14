@@ -26,7 +26,7 @@ const Tab = ({ children }: TabProps) => {
   }, [activeIndex, indicatorControls, selectedIndex]);
 
   return (
-    <div className="flex w-full bg-white items-center z-50 justify-between px-6 py-2 gap-3">
+    <div className="flex h-fit w-full items-center justify-between gap-3 px-6 py-3">
       <div className="relative flex flex-1 items-stretch">
         {tabItems.length > 0 && (
           <motion.div

@@ -18,6 +18,7 @@ const moveFrontCardToBack = <T,>(items: T[]) => {
 const Card = ({
   isCardCompressed,
   isFocusMode,
+  isFocusTransitioning,
   compressedCardHeight,
   expandedCardHeight,
   onToggleFocusMode,
@@ -49,6 +50,7 @@ const Card = ({
         displayOptions={{
           isCardCompressed,
           isFocusMode,
+          isFocusTransitioning,
           compressedCardHeight,
           expandedCardHeight,
           onToggleFocusMode,

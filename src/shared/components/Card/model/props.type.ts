@@ -4,6 +4,7 @@ import type { CardItem, UseCardStackResult } from "./useCardStack.types";
 interface CardDisplayOptions {
   isCardCompressed: boolean;
   isFocusMode: boolean;
+  isFocusTransitioning: boolean;
   compressedCardHeight: number | null;
   expandedCardHeight: number | null;
   onToggleFocusMode: () => void;
@@ -31,6 +32,7 @@ interface FrontCardProps {
   tags?: string[] | null;
   isCardCompressed: CardDisplayOptions["isCardCompressed"];
   isFocusMode: CardDisplayOptions["isFocusMode"];
+  isFocusTransitioning: CardDisplayOptions["isFocusTransitioning"];
   compressedCardHeight: CardDisplayOptions["compressedCardHeight"];
   expandedCardHeight: CardDisplayOptions["expandedCardHeight"];
   onToggleFocusMode: CardDisplayOptions["onToggleFocusMode"];

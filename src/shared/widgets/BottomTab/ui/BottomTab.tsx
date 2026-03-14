@@ -38,7 +38,10 @@ const BottomTab = () => {
       variants={bottomTabVariants}
       initial={false}
       animate={isChromeVisible ? "visible" : "hidden"}
-      style={{ pointerEvents: isChromeVisible ? "auto" : "none" }}
+      style={{
+        pointerEvents: isChromeVisible ? "auto" : "none",
+        visibility: isChromeVisible ? "visible" : "hidden",
+      }}
       aria-hidden={!isChromeVisible}
     >
       <div className={inner()}>

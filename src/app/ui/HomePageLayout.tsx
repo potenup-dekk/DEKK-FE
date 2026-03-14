@@ -7,6 +7,8 @@ interface HomePageLayoutProps {
   cardWrapRef: React.RefObject<HTMLDivElement | null>;
   controlsRef: React.RefObject<HTMLDivElement | null>;
   isFocusMode: boolean;
+  isFocusTransitioning: boolean;
+  transitionOffsetY: number;
   isCardCompressed: boolean;
   expandedCardHeight: number | null;
   compressedCardHeight: number | null;
@@ -19,6 +21,8 @@ const HomePageLayout = ({
   cardWrapRef,
   controlsRef,
   isFocusMode,
+  isFocusTransitioning,
+  transitionOffsetY,
   isCardCompressed,
   expandedCardHeight,
   compressedCardHeight,
@@ -26,13 +30,27 @@ const HomePageLayout = ({
   onOpenCustomDeckSheet,
 }: HomePageLayoutProps) => {
   const { page, cardWrap } = homePageStyle();
+  const shouldApplyTransitionOffset =
+    isFocusTransitioning && Math.abs(transitionOffsetY) >= 1;
 
   return (
     <div ref={pageRef} className={page({ isFocusMode })}>
-      <div ref={cardWrapRef} className={cardWrap({ isFocusMode })}>
+      <div
+        ref={cardWrapRef}
+        className={cardWrap({ isFocusMode })}
+        style={
+          shouldApplyTransitionOffset
+            ? {
+                transform: `translateY(${transitionOffsetY}px)`,
+                willChange: "transform",
+              }
+            : undefined
+        }
+      >
         <Card
           isCardCompressed={isCardCompressed}
           isFocusMode={isFocusMode}
+          isFocusTransitioning={isFocusTransitioning}
           expandedCardHeight={expandedCardHeight}
           compressedCardHeight={compressedCardHeight}
           onToggleFocusMode={onToggleFocusMode}

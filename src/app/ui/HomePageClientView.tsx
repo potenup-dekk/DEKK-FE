@@ -6,6 +6,8 @@ interface HomePageClientViewProps {
   cardWrapRef: React.RefObject<HTMLDivElement | null>;
   controlsRef: React.RefObject<HTMLDivElement | null>;
   isFocusMode: boolean;
+  isFocusTransitioning: boolean;
+  transitionOffsetY: number;
   isCardCompressed: boolean;
   expandedCardHeight: number | null;
   compressedCardHeight: number | null;
@@ -21,6 +23,8 @@ const HomePageClientView = ({
   cardWrapRef,
   controlsRef,
   isFocusMode,
+  isFocusTransitioning,
+  transitionOffsetY,
   isCardCompressed,
   expandedCardHeight,
   compressedCardHeight,
@@ -37,6 +41,8 @@ const HomePageClientView = ({
         cardWrapRef={cardWrapRef}
         controlsRef={controlsRef}
         isFocusMode={isFocusMode}
+        isFocusTransitioning={isFocusTransitioning}
+        transitionOffsetY={transitionOffsetY}
         isCardCompressed={isCardCompressed}
         expandedCardHeight={expandedCardHeight}
         compressedCardHeight={compressedCardHeight}

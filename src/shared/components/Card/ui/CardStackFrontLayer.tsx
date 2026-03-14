@@ -38,6 +38,7 @@ const CardStackFrontLayer = ({
       backdropFilter={cardStack.backdropFilter}
       isCardCompressed={displayOptions.isCardCompressed}
       isFocusMode={displayOptions.isFocusMode}
+      isFocusTransitioning={displayOptions.isFocusTransitioning}
       compressedCardHeight={displayOptions.compressedCardHeight}
       expandedCardHeight={displayOptions.expandedCardHeight}
       onToggleFocusMode={displayOptions.onToggleFocusMode}
