@@ -23,25 +23,6 @@ const assertAuthResponse = <T>(response: ApiResponse<T>) => {
   }
 };
 
-const refreshAuthSession = async () => {
-  const response = await requestJson<ApiResponse<null> | null>(
-    "/api/auth/refresh",
-    {
-      method: "POST",
-    },
-  );
-
-  if (!response) {
-    return {
-      code: "HTTP_NO_CONTENT",
-      message: "세션이 갱신되었습니다.",
-      data: null,
-    } satisfies ApiResponse<null>;
-  }
-
-  return assertAuthResponse(response);
-};
-
 const logout = async () => {
   const response = await requestJson<ApiResponse<null> | null>(
     "/w/v1/auth/logout",
@@ -63,4 +44,4 @@ const logout = async () => {
   return assertAuthResponse(response);
 };
 
-export { logout, refreshAuthSession };
+export { logout };
