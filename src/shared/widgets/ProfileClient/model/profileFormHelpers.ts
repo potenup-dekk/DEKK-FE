@@ -6,7 +6,7 @@ interface ProfileFormValue {
   nickname: string;
   height: string;
   weight: string;
-  gender: string;
+  gender: Gender | "";
 }
 
 interface ProfileFormErrors {
