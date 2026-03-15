@@ -7,9 +7,11 @@ import type { ProfileFormUser } from "./useProfileForm.types";
 
 const createFormFromUserSetter = (
   setForm: React.Dispatch<React.SetStateAction<ProfileFormValue>>,
+  setBaselineForm: React.Dispatch<React.SetStateAction<ProfileFormValue>>,
 ) => {
   return (nextUser: ProfileFormUser) => {
     const nextForm: ProfileFormValue = {
+      nickname: nextUser.nickname?.trim() ?? "",
       height: nextUser.height == null ? "" : String(nextUser.height),
       weight: nextUser.weight == null ? "" : String(nextUser.weight),
       gender: nextUser.gender ?? "",
@@ -17,6 +19,17 @@ const createFormFromUserSetter = (
 
     setForm((previousForm) => {
       const isSameForm =
+        previousForm.nickname === nextForm.nickname &&
+        previousForm.height === nextForm.height &&
+        previousForm.weight === nextForm.weight &&
+        previousForm.gender === nextForm.gender;
+
+      return isSameForm ? previousForm : nextForm;
+    });
+
+    setBaselineForm((previousForm) => {
+      const isSameForm =
+        previousForm.nickname === nextForm.nickname &&
         previousForm.height === nextForm.height &&
         previousForm.weight === nextForm.weight &&
         previousForm.gender === nextForm.gender;
@@ -35,7 +48,12 @@ const createChangeHandler = (
     const { name, value } = event.target;
 
     setForm((prev) => ({ ...prev, [name]: value }));
-    if (name === "height" || name === "weight" || name === "gender") {
+    if (
+      name === "nickname" ||
+      name === "height" ||
+      name === "weight" ||
+      name === "gender"
+    ) {
       setFormErrors((prev) => ({ ...prev, [name]: undefined }));
       setSubmitError(null);
     }

@@ -70,19 +70,42 @@ const resolveCardImageUrl = async (
 const appendCardPage = async (
   nextPageRef: React.MutableRefObject<number>,
   isFetchingRef: React.MutableRefObject<boolean>,
+  seenCardIdRef: React.MutableRefObject<Set<number>> | undefined,
   setCards: React.Dispatch<React.SetStateAction<CardItem[]>>,
 ) => {
   if (isFetchingRef.current) return;
   isFetchingRef.current = true;
 
   try {
-    const page = nextPageRef.current;
-    const response = await getCards(page, PICSUM_LIMIT);
-    if (!response.data) return;
+    const MAX_FETCH_ATTEMPTS = 3;
 
-    nextPageRef.current += 1;
-    const content = response.data.content ?? [];
-    setCards((prev) => [...prev, ...mapCards(page, content)]);
+    const seenCardIds = seenCardIdRef?.current ?? new Set<number>();
+
+    for (let attempt = 0; attempt < MAX_FETCH_ATTEMPTS; attempt += 1) {
+      const page = nextPageRef.current;
+      const response = await getCards(page, PICSUM_LIMIT);
+      nextPageRef.current += 1;
+
+      if (!response.data) {
+        continue;
+      }
+
+      const content = response.data.content ?? [];
+      const uniqueContent = content.filter((item) => {
+        return !seenCardIds.has(item.cardId);
+      });
+
+      if (uniqueContent.length === 0) {
+        continue;
+      }
+
+      uniqueContent.forEach((item) => {
+        seenCardIds.add(item.cardId);
+      });
+
+      setCards((prev) => [...prev, ...mapCards(page, uniqueContent)]);
+      return;
+    }
   } finally {
     isFetchingRef.current = false;
   }

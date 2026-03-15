@@ -3,6 +3,7 @@ import BackCard from "./BackCard";
 import type { UseCardStackResult } from "../model/useCardStack.types";
 import CardStackFrontLayer from "./CardStackFrontLayer";
 import type { CardDisplayOptions } from "../model/props.type";
+import CardLoadingPlaceholder from "./CardLoadingPlaceholder";
 
 interface CardStackLayersProps {
   cardStack: UseCardStackResult;
@@ -22,6 +23,11 @@ const CardStackLayers = ({
     displayOptions.isCardCompressed &&
     !displayOptions.isFocusMode &&
     displayOptions.compressedCardHeight !== null;
+  const targetCardHeight = shouldApplyCompressedCard
+    ? displayOptions.compressedCardHeight
+    : displayOptions.expandedCardHeight;
+  const shouldUseViewportFallbackHeight =
+    !displayOptions.isFocusMode && targetCardHeight === null;
 
   return (
     <>
@@ -34,6 +40,14 @@ const CardStackLayers = ({
           />
         ) : null}
       </AnimatePresence>
+
+      {!hasFrontCard ? (
+        <CardLoadingPlaceholder
+          shouldApplyCompressedCard={shouldApplyCompressedCard}
+          targetCardHeight={targetCardHeight}
+          shouldUseViewportFallbackHeight={shouldUseViewportFallbackHeight}
+        />
+      ) : null}
 
       {cards.length > 1 ? (
         <BackCard

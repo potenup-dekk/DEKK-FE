@@ -2,6 +2,7 @@ import type { Gender } from "@/entities/user";
 import type { ProfileFormErrors, ProfileFormValue } from "./profileFormHelpers";
 
 interface ProfileFormUser {
+  nickname?: string | null;
   height?: number | null;
   weight?: number | null;
   gender?: Gender | null;
@@ -18,6 +19,7 @@ interface UseProfileFormResult {
   isSubmitting: boolean;
   submitError: string | null;
   isReady: boolean;
+  isDirty: boolean;
   setFormFromUser: (nextUser: ProfileFormUser) => void;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;

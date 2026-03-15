@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
-const FOCUS_MODE_TRANSITION_MS = 420;
+const FOCUS_MODE_TRANSITION_MS = 260;
+type FocusTransitionDirection = "enter" | "exit" | null;
 
 const useDisablePageScroll = () => {
   useEffect(() => {
@@ -46,28 +47,53 @@ const useCardLayoutResizeEffect = (measureCardLayout: () => void) => {
 
 const useFocusTransitionReset = (
   isFocusTransitioning: boolean,
+  setFocusTransitionDirection: (value: FocusTransitionDirection) => void,
   setIsFocusTransitioning: (value: boolean) => void,
 ) => {
   useEffect(() => {
     if (!isFocusTransitioning) return;
 
     const timeoutId = window.setTimeout(() => {
+      setFocusTransitionDirection(null);
       setIsFocusTransitioning(false);
     }, FOCUS_MODE_TRANSITION_MS);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [isFocusTransitioning, setIsFocusTransitioning]);
+  }, [
+    isFocusTransitioning,
+    setFocusTransitionDirection,
+    setIsFocusTransitioning,
+  ]);
 };
 
 const useFocusModeChromeVisibility = (
   isFocusMode: boolean,
+  isFocusTransitioning: boolean,
+  focusTransitionDirection: FocusTransitionDirection,
   setChromeVisible: (isVisible: boolean) => void,
 ) => {
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (isFocusTransitioning) {
+      if (focusTransitionDirection === "enter") {
+        setChromeVisible(false);
+        return;
+      }
+
+      if (focusTransitionDirection === "exit") {
+        setChromeVisible(true);
+        return;
+      }
+    }
+
     setChromeVisible(!isFocusMode);
-  }, [isFocusMode, setChromeVisible]);
+  }, [
+    focusTransitionDirection,
+    isFocusMode,
+    isFocusTransitioning,
+    setChromeVisible,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -77,6 +103,7 @@ const useFocusModeChromeVisibility = (
 };
 
 export {
+  type FocusTransitionDirection,
   useCardLayoutResizeEffect,
   useDisablePageScroll,
   useFocusModeChromeVisibility,

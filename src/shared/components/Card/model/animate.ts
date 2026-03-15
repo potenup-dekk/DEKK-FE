@@ -15,6 +15,11 @@ const frontCardFlipStyle = {
   WebkitTransformStyle: "preserve-3d",
 } as const;
 
+const frontFaceOnlyStyle = {
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+} as const;
+
 const backFaceMotionStyle = {
   rotateY: 180,
   backfaceVisibility: "hidden",
@@ -49,18 +54,16 @@ const backCardScaleAnimation = {
 } as const;
 
 const cardResizeTransition = {
-  type: "spring",
-  stiffness: 145,
-  damping: 36,
-  mass: 1,
-  restDelta: 0.08,
-  restSpeed: 0.08,
+  type: "tween",
+  duration: 0.3,
+  ease: "easeInOut",
 } as const;
 
 export {
   backCardScaleAnimation,
   cardResizeTransition,
   backFaceMotionStyle,
+  frontFaceOnlyStyle,
   flipAnimationTransition,
   frontCardDragConstraints,
   frontCardFlipStyle,

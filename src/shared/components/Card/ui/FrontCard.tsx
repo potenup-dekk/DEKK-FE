@@ -16,11 +16,13 @@ const FrontCard = (props: FrontCardProps) => {
       cardNumericId={props.cardNumericId}
       x={x}
       rotate={props.rotate}
+      rotateYSpring={props.rotateYSpring}
       setIsSwiping={props.setIsSwiping}
       onLike={props.onLike}
       onDislike={props.onDislike}
       isCardCompressed={props.isCardCompressed}
       isFocusMode={props.isFocusMode}
+      isFocusTransitioning={props.isFocusTransitioning}
       compressedCardHeight={props.compressedCardHeight}
       expandedCardHeight={props.expandedCardHeight}
       onToggleFocusMode={props.onToggleFocusMode}

@@ -6,11 +6,13 @@ interface FrontCardFrameProps {
   cardNumericId: number;
   x: FrontCardProps["x"];
   rotate: FrontCardProps["rotate"];
+  rotateYSpring: FrontCardProps["rotateYSpring"];
   setIsSwiping: FrontCardProps["setIsSwiping"];
   onLike: FrontCardProps["onLike"];
   onDislike: FrontCardProps["onDislike"];
   isCardCompressed: FrontCardProps["isCardCompressed"];
   isFocusMode: FrontCardProps["isFocusMode"];
+  isFocusTransitioning: FrontCardProps["isFocusTransitioning"];
   compressedCardHeight: FrontCardProps["compressedCardHeight"];
   expandedCardHeight: FrontCardProps["expandedCardHeight"];
   onToggleFocusMode: FrontCardProps["onToggleFocusMode"];
@@ -47,11 +49,13 @@ const FrontCardFrame = ({
   cardNumericId,
   x,
   rotate,
+  rotateYSpring,
   setIsSwiping,
   onLike,
   onDislike,
   isCardCompressed,
   isFocusMode,
+  isFocusTransitioning,
   compressedCardHeight,
   expandedCardHeight,
   onToggleFocusMode,
@@ -60,7 +64,9 @@ const FrontCardFrame = ({
 }: FrontCardFrameProps) => {
   const shouldApplyCompressedCard =
     isCardCompressed && !isFocusMode && compressedCardHeight !== null;
-  const targetCardHeight = shouldApplyCompressedCard ? compressedCardHeight : expandedCardHeight;
+  const targetCardHeight = shouldApplyCompressedCard
+    ? compressedCardHeight
+    : expandedCardHeight;
   const onDragEnd = createDragEndHandler({ setIsSwiping, onLike, onDislike });
 
   return (
@@ -68,7 +74,9 @@ const FrontCardFrame = ({
       cardId={cardId}
       x={x}
       rotate={rotate}
+      rotateYSpring={rotateYSpring}
       targetCardHeight={targetCardHeight}
+      isCardCompressed={isCardCompressed}
       shouldApplyCompressedCard={shouldApplyCompressedCard}
       isFocusMode={isFocusMode}
       onToggleFocusMode={onToggleFocusMode}

@@ -35,18 +35,24 @@ const assertProfileResponse = <T>(response: ApiResponse<T>) => {
 };
 
 const getMyInfo = async () => {
-  const response = await requestJson<ApiResponse<UserMe>>("/w/v1/users/me", {
+  const response = await requestJson<ApiResponse<UserMe>>("/api/users/me", {
     method: "GET",
   });
 
   return assertProfileResponse(response);
 };
 
-const updateMyProfile = async (payload: UpdateMyProfilePayload) => {
+const updateMyProfile = async (
+  payload: UpdateMyProfilePayload,
+  cookieHeader?: string,
+) => {
+  const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
+
   const response = await requestJson<ApiResponse<null> | null>(
     "/w/v1/users/me",
     {
       method: "PATCH",
+      headers,
       body: JSON.stringify(payload),
     },
   );
@@ -62,11 +68,17 @@ const updateMyProfile = async (payload: UpdateMyProfilePayload) => {
   return assertProfileResponse(response);
 };
 
-const completeOnboarding = async (payload: OnboardingPayload) => {
+const completeOnboarding = async (
+  payload: OnboardingPayload,
+  cookieHeader?: string,
+) => {
+  const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
+
   const response = await requestJson<ApiResponse<null> | null>(
     "/w/v1/users/onboarding",
     {
       method: "POST",
+      headers,
       body: JSON.stringify(payload),
     },
   );

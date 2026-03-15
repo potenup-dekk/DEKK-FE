@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import type { CustomDeckData } from "@/entities/deck";
+import {
+  createCustomDeckAction,
+  saveCardToCustomDeckAction,
+} from "@/shared/api/actions";
 import { getCustomDecks } from "@/shared/api/services";
 import { toast } from "sonner";
 import deckStyle from "../style";
@@ -41,6 +45,31 @@ const DeckCreateSheet = ({
   const [isCreatePending, setIsCreatePending] = useState(false);
   const [isSavePending, setIsSavePending] = useState(false);
   const MAX_DECK_NAME_LENGTH = 20;
+
+  const defaultCreate = async (deckName: string) => {
+    try {
+      await createCustomDeckAction(deckName);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const defaultSaveCardToDeck = async (customDeckId: number) => {
+    if (!targetCardId) {
+      return false;
+    }
+
+    try {
+      await saveCardToCustomDeckAction(customDeckId, targetCardId);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const createHandler = onCreate ?? defaultCreate;
+  const saveCardToDeckHandler = onSaveCardToDeck ?? defaultSaveCardToDeck;
 
   const isSubmitDisabled = !name.trim() || isCreatePending;
 
@@ -130,10 +159,6 @@ const DeckCreateSheet = ({
   };
 
   const handleCreate = async () => {
-    if (!onCreate) {
-      return;
-    }
-
     if (isCreatePending) {
       return;
     }
@@ -142,7 +167,7 @@ const DeckCreateSheet = ({
     const previousDecks = customDecks;
 
     setIsCreatePending(true);
-    const didCreate = await onCreate(trimmedName);
+    const didCreate = await createHandler(trimmedName);
     setIsCreatePending(false);
 
     if (!didCreate) {
@@ -173,14 +198,8 @@ const DeckCreateSheet = ({
       return;
     }
 
-    if (!onSaveCardToDeck) {
-      toast.success("커스텀 덱을 생성했습니다.");
-      setName("");
-      return;
-    }
-
     setIsSavePending(true);
-    const didSave = await onSaveCardToDeck(createdDeckId);
+    const didSave = await saveCardToDeckHandler(createdDeckId);
     setIsSavePending(false);
 
     if (!didSave) {
@@ -194,16 +213,12 @@ const DeckCreateSheet = ({
   };
 
   const handleSaveCardToDeck = async (customDeckId: number) => {
-    if (!onSaveCardToDeck) {
-      return;
-    }
-
     if (isSavePending) {
       return;
     }
 
     setIsSavePending(true);
-    const didSave = await onSaveCardToDeck(customDeckId);
+    const didSave = await saveCardToDeckHandler(customDeckId);
     setIsSavePending(false);
 
     if (!didSave) {
@@ -240,7 +255,7 @@ const DeckCreateSheet = ({
         <button
           type="button"
           className={sheetButtonPrimary()}
-          disabled={isSubmitDisabled || !onCreate}
+          disabled={isSubmitDisabled}
           onClick={() => {
             void handleCreate();
           }}
@@ -265,7 +280,7 @@ const DeckCreateSheet = ({
                   key={deck.deckId}
                   type="button"
                   className={sheetDeckItem()}
-                  disabled={isSavePending || !onSaveCardToDeck}
+                  disabled={isSavePending}
                   onClick={() => {
                     void handleSaveCardToDeck(deck.deckId);
                   }}

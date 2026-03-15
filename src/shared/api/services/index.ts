@@ -15,4 +15,4 @@ export {
   updateCustomDeckName,
 } from "./deck.custom";
 export { deleteDefaultDeckCard, getDecks, getDefaultDeckCards } from "./deck";
-export { logout } from "./auth";
+export { logout, refreshAuthSession } from "./auth";

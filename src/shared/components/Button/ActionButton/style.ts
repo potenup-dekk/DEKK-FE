@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 const actionButtonStyle = tv({
-  base: "cursor-pointer rounded-sm border",
+  base: "cursor-pointer rounded-sm border disabled:cursor-not-allowed disabled:opacity-60",
 
   variants: {
     color: {

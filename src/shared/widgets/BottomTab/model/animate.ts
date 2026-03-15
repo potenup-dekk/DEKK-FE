@@ -7,14 +7,13 @@ const bottomTabTransition: Transition = {
   mass: 1.05,
 };
 
-const BOTTOM_TAB_HIDE_DELAY = 0.12;
-const BOTTOM_TAB_SHOW_DELAY = 0.16;
+const BOTTOM_TAB_HIDE_DELAY = 0;
+const BOTTOM_TAB_SHOW_DELAY = 0;
 
 const bottomTabVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 88,
-    height: 0,
     visibility: "hidden",
     transition: {
       ...bottomTabTransition,
@@ -24,7 +23,6 @@ const bottomTabVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    height: 80,
     visibility: "visible",
     transition: {
       ...bottomTabTransition,

@@ -20,6 +20,7 @@ interface ProfileFormViewProps {
   settingsError: string | null;
   isSubmitting: boolean;
   isReady: boolean;
+  isDirty: boolean;
   isLoggingOut: boolean;
   email?: string;
   onLogout: () => Promise<void>;
@@ -47,6 +48,7 @@ const ProfileFormView = (props: ProfileFormViewProps) => {
             authError={props.authError}
             isSubmitting={props.isSubmitting}
             isReady={props.isReady}
+            isDirty={props.isDirty}
             email={props.email}
             handleChange={props.handleChange}
             handleSubmit={props.handleSubmit}

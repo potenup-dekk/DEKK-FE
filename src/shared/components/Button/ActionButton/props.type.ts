@@ -10,6 +10,7 @@ interface ActionButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
   className?: string;
+  disabled?: boolean;
 }
 
 export type { ActionButtonProps };

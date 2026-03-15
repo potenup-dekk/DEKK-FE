@@ -5,9 +5,15 @@ const tabIndicatorTransition = {
 } as const;
 
 const getTabIndicatorAnimate = (activeIndex: number, hasSelection: boolean) => {
+  if (!hasSelection) {
+    return {
+      opacity: 0,
+    };
+  }
+
   return {
     x: `${activeIndex * 100}%`,
-    opacity: hasSelection ? 1 : 0,
+    opacity: 1,
   };
 };
 

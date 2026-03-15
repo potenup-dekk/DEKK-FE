@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { getMyInfo } from "@/features/profile";
+import { ApiRequestError } from "@/shared/api/fetcher/client";
+import { refreshAuthSession } from "@/shared/api/services/auth";
 
 // development environment bypass for easier testing without authentication
 // const isLocalEnvironment = process.env.NODE_ENV === "development";
@@ -12,6 +14,7 @@ type UserStatus = "PENDING" | "ACTIVE";
 interface GuardUser {
   id?: number;
   email?: string;
+  nickname?: string | null;
   status?: UserStatus;
   height?: number | null;
   weight?: number | null;
@@ -44,6 +47,14 @@ const useAuthGuard = (): UseAuthGuardResult => {
   const [user, setUser] = useState<GuardUser | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const loadUser = useCallback(async () => {
+    const result = await getMyInfo();
+    const nextUser = result.data ?? null;
+
+    setIsAuthenticated(Boolean(nextUser));
+    setUser(nextUser);
+  }, []);
+
   const refetch = useCallback(async () => {
     if (isLocalEnvironment) {
       applyLocalAuthState(setIsAuthenticated, setUser, setError, setIsLoading);
@@ -54,12 +65,21 @@ const useAuthGuard = (): UseAuthGuardResult => {
     setError(null);
 
     try {
-      const result = await getMyInfo();
-      const nextUser = result.data ?? null;
-
-      setIsAuthenticated(Boolean(nextUser));
-      setUser(nextUser);
+      await loadUser();
     } catch (err) {
+      if (err instanceof ApiRequestError && err.status === 401) {
+        try {
+          await refreshAuthSession();
+          await loadUser();
+          return;
+        } catch {
+          setIsAuthenticated(false);
+          setUser(null);
+          setError("세션이 만료되었습니다. 다시 로그인해 주세요.");
+          return;
+        }
+      }
+
       setIsAuthenticated(false);
       setUser(null);
       setError(
@@ -70,7 +90,7 @@ const useAuthGuard = (): UseAuthGuardResult => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [loadUser]);
 
   useEffect(() => {
     void refetch();

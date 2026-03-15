@@ -1,6 +1,8 @@
-import { motion } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import {
   cardResizeTransition,
+  frontFaceOnlyStyle,
+  frontCardFlipStyle,
   frontCardDragConstraints,
   frontCardMotionStyle,
   getFrontCardExit,
@@ -14,7 +16,9 @@ interface FrontCardMotionContainerProps {
   cardNumericId: number;
   x: FrontCardProps["x"];
   rotate: FrontCardProps["rotate"];
+  rotateYSpring: FrontCardProps["rotateYSpring"];
   targetCardHeight: number | null;
+  isCardCompressed: boolean;
   shouldApplyCompressedCard: boolean;
   isFocusMode: boolean;
   onToggleFocusMode: () => void;
@@ -28,7 +32,9 @@ const FrontCardMotionContainer = ({
   cardNumericId,
   x,
   rotate,
+  rotateYSpring,
   targetCardHeight,
+  isCardCompressed,
   shouldApplyCompressedCard,
   isFocusMode,
   onToggleFocusMode,
@@ -37,6 +43,11 @@ const FrontCardMotionContainer = ({
   children,
 }: FrontCardMotionContainerProps) => {
   const { frontRoot } = cardStyle();
+  const frontFaceOverlayOpacity = useTransform(
+    rotateYSpring,
+    [0, 70, 100, 180],
+    [1, 1, 0, 0],
+  );
 
   return (
     <motion.div
@@ -53,12 +64,24 @@ const FrontCardMotionContainer = ({
       exit={getFrontCardExit(x.get())}
     >
       {children}
-      <FrontCardFocusToggle
-        cardId={cardNumericId}
-        isFocusMode={isFocusMode}
-        onToggleFocusMode={onToggleFocusMode}
-        onOpenCustomDeckSheet={onOpenCustomDeckSheet}
-      />
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          rotateY: rotateYSpring,
+          opacity: frontFaceOverlayOpacity,
+          ...frontCardFlipStyle,
+        }}
+      >
+        <div style={frontFaceOnlyStyle}>
+          <FrontCardFocusToggle
+            cardId={cardNumericId}
+            isFocusMode={isFocusMode}
+            shouldShowFocusModeButton={isFocusMode || isCardCompressed}
+            onToggleFocusMode={onToggleFocusMode}
+            onOpenCustomDeckSheet={onOpenCustomDeckSheet}
+          />
+        </div>
+      </motion.div>
     </motion.div>
   );
 };

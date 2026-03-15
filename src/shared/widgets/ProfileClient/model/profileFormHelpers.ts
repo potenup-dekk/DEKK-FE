@@ -3,23 +3,32 @@ import { updateMyProfileAction } from "@/shared/api/actions";
 import type { Gender, UpdateMyProfilePayload } from "@/entities/user";
 
 interface ProfileFormValue {
+  nickname: string;
   height: string;
   weight: string;
   gender: string;
 }
 
 interface ProfileFormErrors {
+  nickname?: string;
   height?: string;
   weight?: string;
   gender?: string;
 }
 
+const GENDER_VALUES = ["MALE", "FEMALE", "OTHER"] as const;
+
 const validateForm = (form: ProfileFormValue) => {
   const nextErrors: ProfileFormErrors = {};
 
+  if (!form.nickname.trim()) nextErrors.nickname = "닉네임을 입력해주세요.";
   if (!form.height.trim()) nextErrors.height = "키를 입력해주세요.";
   if (!form.weight.trim()) nextErrors.weight = "몸무게를 입력해주세요.";
-  if (!form.gender.trim()) nextErrors.gender = "성별을 입력해주세요.";
+  if (!form.gender.trim()) nextErrors.gender = "성별을 선택해주세요.";
+
+  if (form.nickname.trim() && form.nickname.trim().length > 10) {
+    nextErrors.nickname = "닉네임은 10자 이하로 입력해주세요.";
+  }
 
   const heightNum = Number(form.height);
   if (form.height.trim()) {
@@ -42,14 +51,15 @@ const validateForm = (form: ProfileFormValue) => {
   const normalizedGender = form.gender.trim().toUpperCase();
   if (
     form.gender.trim() &&
-    !["MALE", "FEMALE", "OTHER"].includes(normalizedGender)
+    !GENDER_VALUES.includes(normalizedGender as Gender)
   ) {
-    nextErrors.gender = "성별은 MALE / FEMALE / OTHER 중 하나로 입력해주세요.";
+    nextErrors.gender = "성별을 다시 선택해주세요.";
   }
 
   return {
     nextErrors,
     payload: {
+      nickname: form.nickname.trim(),
       height: heightNum,
       weight: weightNum,
       gender: normalizedGender as Gender,
