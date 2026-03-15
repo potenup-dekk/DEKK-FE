@@ -1,18 +1,22 @@
 "use client";
 
-import { useRef } from "react";
 import useCardStack from "../model/useCardStack";
 import CardStackContent from "./CardStackContent";
 import { useAuthGuard } from "@/shared/hooks";
 import { CardAuthProvider } from "../model/cardAuthContext";
 import type { CardDisplayOptions } from "../model/props.type";
 
-const APPEND_INTERVAL = 3;
+const REMAINING_CARD_APPEND_THRESHOLD = 3;
 
-const moveFrontCardToBack = <T,>(items: T[]) => {
-  if (items.length <= 1) return items;
-  const [frontCard, ...rest] = items;
-  return [...rest, frontCard];
+const removeSwipedCard = <T extends { id: string }>(
+  items: T[],
+  removingCardId: string | null,
+) => {
+  if (!removingCardId) {
+    return items.slice(1);
+  }
+
+  return items.filter((item) => item.id !== removingCardId);
 };
 
 const Card = ({
@@ -26,14 +30,19 @@ const Card = ({
 }: CardDisplayOptions) => {
   const { isAuthenticated } = useAuthGuard();
   const cardStack = useCardStack(isAuthenticated);
-  const swipeCycleCountRef = useRef(0);
 
   const handleExitComplete = () => {
-    cardStack.resetFlipState();
-    cardStack.setCards((prev) => moveFrontCardToBack(prev));
+    let shouldAppendNextPage = false;
 
-    swipeCycleCountRef.current += 1;
-    if (swipeCycleCountRef.current % APPEND_INTERVAL === 0) {
+    cardStack.resetFlipState();
+    cardStack.setCards((prev) => {
+      const nextCards = removeSwipedCard(prev, cardStack.removingCardId);
+      shouldAppendNextPage =
+        nextCards.length === REMAINING_CARD_APPEND_THRESHOLD;
+      return nextCards;
+    });
+
+    if (shouldAppendNextPage) {
       void cardStack.appendNextPage();
     }
 

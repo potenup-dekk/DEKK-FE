@@ -8,12 +8,13 @@ import {
   useRevokeBlobUrls,
 } from "./useCardData.effects";
 
-const PICSUM_START_PAGE = 2;
+const CARD_START_PAGE = 0;
 
 const useCardData = () => {
   const [cards, setCards] = useState<CardItem[]>([]);
-  const nextPageRef = useRef(PICSUM_START_PAGE);
+  const nextPageRef = useRef(CARD_START_PAGE);
   const isFetchingRef = useRef(false);
+  const seenCardIdRef = useRef<Set<number>>(new Set());
   const imageUrlCacheRef = useRef<Map<string, string>>(new Map());
   const loadingImageRef = useRef<Map<string, Promise<string>>>(new Map());
   const createdBlobUrlsRef = useRef<Set<string>>(new Set());
@@ -28,7 +29,7 @@ const useCardData = () => {
   }, []);
 
   const appendNextPage = useCallback(async () => {
-    await appendCardPage(nextPageRef, isFetchingRef, setCards);
+    await appendCardPage(nextPageRef, isFetchingRef, seenCardIdRef, setCards);
   }, []);
 
   usePrefetchCardImages(cards, resolveImageUrl, setCards);
