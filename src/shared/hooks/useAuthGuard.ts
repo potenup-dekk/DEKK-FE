@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getMyInfo } from "@/features/profile";
 import { ApiRequestError } from "@/shared/api/fetcher/client";
-import { refreshAuthSession } from "@/shared/api/services/auth";
 
 // development environment bypass for easier testing without authentication
 // const isLocalEnvironment = process.env.NODE_ENV === "development";
@@ -68,16 +67,10 @@ const useAuthGuard = (): UseAuthGuardResult => {
       await loadUser();
     } catch (err) {
       if (err instanceof ApiRequestError && err.status === 401) {
-        try {
-          await refreshAuthSession();
-          await loadUser();
-          return;
-        } catch {
-          setIsAuthenticated(false);
-          setUser(null);
-          setError("세션이 만료되었습니다. 다시 로그인해 주세요.");
-          return;
-        }
+        setIsAuthenticated(false);
+        setUser(null);
+        setError("세션이 만료되었습니다. 다시 로그인해 주세요.");
+        return;
       }
 
       setIsAuthenticated(false);
