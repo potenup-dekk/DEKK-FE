@@ -1,7 +1,7 @@
 const APP_ROUTES = {
   HOME: "/",
   DECK: "/deck",
-  UPLOAD: "/upload",
+  POST: "/post",
   ME: "/me",
 };
 

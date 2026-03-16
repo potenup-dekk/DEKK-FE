@@ -1,7 +1,7 @@
-import React from "react";
+import { redirect } from "next/navigation";
 
 const UploadPage = () => {
-  return <div>준비중...</div>;
+  redirect("/post");
 };
 
 export default UploadPage;

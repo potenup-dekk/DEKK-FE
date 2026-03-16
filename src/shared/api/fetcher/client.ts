@@ -70,7 +70,19 @@ export async function requestJson<T>(
   const isJson = contentType.includes("application/json");
 
   if (res.ok) {
-    return (isJson ? await res.json() : (null as T)) as T;
+    if (isJson) {
+      return (await res.json()) as T;
+    }
+
+    if (res.status === 204 || res.status === 205) {
+      return null as T;
+    }
+
+    throw new ApiRequestError(
+      res.status,
+      `Unexpected non-JSON response: ${res.status}`,
+      "NON_JSON_RESPONSE",
+    );
   }
 
   const payload = await parseApiError(res);

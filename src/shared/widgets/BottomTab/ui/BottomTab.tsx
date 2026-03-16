@@ -14,7 +14,7 @@ const HOME_TAB_ROUTE = "/main";
 const BOTTOM_TAB_ITEMS = [
   { icon: HomeIcon, label: "홈", route: HOME_TAB_ROUTE },
   { icon: LayersIcon, label: "덱", route: APP_ROUTES.DECK },
-  { icon: ShirtIcon, label: "등록", route: APP_ROUTES.UPLOAD },
+  { icon: ShirtIcon, label: "등록", route: APP_ROUTES.POST },
 ] as const;
 
 const isBottomTabItemSelected = (pathname: string, route: string) => {
