@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { API_BASE } from "@/shared/config/env";
 
+export const dynamic = "force-dynamic";
+export const cache = "no-store";
+
 const copySetCookieHeaders = (source: Headers, target: Headers) => {
   const responseHeaders = source as Headers & {
     getSetCookie?: () => string[];
@@ -48,6 +51,26 @@ const GET = async (request: NextRequest) => {
     headers,
     cache: "no-store",
   });
+
+  const upstreamContentType = upstream.headers.get("content-type") ?? "";
+  const isUnexpectedHtmlResponse =
+    upstream.ok && upstreamContentType.includes("text/html");
+
+  if (isUnexpectedHtmlResponse) {
+    return NextResponse.json(
+      {
+        code: "AUTH_UNAUTHORIZED",
+        message: "인증 정보가 유효하지 않습니다.",
+        errors: ["Unexpected HTML response from auth upstream"],
+      },
+      {
+        status: 401,
+        headers: {
+          "cache-control": "no-store",
+        },
+      },
+    );
+  }
 
   const body = await upstream.arrayBuffer();
 
