@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { API_BASE } from "@/shared/config/env";
 
+export const dynamic = "force-dynamic";
+export const cache = "no-store";
+
 const copySetCookieHeaders = (source: Headers, target: Headers) => {
   const responseHeaders = source as Headers & {
     getSetCookie?: () => string[];
