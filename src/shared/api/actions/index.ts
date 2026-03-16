@@ -11,3 +11,9 @@ export {
   saveCardToCustomDeckAction,
   updateCustomDeckNameAction,
 } from "./deck";
+export {
+  joinSharedDeckAction,
+  leaveSharedDeckAction,
+  turnOffSharedDeckAction,
+  turnOnSharedDeckAction,
+} from "./deck.shared";

@@ -27,7 +27,7 @@ export interface DefaultDeckCardsResponse {
   hasNext: boolean;
 }
 
-export type DeckType = "DEFAULT" | "CUSTOM";
+export type DeckType = "DEFAULT" | "CUSTOM" | "SHARED";
 
 export interface DeckSummaryData {
   deckId: number;
@@ -50,4 +50,21 @@ export interface CreateCustomDeckPayload {
 
 export interface UpdateCustomDeckPayload {
   name: string;
+}
+
+export interface GuestSharedDeckCardResponse {
+  cardId: number;
+  cardImageUrl: string;
+  height: number | null;
+  weight: number | null;
+  tags?: string[];
+}
+
+export interface ShareTokenResult {
+  token: string;
+  expiredInSeconds: number;
+}
+
+export interface SharedDeckJoinPayload {
+  token: string;
 }

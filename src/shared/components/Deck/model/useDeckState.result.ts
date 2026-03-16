@@ -14,6 +14,9 @@ const toUseDeckStateResult = (
   deleteSelectedCard: UseDeckStateResult["deleteSelectedCard"],
   updateActiveDeckName: UseDeckStateResult["updateActiveDeckName"],
   deleteActiveDeck: UseDeckStateResult["deleteActiveDeck"],
+  turnOnSharedDeck: UseDeckStateResult["turnOnSharedDeck"],
+  turnOffSharedDeck: UseDeckStateResult["turnOffSharedDeck"],
+  leaveSharedDeck: UseDeckStateResult["leaveSharedDeck"],
 ): UseDeckStateResult => {
   return {
     decks: store.decks,
@@ -38,6 +41,9 @@ const toUseDeckStateResult = (
     deleteSelectedCard,
     updateActiveDeckName,
     deleteActiveDeck,
+    turnOnSharedDeck,
+    turnOffSharedDeck,
+    leaveSharedDeck,
   };
 };
 

@@ -1,5 +1,6 @@
 import type { DeckItem, DeckOriginOffset } from "../model/deckState.helpers";
 import type { DefaultDeckFetchStatus } from "../model/useDeckState.types";
+import type { ShareTokenResult } from "@/entities/deck";
 import DeckGridLayer from "./DeckGridLayer";
 import DeckOpenLayer from "./DeckOpenLayer";
 
@@ -17,6 +18,11 @@ interface DeckFrameProps {
   onSelectCard: (cardId: number) => void;
   onUpdateDeckName: (name: string) => Promise<boolean>;
   onDeleteDeck: () => Promise<boolean>;
+  onTurnOnSharedDeck: (
+    customDeckId: number,
+  ) => Promise<{ success: boolean; tokenResult?: ShareTokenResult }>;
+  onTurnOffSharedDeck: (customDeckId: number) => Promise<boolean>;
+  onLeaveSharedDeck: (sharedDeckId: number) => Promise<boolean>;
 }
 
 const DeckFrame = ({
@@ -33,6 +39,9 @@ const DeckFrame = ({
   onSelectCard,
   onUpdateDeckName,
   onDeleteDeck,
+  onTurnOnSharedDeck,
+  onTurnOffSharedDeck,
+  onLeaveSharedDeck,
 }: DeckFrameProps) => {
   const isOpenLayerVisible = mode !== "closed" && activeDeck;
   const isClosing = mode === "closing";
@@ -59,6 +68,9 @@ const DeckFrame = ({
           onSelectCard={onSelectCard}
           onUpdateDeckName={onUpdateDeckName}
           onDeleteDeck={onDeleteDeck}
+          onTurnOnSharedDeck={onTurnOnSharedDeck}
+          onTurnOffSharedDeck={onTurnOffSharedDeck}
+          onLeaveSharedDeck={onLeaveSharedDeck}
         />
       ) : null}
     </>

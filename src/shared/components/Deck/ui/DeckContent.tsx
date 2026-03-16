@@ -24,6 +24,9 @@ const DeckContent = ({ deckState }: DeckContentProps) => {
         onSelectCard={deckState.selectCard}
         onUpdateDeckName={deckState.updateActiveDeckName}
         onDeleteDeck={deckState.deleteActiveDeck}
+        onTurnOnSharedDeck={deckState.turnOnSharedDeck}
+        onTurnOffSharedDeck={deckState.turnOffSharedDeck}
+        onLeaveSharedDeck={deckState.leaveSharedDeck}
       />
 
       <DeckHeroOverlay

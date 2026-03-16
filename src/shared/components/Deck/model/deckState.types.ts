@@ -1,3 +1,5 @@
+import type { DeckType, ShareTokenResult } from "@/entities/deck";
+
 interface DeckCardProductItem {
   productId: number;
   brand: string;
@@ -25,10 +27,22 @@ interface DeckOriginOffset {
 interface DeckItem {
   id: number;
   name: string;
+  type: DeckType;
   isDefault: boolean;
   cardCount: number;
   previewImageSrcList: string[];
   cards: DeckCardItem[];
 }
 
-export type { DeckCardItem, DeckCardProductItem, DeckItem, DeckOriginOffset };
+interface SharedDeckActionResult {
+  success: boolean;
+  tokenResult?: ShareTokenResult;
+}
+
+export type {
+  DeckCardItem,
+  DeckCardProductItem,
+  DeckItem,
+  DeckOriginOffset,
+  SharedDeckActionResult,
+};

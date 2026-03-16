@@ -1,7 +1,10 @@
 import {
   createCustomDeckAction,
+  leaveSharedDeckAction,
   deleteCustomDeckAction,
   saveCardToCustomDeckAction,
+  turnOffSharedDeckAction,
+  turnOnSharedDeckAction,
   updateCustomDeckNameAction,
 } from "@/shared/api/actions";
 import { getDecks } from "@/shared/api/services";
@@ -190,6 +193,44 @@ const createDeckStateRuntimeHandlers = (
     return true;
   };
 
+  const turnOnSharedDeck = async (customDeckId: number) => {
+    try {
+      const response = await turnOnSharedDeckAction(customDeckId);
+      await syncDeckListFromServer();
+
+      return {
+        success: true,
+        tokenResult: response.data,
+      };
+    } catch {
+      return {
+        success: false,
+      };
+    }
+  };
+
+  const turnOffSharedDeck = async (customDeckId: number) => {
+    try {
+      await turnOffSharedDeckAction(customDeckId);
+      await syncDeckListFromServer();
+    } catch {
+      return false;
+    }
+
+    return true;
+  };
+
+  const leaveSharedDeck = async (sharedDeckId: number) => {
+    try {
+      await leaveSharedDeckAction(sharedDeckId);
+      await syncDeckListFromServer();
+    } catch {
+      return false;
+    }
+
+    return true;
+  };
+
   return {
     createDeck,
     deleteActiveDeck,
@@ -212,6 +253,9 @@ const createDeckStateRuntimeHandlers = (
       loadDefaultDeckCards,
     ),
     saveSelectedCardToCustomDeck,
+    leaveSharedDeck,
+    turnOffSharedDeck,
+    turnOnSharedDeck,
     updateActiveDeckName,
   };
 };

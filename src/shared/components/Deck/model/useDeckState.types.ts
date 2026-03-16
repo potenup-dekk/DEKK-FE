@@ -2,6 +2,7 @@ import type {
   DeckCardItem,
   DeckItem,
   DeckOriginOffset,
+  SharedDeckActionResult,
 } from "./deckState.helpers";
 
 type DeckViewMode = "closed" | "open" | "hero" | "closing";
@@ -30,6 +31,9 @@ interface UseDeckStateResult {
   deleteSelectedCard: () => Promise<boolean>;
   updateActiveDeckName: (name: string) => Promise<boolean>;
   deleteActiveDeck: () => Promise<boolean>;
+  turnOnSharedDeck: (customDeckId: number) => Promise<SharedDeckActionResult>;
+  turnOffSharedDeck: (customDeckId: number) => Promise<boolean>;
+  leaveSharedDeck: (sharedDeckId: number) => Promise<boolean>;
 }
 
 const DEFAULT_ORIGIN_OFFSET: DeckOriginOffset = { x: 0, y: 0 };

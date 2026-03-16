@@ -7,4 +7,7 @@ export {
   type CustomDeckData,
   type CreateCustomDeckPayload,
   type UpdateCustomDeckPayload,
+  type GuestSharedDeckCardResponse,
+  type ShareTokenResult,
+  type SharedDeckJoinPayload,
 } from "./types";

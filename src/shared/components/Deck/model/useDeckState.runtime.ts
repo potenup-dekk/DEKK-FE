@@ -33,9 +33,12 @@ const useDeckStateRuntime = () => {
     createDeck,
     deleteActiveDeck,
     deleteSelectedCard,
+    leaveSharedDeck,
     openDeck,
     retryLoadDefaultDeck,
     saveSelectedCardToCustomDeck,
+    turnOffSharedDeck,
+    turnOnSharedDeck,
     updateActiveDeckName,
   } = createDeckStateRuntimeHandlers(store, actions, activeDeck, selectedCard);
 
@@ -47,11 +50,14 @@ const useDeckStateRuntime = () => {
     createDeck,
     deleteActiveDeck,
     deleteSelectedCard,
+    leaveSharedDeck,
     openDeck,
     retryLoadDefaultDeck,
     saveSelectedCardToCustomDeck,
     selectedCard,
     store,
+    turnOffSharedDeck,
+    turnOnSharedDeck,
     updateActiveDeckName,
   };
 };

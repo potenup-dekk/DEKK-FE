@@ -9,11 +9,14 @@ const useDeckState = (): UseDeckStateResult => {
     createDeck,
     deleteActiveDeck,
     deleteSelectedCard,
+    leaveSharedDeck,
     openDeck,
     retryLoadDefaultDeck,
     saveSelectedCardToCustomDeck,
     selectedCard,
     store,
+    turnOffSharedDeck,
+    turnOnSharedDeck,
     updateActiveDeckName,
   } = useDeckStateRuntime();
 
@@ -29,6 +32,9 @@ const useDeckState = (): UseDeckStateResult => {
     deleteSelectedCard,
     updateActiveDeckName,
     deleteActiveDeck,
+    turnOnSharedDeck,
+    turnOffSharedDeck,
+    leaveSharedDeck,
   );
 };
 
