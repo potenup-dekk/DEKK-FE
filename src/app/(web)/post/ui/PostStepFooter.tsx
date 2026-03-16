@@ -2,7 +2,7 @@ import { ActionButton } from "@/shared/components/Button";
 import postPageStyle from "../style";
 
 interface PostStepFooterProps {
-  step: 0 | 1 | 2;
+  step: 0 | 1 | 2 | 3;
   canMoveNext: boolean;
   onPrevious: () => void;
   onNext: () => void;
@@ -17,7 +17,7 @@ const PostStepFooter = ({
   onSubmit,
 }: PostStepFooterProps) => {
   const { footer } = postPageStyle();
-  const isLastStep = step === 2;
+  const isLastStep = step === 3;
 
   return (
     <div className={footer()}>

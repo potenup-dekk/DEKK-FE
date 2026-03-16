@@ -38,8 +38,11 @@ const PostPageClient = () => {
       secondaryCategoryName={postForm.secondaryCategoryName}
       tagInput={postForm.tagInput}
       tags={postForm.tags}
+      productInput={postForm.productInput}
+      products={postForm.products}
       stepErrorMessage={postForm.stepErrorMessage}
       tagErrorMessage={postForm.tagErrorMessage}
+      productErrorMessage={postForm.productErrorMessage}
       submitStatusMessage={postForm.submitStatusMessage}
       onOpenImagePicker={postForm.openImagePicker}
       onImageChange={postForm.handleImageChange}
@@ -48,6 +51,9 @@ const PostPageClient = () => {
       onTagInputChange={postForm.handleTagInputChange}
       onTagAdd={postForm.handleTagAdd}
       onTagRemove={postForm.handleTagRemove}
+      onProductInputChange={postForm.handleProductInputChange}
+      onProductAdd={postForm.handleProductAdd}
+      onProductRemove={postForm.handleProductRemove}
       onPrevious={postForm.handleStepPrevious}
       onNext={postForm.handleStepNext}
       onSubmit={postForm.handleSubmit}

@@ -5,7 +5,7 @@ const postPageStyle = tv({
     page: "mx-auto flex w-full max-w-md flex-col gap-4 px-4 pb-24 pt-6 sm:px-6",
     title: "text-xl font-bold text-primary",
     description: "text-xs text-zinc-500",
-    stepHeader: "grid grid-cols-3 gap-2",
+    stepHeader: "grid grid-cols-4 gap-2",
     stepItem: "rounded-lg border px-3 py-2 text-center",
     stepTitle: "text-xs font-semibold",
     stepValue: "mt-1 text-[11px]",
@@ -28,6 +28,17 @@ const postPageStyle = tv({
     tagBadgeButton:
       "inline-flex items-center gap-1 rounded-full border border-zinc-200 pr-2",
     tagRemoveText: "text-[10px] text-zinc-500",
+    productList:
+      "max-h-64 space-y-2 overflow-y-auto rounded-lg border border-zinc-200 bg-zinc-50 p-2",
+    productListEmpty:
+      "flex h-20 items-center justify-center text-xs text-zinc-400",
+    productItem: "flex items-start gap-3 rounded-lg bg-white p-2",
+    productImage: "size-[calc(40px)] rounded-lg object-cover",
+    productMeta: "min-w-0 flex-1",
+    productTitle: "truncate text-sm font-bold text-zinc-800",
+    productDescription: "mt-0.5 text-[11px] text-zinc-500",
+    productDeleteButton:
+      "rounded-md p-1 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-500",
     errorText: "mt-2 text-xs text-red-500",
     statusText: "mt-2 text-xs text-primary",
     footer: "mt-2 flex items-center justify-between gap-2",

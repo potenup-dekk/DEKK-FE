@@ -1,8 +1,10 @@
 import postPageStyle from "../style";
 import PostCategoryStep from "./PostCategoryStep";
 import PostImageStep from "./PostImageStep";
+import PostProductStep from "./PostProductStep";
 import PostStepFooter from "./PostStepFooter";
 import PostTagStep from "./PostTagStep";
+import type { PostProductItem } from "../model/postForm.types";
 
 interface PrimaryCategoryOption {
   id: string;
@@ -10,7 +12,7 @@ interface PrimaryCategoryOption {
 }
 
 interface PostPageViewProps {
-  step: 0 | 1 | 2;
+  step: 0 | 1 | 2 | 3;
   canMoveNext: boolean;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
   imagePreviewUrl: string | null;
@@ -21,8 +23,11 @@ interface PostPageViewProps {
   secondaryCategoryName: string;
   tagInput: string;
   tags: string[];
+  productInput: string;
+  products: PostProductItem[];
   stepErrorMessage: string | null;
   tagErrorMessage: string | null;
+  productErrorMessage: string | null;
   submitStatusMessage: string | null;
   onOpenImagePicker: () => void;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -31,6 +36,9 @@ interface PostPageViewProps {
   onTagInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onTagAdd: () => void;
   onTagRemove: (tag: string) => void;
+  onProductInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onProductAdd: () => void;
+  onProductRemove: (productId: string) => void;
   onPrevious: () => void;
   onNext: () => void;
   onSubmit: () => void;
@@ -38,8 +46,9 @@ interface PostPageViewProps {
 
 const STEP_HEADERS = [
   { title: "코디 사진 업로드", value: "1단계" },
-  { title: "카테고리 등록", value: "2단계" },
-  { title: "태그 등록", value: "3단계" },
+  { title: "코디 상품 추가", value: "2단계" },
+  { title: "카테고리 등록", value: "3단계" },
+  { title: "태그 등록", value: "4단계" },
 ] as const;
 
 const PostPageView = ({
@@ -54,8 +63,11 @@ const PostPageView = ({
   secondaryCategoryName,
   tagInput,
   tags,
+  productInput,
+  products,
   stepErrorMessage,
   tagErrorMessage,
+  productErrorMessage,
   submitStatusMessage,
   onOpenImagePicker,
   onImageChange,
@@ -64,6 +76,9 @@ const PostPageView = ({
   onTagInputChange,
   onTagAdd,
   onTagRemove,
+  onProductInputChange,
+  onProductAdd,
+  onProductRemove,
   onPrevious,
   onNext,
   onSubmit,
@@ -84,7 +99,8 @@ const PostPageView = ({
     <div className={page()}>
       <h1 className={title()}>코디 등록</h1>
       <p className={description()}>
-        코디 사진 업로드 → 카테고리 등록 → 태그 등록 순서로 진행해주세요.
+        코디 사진 업로드 → 코디 상품 추가 → 카테고리 등록 → 태그 등록 순서로
+        진행해주세요.
       </p>
 
       <div className={stepHeader()}>
@@ -127,6 +143,17 @@ const PostPageView = ({
       ) : null}
 
       {step === 1 ? (
+        <PostProductStep
+          productInput={productInput}
+          products={products}
+          productErrorMessage={productErrorMessage}
+          onProductInputChange={onProductInputChange}
+          onProductAdd={onProductAdd}
+          onProductRemove={onProductRemove}
+        />
+      ) : null}
+
+      {step === 2 ? (
         <PostCategoryStep
           primaryCategoryOptions={primaryCategoryOptions}
           primaryCategoryId={primaryCategoryId}
@@ -138,7 +165,7 @@ const PostPageView = ({
         />
       ) : null}
 
-      {step === 2 ? (
+      {step === 3 ? (
         <PostTagStep
           tagInput={tagInput}
           tags={tags}

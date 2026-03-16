@@ -4,7 +4,19 @@ import {
   TAG_MAX_LENGTH,
   TAG_MIN_LENGTH,
 } from "./postForm.constants";
-import type { PostStep, TagValidationResult } from "./postForm.types";
+import type {
+  PostProductItem,
+  PostStep,
+  TagValidationResult,
+} from "./postForm.types";
+
+const PRODUCT_THUMBNAIL_CANDIDATES = [
+  "/goods/top.webp",
+  "/goods/bottom.webp",
+  "/goods/neck.webp",
+  "/goods/shirts.webp",
+  "/goods/sweater.webp",
+];
 
 const validateTag = (
   tagInput: string,
@@ -61,8 +73,13 @@ const usePostForm = () => {
   const [secondaryCategoryName, setSecondaryCategoryName] = useState("");
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [productInput, setProductInput] = useState("");
+  const [products, setProducts] = useState<PostProductItem[]>([]);
   const [stepErrorMessage, setStepErrorMessage] = useState<string | null>(null);
   const [tagErrorMessage, setTagErrorMessage] = useState<string | null>(null);
+  const [productErrorMessage, setProductErrorMessage] = useState<string | null>(
+    null,
+  );
   const [submitStatusMessage, setSubmitStatusMessage] = useState<string | null>(
     null,
   );
@@ -91,6 +108,10 @@ const usePostForm = () => {
     }
 
     if (step === 1) {
+      return products.length > 0;
+    }
+
+    if (step === 2) {
       return Boolean(primaryCategoryId && secondaryCategoryName);
     }
 
@@ -98,12 +119,13 @@ const usePostForm = () => {
   }, [
     imagePreviewUrl,
     primaryCategoryId,
+    products.length,
     secondaryCategoryName,
     step,
     tags.length,
   ]);
 
-  const isLastStep = step === 2;
+  const isLastStep = step === 3;
 
   useEffect(() => {
     return () => {
@@ -188,6 +210,58 @@ const usePostForm = () => {
     setSubmitStatusMessage(null);
   }, []);
 
+  const handleProductInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setProductInput(event.target.value);
+      setProductErrorMessage(null);
+      setSubmitStatusMessage(null);
+    },
+    [],
+  );
+
+  const handleProductAdd = useCallback(() => {
+    const normalizedTitle = productInput.trim();
+
+    if (!normalizedTitle) {
+      setProductErrorMessage("상품명을 입력해주세요.");
+      return;
+    }
+
+    const isDuplicate = products.some(
+      (product) => product.title === normalizedTitle,
+    );
+
+    if (isDuplicate) {
+      setProductErrorMessage("이미 추가된 상품입니다.");
+      return;
+    }
+
+    const nextThumbnailIndex =
+      products.length % PRODUCT_THUMBNAIL_CANDIDATES.length;
+    const nextProduct: PostProductItem = {
+      id: `product-${Date.now()}-${products.length}`,
+      title: normalizedTitle,
+      description: "코디에 추가된 상품",
+      imageUrl: PRODUCT_THUMBNAIL_CANDIDATES[nextThumbnailIndex],
+    };
+
+    setProducts((previousProducts) => {
+      return [...previousProducts, nextProduct];
+    });
+    setProductInput("");
+    setProductErrorMessage(null);
+    setStepErrorMessage(null);
+    setSubmitStatusMessage(null);
+  }, [productInput, products]);
+
+  const handleProductRemove = useCallback((productId: string) => {
+    setProducts((previousProducts) => {
+      return previousProducts.filter((product) => product.id !== productId);
+    });
+    setProductErrorMessage(null);
+    setSubmitStatusMessage(null);
+  }, []);
+
   const handleStepPrevious = useCallback(() => {
     setStep((previousStep) => {
       if (previousStep === 0) {
@@ -206,7 +280,7 @@ const usePostForm = () => {
     }
 
     setStep((previousStep) => {
-      if (previousStep === 2) {
+      if (previousStep === 3) {
         return previousStep;
       }
 
@@ -237,8 +311,11 @@ const usePostForm = () => {
     secondaryCategoryName,
     tagInput,
     tags,
+    productInput,
+    products,
     stepErrorMessage,
     tagErrorMessage,
+    productErrorMessage,
     submitStatusMessage,
     openImagePicker,
     handleImageChange,
@@ -247,6 +324,9 @@ const usePostForm = () => {
     handleTagInputChange,
     handleTagAdd,
     handleTagRemove,
+    handleProductInputChange,
+    handleProductAdd,
+    handleProductRemove,
     handleStepPrevious,
     handleStepNext,
     handleSubmit,
