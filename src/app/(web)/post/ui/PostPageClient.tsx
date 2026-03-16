@@ -11,19 +11,19 @@ const PostPageClient = () => {
   const { isLoading, isAuthenticated } = useAuthGuard();
   const postForm = usePostForm();
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace("/login");
-    }
-  }, [isAuthenticated, isLoading, router]);
+  // useEffect(() => {
+  //   if (!isLoading && !isAuthenticated) {
+  //     router.replace("/login");
+  //   }
+  // }, [isAuthenticated, isLoading, router]);
 
-  if (isLoading) {
-    return <div className="p-4 text-sm">로그인 상태 확인 중…</div>;
-  }
+  // if (isLoading) {
+  //   return <div className="p-4 text-sm">로그인 상태 확인 중…</div>;
+  // }
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  // if (!isAuthenticated) {
+  //   return null;
+  // }
 
   return (
     <PostPageView
