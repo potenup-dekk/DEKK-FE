@@ -19,15 +19,27 @@ const assertSharedDeckPreviewResponse = (
     return response;
   }
 
-  throw new ApiRequestError(400, response.message, response.code, response.errors);
+  throw new ApiRequestError(
+    400,
+    response.message,
+    response.code,
+    response.errors,
+  );
 };
 
-const assertTurnOnSharedDeckResponse = (response: ApiResponse<ShareTokenResult>) => {
+const assertTurnOnSharedDeckResponse = (
+  response: ApiResponse<ShareTokenResult>,
+) => {
   if (response.code === SHARED_DECK_TURN_ON_SUCCESS_CODE) {
     return response;
   }
 
-  throw new ApiRequestError(400, response.message, response.code, response.errors);
+  throw new ApiRequestError(
+    400,
+    response.message,
+    response.code,
+    response.errors,
+  );
 };
 
 const assertTurnOffSharedDeckResponse = (response: ApiResponse<null>) => {
@@ -35,7 +47,12 @@ const assertTurnOffSharedDeckResponse = (response: ApiResponse<null>) => {
     return response;
   }
 
-  throw new ApiRequestError(400, response.message, response.code, response.errors);
+  throw new ApiRequestError(
+    400,
+    response.message,
+    response.code,
+    response.errors,
+  );
 };
 
 const assertJoinSharedDeckResponse = (response: ApiResponse<null>) => {
@@ -43,7 +60,12 @@ const assertJoinSharedDeckResponse = (response: ApiResponse<null>) => {
     return response;
   }
 
-  throw new ApiRequestError(400, response.message, response.code, response.errors);
+  throw new ApiRequestError(
+    400,
+    response.message,
+    response.code,
+    response.errors,
+  );
 };
 
 const assertLeaveSharedDeckResponse = (response: ApiResponse<null>) => {
@@ -51,21 +73,28 @@ const assertLeaveSharedDeckResponse = (response: ApiResponse<null>) => {
     return response;
   }
 
-  throw new ApiRequestError(400, response.message, response.code, response.errors);
+  throw new ApiRequestError(
+    400,
+    response.message,
+    response.code,
+    response.errors,
+  );
 };
 
 const getSharedDeckPreview = async (token: string) => {
-  const response = await requestJson<ApiResponse<GuestSharedDeckCardResponse[]>>(
-    `/api/decks/shared/${token}/cards`,
-    {
-      method: "GET",
-    },
-  );
+  const response = await requestJson<
+    ApiResponse<GuestSharedDeckCardResponse[]>
+  >(`/api/decks/shared/${token}/cards`, {
+    method: "GET",
+  });
 
   return assertSharedDeckPreviewResponse(response);
 };
 
-const turnOnSharedDeck = async (customDeckId: number, cookieHeader?: string) => {
+const turnOnSharedDeck = async (
+  customDeckId: number,
+  cookieHeader?: string,
+) => {
   const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
 
   const response = await requestJson<ApiResponse<ShareTokenResult>>(
@@ -79,7 +108,10 @@ const turnOnSharedDeck = async (customDeckId: number, cookieHeader?: string) => 
   return assertTurnOnSharedDeckResponse(response);
 };
 
-const turnOffSharedDeck = async (customDeckId: number, cookieHeader?: string) => {
+const turnOffSharedDeck = async (
+  customDeckId: number,
+  cookieHeader?: string,
+) => {
   const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
 
   const response = await requestJson<ApiResponse<null>>(
@@ -99,11 +131,14 @@ const joinSharedDeck = async (
 ) => {
   const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
 
-  const response = await requestJson<ApiResponse<null>>(`/w/v1/decks/shared/join`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(payload),
-  });
+  const response = await requestJson<ApiResponse<null>>(
+    `/w/v1/decks/shared/join`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify(payload),
+    },
+  );
 
   return assertJoinSharedDeckResponse(response);
 };
