@@ -77,7 +77,9 @@ const BackFace = ({
     scheduleSwipeUnlock();
   };
 
-  const handleInteractionRelease = (event: React.SyntheticEvent<HTMLDivElement>) => {
+  const handleInteractionRelease = (
+    event: React.SyntheticEvent<HTMLDivElement>,
+  ) => {
     const element = event.currentTarget;
 
     if (canScrollVertically(element)) {
