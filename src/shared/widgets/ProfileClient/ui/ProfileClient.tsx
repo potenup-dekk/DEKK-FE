@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useAuthGuard } from "@/shared/hooks";
+import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 import useProfileForm from "../model/useProfileForm";
 import useProfileClientSync from "../model/useProfileClientSync";
 import useProfilePendingRedirect from "../model/useProfilePendingRedirect";
@@ -56,7 +57,7 @@ const ProfileClient = () => {
 
   const profileForm = useProfileForm({
     refetch,
-    onUnauthorized: () => router.replace("/login"),
+    onUnauthorized: () => prefetchAndReplace(router, "/login"),
   });
   const { loading } = profileClientStyle();
 

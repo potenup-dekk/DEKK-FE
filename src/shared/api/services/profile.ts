@@ -34,9 +34,13 @@ const assertProfileResponse = <T>(response: ApiResponse<T>) => {
   }
 };
 
-const getMyInfo = async () => {
-  const response = await requestJson<ApiResponse<UserMe>>("/api/users/me", {
+const getMyInfo = async (cookieHeader?: string) => {
+  const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
+  const endpoint = cookieHeader ? "/w/v1/users/me" : "/api/users/me";
+
+  const response = await requestJson<ApiResponse<UserMe>>(endpoint, {
     method: "GET",
+    headers,
   });
 
   return assertProfileResponse(response);

@@ -19,11 +19,14 @@ const DeckContent = ({ deckState }: DeckContentProps) => {
         defaultDeckFetchStatus={deckState.defaultDeckFetchStatus}
         defaultDeckFetchError={deckState.defaultDeckFetchError}
         onOpenDeck={deckState.openDeck}
+        onPrefetchDeckDetail={deckState.prefetchDeckDetail}
         onRetryLoadDefaultDeck={deckState.retryLoadDefaultDeck}
         onCloseDeck={deckState.closeDeck}
         onSelectCard={deckState.selectCard}
         onUpdateDeckName={deckState.updateActiveDeckName}
         onDeleteDeck={deckState.deleteActiveDeck}
+        onShareDeck={deckState.shareActiveDeck}
+        onStopShareDeck={deckState.stopShareActiveDeck}
       />
 
       <DeckHeroOverlay

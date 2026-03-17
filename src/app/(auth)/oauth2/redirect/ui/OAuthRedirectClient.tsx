@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getMyInfo } from "@/features/profile";
+import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 
 const OAuthRedirectClient = () => {
   const router = useRouter();
@@ -12,7 +13,7 @@ const OAuthRedirectClient = () => {
     (async () => {
       const error = searchParams.get("error");
       if (error) {
-        router.replace("/login");
+        prefetchAndReplace(router, "/login");
         return;
       }
 
@@ -21,13 +22,13 @@ const OAuthRedirectClient = () => {
         const status = res.data?.status;
 
         if (!status) {
-          router.replace("/login");
+          prefetchAndReplace(router, "/login");
           return;
         }
 
-        router.replace(status === "PENDING" ? "/join" : "/");
+        prefetchAndReplace(router, status === "PENDING" ? "/join" : "/");
       } catch {
-        router.replace("/login");
+        prefetchAndReplace(router, "/login");
       }
     })();
   }, [router, searchParams]);

@@ -1,5 +1,6 @@
 import type { DeckItem, DeckOriginOffset } from "../model/deckState.helpers";
 import type { DefaultDeckFetchStatus } from "../model/useDeckState.types";
+import type { CustomDeckShareData } from "@/entities/deck";
 import DeckGridLayer from "./DeckGridLayer";
 import DeckOpenLayer from "./DeckOpenLayer";
 
@@ -12,11 +13,14 @@ interface DeckFrameProps {
   defaultDeckFetchStatus: DefaultDeckFetchStatus;
   defaultDeckFetchError: string | null;
   onOpenDeck: (deckId: number, sourceRect: DOMRect) => void;
+  onPrefetchDeckDetail: (deckId: number) => void;
   onRetryLoadDefaultDeck: () => void;
   onCloseDeck: () => void;
   onSelectCard: (cardId: number) => void;
   onUpdateDeckName: (name: string) => Promise<boolean>;
   onDeleteDeck: () => Promise<boolean>;
+  onShareDeck: () => Promise<CustomDeckShareData | null>;
+  onStopShareDeck: () => Promise<boolean>;
 }
 
 const DeckFrame = ({
@@ -28,11 +32,14 @@ const DeckFrame = ({
   defaultDeckFetchStatus,
   defaultDeckFetchError,
   onOpenDeck,
+  onPrefetchDeckDetail,
   onRetryLoadDefaultDeck,
   onCloseDeck,
   onSelectCard,
   onUpdateDeckName,
   onDeleteDeck,
+  onShareDeck,
+  onStopShareDeck,
 }: DeckFrameProps) => {
   const isOpenLayerVisible = mode !== "closed" && activeDeck;
   const isClosing = mode === "closing";
@@ -44,6 +51,7 @@ const DeckFrame = ({
         decks={decks}
         hiddenDeckId={hiddenDeckId}
         onOpenDeck={onOpenDeck}
+        onPrefetchDeckDetail={onPrefetchDeckDetail}
       />
 
       {isOpenLayerVisible ? (
@@ -59,6 +67,8 @@ const DeckFrame = ({
           onSelectCard={onSelectCard}
           onUpdateDeckName={onUpdateDeckName}
           onDeleteDeck={onDeleteDeck}
+          onShareDeck={onShareDeck}
+          onStopShareDeck={onStopShareDeck}
         />
       ) : null}
     </>

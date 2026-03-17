@@ -16,6 +16,7 @@ interface BackFaceProps {
 
   products: ProductItem[] | null;
   tags: string[] | null;
+  onProductScrollInteractionChange?: (isInteracting: boolean) => void;
 }
 
 export type { BackFaceProps, FrontFaceProps };

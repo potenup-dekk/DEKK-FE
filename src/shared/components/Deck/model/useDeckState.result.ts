@@ -7,13 +7,17 @@ const toUseDeckStateResult = (
   activeDeck: UseDeckStateResult["activeDeck"],
   selectedCard: UseDeckStateResult["selectedCard"],
   actions: ReturnType<typeof createDeckStateActions>,
+  closeDeck: UseDeckStateResult["closeDeck"],
   openDeck: UseDeckStateResult["openDeck"],
+  prefetchDeckDetail: UseDeckStateResult["prefetchDeckDetail"],
   retryLoadDefaultDeck: UseDeckStateResult["retryLoadDefaultDeck"],
   createDeck: UseDeckStateResult["createDeck"],
   saveSelectedCardToCustomDeck: UseDeckStateResult["saveSelectedCardToCustomDeck"],
   deleteSelectedCard: UseDeckStateResult["deleteSelectedCard"],
   updateActiveDeckName: UseDeckStateResult["updateActiveDeckName"],
   deleteActiveDeck: UseDeckStateResult["deleteActiveDeck"],
+  shareActiveDeck: UseDeckStateResult["shareActiveDeck"],
+  stopShareActiveDeck: UseDeckStateResult["stopShareActiveDeck"],
 ): UseDeckStateResult => {
   return {
     decks: store.decks,
@@ -26,8 +30,9 @@ const toUseDeckStateResult = (
     defaultDeckFetchStatus: store.defaultDeckFetchStatus,
     defaultDeckFetchError: store.defaultDeckFetchError,
     openDeck,
+    prefetchDeckDetail,
     retryLoadDefaultDeck,
-    closeDeck: actions.closeDeck,
+    closeDeck,
     selectCard: actions.selectCard,
     closeHero: actions.closeHero,
     toggleHeroFlip: actions.toggleHeroFlip,
@@ -38,6 +43,8 @@ const toUseDeckStateResult = (
     deleteSelectedCard,
     updateActiveDeckName,
     deleteActiveDeck,
+    shareActiveDeck,
+    stopShareActiveDeck,
   };
 };
 

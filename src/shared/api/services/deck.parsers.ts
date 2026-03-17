@@ -8,12 +8,18 @@ const toDeckSummaryData = (
   const typeValue = raw.type;
   const cardCountValue = raw.cardCount;
   const previewImageUrlsValue = raw.previewImageUrls;
+  const sharedTokenValue =
+    raw.sharedToken ?? raw.shareToken ?? raw.token ?? raw.inviteToken;
 
   if (typeof deckIdValue !== "number" || typeof nameValue !== "string") {
     return null;
   }
 
-  if (typeValue !== "DEFAULT" && typeValue !== "CUSTOM") {
+  if (
+    typeValue !== "DEFAULT" &&
+    typeValue !== "CUSTOM" &&
+    typeValue !== "SHARED"
+  ) {
     return null;
   }
 
@@ -28,6 +34,10 @@ const toDeckSummaryData = (
     deckId: deckIdValue,
     name: nameValue,
     type: typeValue,
+    sharedToken:
+      typeValue === "SHARED" && typeof sharedTokenValue === "string"
+        ? sharedTokenValue
+        : null,
     cardCount,
     previewImageUrls,
   };

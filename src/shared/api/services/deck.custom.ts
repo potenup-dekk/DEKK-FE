@@ -1,8 +1,11 @@
 import { ApiRequestError, requestJson } from "@/shared/api/fetcher/client";
 import type {
   CreateCustomDeckPayload,
+  CustomDeckCardsResultData,
   CustomDeckData,
+  CustomDeckShareData,
   DeckCardContentData,
+  DeckType,
   DefaultDeckCardsResponse,
   UpdateCustomDeckPayload,
 } from "@/entities/deck";
@@ -142,9 +145,38 @@ const assertCustomDeckDeleteResponse = (response: ApiResponse<null>) => {
 };
 
 const toCustomDeckCardsPageData = (
-  data: DefaultDeckCardsResponse | DeckCardContentData[] | null | undefined,
+  data:
+    | DefaultDeckCardsResponse
+    | DeckCardContentData[]
+    | CustomDeckCardsResultData
+    | null
+    | undefined,
   page: number,
 ): CustomDeckCardsPageData => {
+  if (data && typeof data === "object" && "cards" in data) {
+    const cards = (data as CustomDeckCardsResultData).cards;
+
+    if (!Array.isArray(cards)) {
+      return {
+        content: [],
+        currentPage: page,
+        size: 0,
+        totalElements: 0,
+        totalPages: 0,
+        hasNext: false,
+      };
+    }
+
+    return {
+      content: cards,
+      currentPage: page,
+      size: cards.length,
+      totalElements: cards.length,
+      totalPages: 1,
+      hasNext: false,
+    };
+  }
+
   if (Array.isArray(data)) {
     return {
       content: data,
@@ -156,18 +188,37 @@ const toCustomDeckCardsPageData = (
     };
   }
 
-  if (data && Array.isArray(data.content)) {
+  if (data && typeof data === "object" && "content" in data) {
+    const pagedData = data as DefaultDeckCardsResponse;
+
+    if (!Array.isArray(pagedData.content)) {
+      return {
+        content: [],
+        currentPage: page,
+        size: 0,
+        totalElements: 0,
+        totalPages: 0,
+        hasNext: false,
+      };
+    }
+
     return {
-      content: data.content,
+      content: pagedData.content,
       currentPage:
-        typeof data.currentPage === "number" ? data.currentPage : page,
-      size: typeof data.size === "number" ? data.size : data.content.length,
+        typeof pagedData.currentPage === "number"
+          ? pagedData.currentPage
+          : page,
+      size:
+        typeof pagedData.size === "number"
+          ? pagedData.size
+          : pagedData.content.length,
       totalElements:
-        typeof data.totalElements === "number"
-          ? data.totalElements
-          : data.content.length,
-      totalPages: typeof data.totalPages === "number" ? data.totalPages : 1,
-      hasNext: Boolean(data.hasNext),
+        typeof pagedData.totalElements === "number"
+          ? pagedData.totalElements
+          : pagedData.content.length,
+      totalPages:
+        typeof pagedData.totalPages === "number" ? pagedData.totalPages : 1,
+      hasNext: Boolean(pagedData.hasNext),
     };
   }
 
@@ -179,6 +230,165 @@ const toCustomDeckCardsPageData = (
     totalPages: 0,
     hasNext: false,
   };
+};
+
+const toDeckCardList = (data: unknown): DeckCardContentData[] => {
+  if (!Array.isArray(data)) {
+    return [];
+  }
+
+  return data
+    .map((item) => {
+      if (!item || typeof item !== "object") {
+        return null;
+      }
+
+      const raw = item as Record<string, unknown>;
+      const cardId = raw.cardId;
+      const cardImageUrl = raw.cardImageUrl;
+      const height = raw.height;
+      const weight = raw.weight;
+      const tag = raw.tag;
+      const tags = raw.tags;
+      const products = raw.products;
+
+      if (typeof cardId !== "number" || typeof cardImageUrl !== "string") {
+        return null;
+      }
+
+      const parsedCard: DeckCardContentData = {
+        cardId,
+        cardImageUrl,
+        height: typeof height === "number" ? height : null,
+        weight: typeof weight === "number" ? weight : null,
+      };
+
+      if (Array.isArray(tag)) {
+        parsedCard.tag = tag.filter(
+          (item): item is string => typeof item === "string",
+        );
+      }
+
+      if (Array.isArray(tags)) {
+        parsedCard.tags = tags.filter(
+          (item): item is string => typeof item === "string",
+        );
+      }
+
+      if (Array.isArray(products)) {
+        parsedCard.products = products
+          .map((product) => {
+            if (!product || typeof product !== "object") {
+              return null;
+            }
+
+            const rawProduct = product as Record<string, unknown>;
+            const productId = rawProduct.productId;
+            const brand = rawProduct.brand;
+            const name = rawProduct.name;
+            const productImageUrl = rawProduct.productImageUrl;
+            const productsImageUrl = rawProduct.productsImageUrl;
+            const productUrl = rawProduct.productUrl;
+            const url = rawProduct.url;
+
+            return {
+              productId: typeof productId === "number" ? productId : undefined,
+              brand: typeof brand === "string" ? brand : undefined,
+              name: typeof name === "string" ? name : undefined,
+              productImageUrl:
+                typeof productImageUrl === "string"
+                  ? productImageUrl
+                  : undefined,
+              productsImageUrl:
+                typeof productsImageUrl === "string"
+                  ? productsImageUrl
+                  : undefined,
+              productUrl:
+                typeof productUrl === "string" ? productUrl : undefined,
+              url: typeof url === "string" ? url : undefined,
+            };
+          })
+          .filter((item): item is NonNullable<typeof item> => item !== null);
+      }
+
+      return parsedCard;
+    })
+    .filter((item): item is DeckCardContentData => item !== null);
+};
+
+const toDeckType = (value: unknown): DeckType => {
+  if (value === "DEFAULT" || value === "CUSTOM" || value === "SHARED") {
+    return value;
+  }
+
+  return "CUSTOM";
+};
+
+const toCustomDeckDetailData = (data: unknown): CustomDeckCardsResultData => {
+  if (!data || typeof data !== "object") {
+    return {
+      deckType: "CUSTOM",
+      token: null,
+      expiredInSeconds: null,
+      cards: [],
+    };
+  }
+
+  const raw = data as Record<string, unknown>;
+
+  return {
+    deckType: toDeckType(raw.deckType),
+    token: typeof raw.token === "string" ? raw.token : null,
+    expiredInSeconds:
+      typeof raw.expiredInSeconds === "number" ? raw.expiredInSeconds : null,
+    cards: toDeckCardList(raw.cards),
+  };
+};
+
+const toCustomDeckShareData = (data: unknown): CustomDeckShareData => {
+  const fallback: CustomDeckShareData = {
+    token: "",
+    expiredInSeconds: null,
+    expiredAt: null,
+    remainingTime: null,
+  };
+
+  if (!data || typeof data !== "object") {
+    return fallback;
+  }
+
+  const raw = data as Record<string, unknown>;
+  const token = typeof raw.token === "string" ? raw.token : "";
+  const expiredInSeconds =
+    typeof raw.expiredInSeconds === "number" ? raw.expiredInSeconds : null;
+  const expiredAt =
+    typeof raw.expiredAt === "string"
+      ? raw.expiredAt
+      : typeof raw.expiresAt === "string"
+        ? raw.expiresAt
+        : null;
+  const remainingTime =
+    typeof raw.remainingTime === "string" ? raw.remainingTime : null;
+
+  return {
+    token,
+    expiredInSeconds,
+    expiredAt,
+    remainingTime,
+  };
+};
+
+const assertCustomDeckShareResponse = <T>(response: ApiResponse<T>) => {
+  if (response.code.startsWith("SD2") || response.code.endsWith("OK")) {
+    return response;
+  }
+
+  throw new ApiRequestError(
+    400,
+    response.message,
+    response.code,
+    response.errors,
+  );
 };
 
 const getCustomDecks = async () => {
@@ -200,19 +410,37 @@ const getCustomDecks = async () => {
 const getCustomDeckCards = async (
   customDeckId: number,
   page = 0,
-  size = 100,
+  _size = 100,
 ) => {
-  const response = await requestJson<
-    ApiResponse<DefaultDeckCardsResponse | DeckCardContentData[]>
-  >(`/api/decks/custom/${customDeckId}/cards?page=${page}&size=${size}`, {
-    method: "GET",
-  });
+  const response = await requestJson<ApiResponse<unknown>>(
+    `/api/decks/custom/${customDeckId}/cards`,
+    {
+      method: "GET",
+    },
+  );
+
+  const validated = assertCustomDeckCardsResponse(response);
+  const detailData = toCustomDeckDetailData(validated.data);
+
+  return {
+    ...validated,
+    data: toCustomDeckCardsPageData(detailData, page),
+  };
+};
+
+const getCustomDeckDetail = async (customDeckId: number) => {
+  const response = await requestJson<ApiResponse<unknown>>(
+    `/api/decks/custom/${customDeckId}/cards`,
+    {
+      method: "GET",
+    },
+  );
 
   const validated = assertCustomDeckCardsResponse(response);
 
   return {
     ...validated,
-    data: toCustomDeckCardsPageData(validated.data, page),
+    data: toCustomDeckDetailData(validated.data),
   };
 };
 
@@ -303,12 +531,51 @@ const deleteCustomDeck = async (
   return assertCustomDeckDeleteResponse(response);
 };
 
+const shareCustomDeck = async (customDeckId: number, cookieHeader?: string) => {
+  const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
+
+  const response = await requestJson<ApiResponse<unknown>>(
+    `/w/v1/decks/custom/${customDeckId}/share`,
+    {
+      method: "POST",
+      headers,
+    },
+  );
+
+  const validated = assertCustomDeckShareResponse(response);
+
+  return {
+    ...validated,
+    data: toCustomDeckShareData(validated.data),
+  };
+};
+
+const stopCustomDeckShare = async (
+  customDeckId: number,
+  cookieHeader?: string,
+) => {
+  const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
+
+  const response = await requestJson<ApiResponse<null>>(
+    `/w/v1/decks/custom/${customDeckId}/share`,
+    {
+      method: "DELETE",
+      headers,
+    },
+  );
+
+  return assertCustomDeckShareResponse(response);
+};
+
 export {
   createCustomDeck,
   deleteCardFromCustomDeck,
   deleteCustomDeck,
+  getCustomDeckDetail,
   getCustomDeckCards,
   getCustomDecks,
   saveCardToCustomDeck,
+  shareCustomDeck,
+  stopCustomDeckShare,
   updateCustomDeckName,
 };
