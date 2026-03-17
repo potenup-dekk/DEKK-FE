@@ -27,12 +27,13 @@ export interface DefaultDeckCardsResponse {
   hasNext: boolean;
 }
 
-export type DeckType = "DEFAULT" | "CUSTOM";
+export type DeckType = "DEFAULT" | "CUSTOM" | "SHARED";
 
 export interface DeckSummaryData {
   deckId: number;
   name: string;
   type: DeckType;
+  sharedToken?: string | null;
   cardCount: number;
   previewImageUrls: string[];
 }
@@ -44,10 +45,32 @@ export interface CustomDeckData {
   imageUrl: string;
 }
 
+export interface CustomDeckCardsResultData {
+  deckType: DeckType;
+  token: string | null;
+  expiredInSeconds: number | null;
+  cards: DeckCardContentData[];
+}
+
 export interface CreateCustomDeckPayload {
   name: string;
 }
 
 export interface UpdateCustomDeckPayload {
   name: string;
+}
+
+export interface CustomDeckShareData {
+  token: string;
+  expiredInSeconds: number | null;
+  expiredAt: string | null;
+  remainingTime: string | null;
+}
+
+export interface GuestSharedDeckCardData {
+  cardId: number;
+  cardImageUrl: string;
+  height: number | null;
+  weight: number | null;
+  tags: string[];
 }

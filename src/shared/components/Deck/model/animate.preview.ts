@@ -11,7 +11,7 @@ interface DeckPreviewCardVisual {
 }
 
 const DECK_PREVIEW_X_OFFSET_BY_INDEX = [0, 6, 12] as const;
-const DECK_PREVIEW_WIDTH_BY_INDEX = [100, 98, 95] as const;
+const DECK_PREVIEW_WIDTH_BY_INDEX = [90, 88, 85] as const;
 
 const resolveDeckPreviewStackIndex = (index: number) => {
   return Math.max(0, Math.min(index, 2));

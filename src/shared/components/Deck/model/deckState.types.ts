@@ -25,6 +25,8 @@ interface DeckOriginOffset {
 interface DeckItem {
   id: number;
   name: string;
+  type: "DEFAULT" | "CUSTOM" | "SHARED";
+  sharedToken: string | null;
   isDefault: boolean;
   cardCount: number;
   previewImageSrcList: string[];

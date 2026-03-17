@@ -6,6 +6,7 @@ interface DeckGridLayerProps {
   decks: DeckItem[];
   hiddenDeckId: number | null;
   onOpenDeck: (deckId: number, sourceRect: DOMRect) => void;
+  onPrefetchDeckDetail: (deckId: number) => void;
 }
 
 const HiddenDeckPlaceholder = () => {
@@ -13,7 +14,7 @@ const HiddenDeckPlaceholder = () => {
 
   return (
     <div
-      className="flex w-25 flex-col items-center gap-1 text-center"
+      className="flex w-22.5 flex-col items-center gap-1 text-center"
       aria-hidden
     >
       <div className={coverStack()}>
@@ -29,6 +30,7 @@ const DeckGridLayer = ({
   decks,
   hiddenDeckId,
   onOpenDeck,
+  onPrefetchDeckDetail,
 }: DeckGridLayerProps) => {
   const { deckGrid } = deckStyle();
 
@@ -39,7 +41,14 @@ const DeckGridLayer = ({
           return <HiddenDeckPlaceholder key={deck.id} />;
         }
 
-        return <DeckCover key={deck.id} deck={deck} onOpen={onOpenDeck} />;
+        return (
+          <DeckCover
+            key={deck.id}
+            deck={deck}
+            onOpen={onOpenDeck}
+            onPrefetchDetail={onPrefetchDeckDetail}
+          />
+        );
       })}
     </div>
   );

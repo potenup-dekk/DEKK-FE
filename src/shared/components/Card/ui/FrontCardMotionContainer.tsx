@@ -18,6 +18,7 @@ interface FrontCardMotionContainerProps {
   rotate: FrontCardProps["rotate"];
   rotateYSpring: FrontCardProps["rotateYSpring"];
   targetCardHeight: number | null;
+  isSwipeEnabled: boolean;
   isCardCompressed: boolean;
   shouldApplyCompressedCard: boolean;
   isFocusMode: boolean;
@@ -34,6 +35,7 @@ const FrontCardMotionContainer = ({
   rotate,
   rotateYSpring,
   targetCardHeight,
+  isSwipeEnabled,
   isCardCompressed,
   shouldApplyCompressedCard,
   isFocusMode,
@@ -56,7 +58,7 @@ const FrontCardMotionContainer = ({
       className={frontRoot({ isCardCompressed: shouldApplyCompressedCard })}
       animate={targetCardHeight ? { height: targetCardHeight } : undefined}
       transition={cardResizeTransition}
-      drag
+      drag={isSwipeEnabled}
       dragSnapToOrigin
       dragConstraints={frontCardDragConstraints}
       style={{ x, rotate, ...frontCardMotionStyle }}

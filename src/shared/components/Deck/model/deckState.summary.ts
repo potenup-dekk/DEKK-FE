@@ -10,6 +10,8 @@ const mapDeckSummaries = (decks: DeckSummaryData[]): DeckItem[] => {
       return {
         id: deck.deckId,
         name: deck.name,
+        type: deck.type,
+        sharedToken: deck.sharedToken ?? null,
         isDefault,
         cardCount: deck.cardCount,
         previewImageSrcList: normalizeDeckPreviewImageSrcList(

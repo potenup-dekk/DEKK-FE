@@ -6,9 +6,17 @@ import Header from "@/shared/widgets/Header";
 import { LayoutChromeVisibilityProvider } from "@/shared/hooks";
 import ToastProvider from "@/shared/components/ToastProvider";
 
+const DEFAULT_SITE_URL = "http://localhost:3000";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
+
 export const metadata: Metadata = {
   title: "DEKK",
+  applicationName: "DEKK",
   description: "나에게 꼭 맞는 맞춤 핏을 탐색하고 수집하세요!",
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: "/main",
+  },
   icons: {
     icon: [{ url: "/icon.png", type: "image/png" }],
     apple: [{ url: "/apple-icon.png", type: "image/png" }],
@@ -43,6 +51,18 @@ const RootLayout = ({
       <body
         className={`antialiased flex h-dvh w-full flex-col overflow-hidden`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "DEKK",
+              alternateName: "데크",
+              url: SITE_URL,
+            }),
+          }}
+        />
         <LayoutChromeVisibilityProvider>
           <div className="mx-auto flex h-full w-full max-w-md flex-col">
             <Header />

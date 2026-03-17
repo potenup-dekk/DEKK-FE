@@ -2,6 +2,7 @@ import type { Gender } from "@/entities/user";
 
 interface RouterLike {
   replace: (href: string) => void;
+  prefetch?: (href: string) => void;
 }
 
 interface JoinFormValue {

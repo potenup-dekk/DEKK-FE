@@ -3,6 +3,7 @@ import type {
   DeckItem,
   DeckOriginOffset,
 } from "./deckState.helpers";
+import type { CustomDeckShareData } from "@/entities/deck";
 
 type DeckViewMode = "closed" | "open" | "hero" | "closing";
 type DefaultDeckFetchStatus = "idle" | "loading" | "success" | "error";
@@ -18,6 +19,7 @@ interface UseDeckStateResult {
   defaultDeckFetchStatus: DefaultDeckFetchStatus;
   defaultDeckFetchError: string | null;
   openDeck: (deckId: number, sourceRect: DOMRect) => void;
+  prefetchDeckDetail: (deckId: number) => void;
   retryLoadDefaultDeck: () => void;
   closeDeck: () => void;
   selectCard: (cardId: number) => void;
@@ -30,6 +32,8 @@ interface UseDeckStateResult {
   deleteSelectedCard: () => Promise<boolean>;
   updateActiveDeckName: (name: string) => Promise<boolean>;
   deleteActiveDeck: () => Promise<boolean>;
+  shareActiveDeck: () => Promise<CustomDeckShareData | null>;
+  stopShareActiveDeck: () => Promise<boolean>;
 }
 
 const DEFAULT_ORIGIN_OFFSET: DeckOriginOffset = { x: 0, y: 0 };

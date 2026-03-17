@@ -1,5 +1,6 @@
 import { ApiRequestError } from "@/shared/api/fetcher/client";
 import { completeOnboarding, getMyInfo } from "@/features/profile";
+import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 import type {
   JoinFormErrors,
   JoinFormValue,
@@ -81,7 +82,7 @@ const handleJoinError = (
   }
 
   if (error.status === 401) {
-    router.replace("/login");
+    prefetchAndReplace(router, "/login");
   }
 };
 
@@ -96,11 +97,11 @@ const submitOnboarding = async (
     const status = me.data?.status;
 
     if (!status) {
-      router.replace("/login");
+      prefetchAndReplace(router, "/login");
       return;
     }
 
-    router.replace(status === "ACTIVE" ? "/" : "/join");
+    prefetchAndReplace(router, status === "ACTIVE" ? "/" : "/join");
   } catch (error) {
     handleJoinError(error, router, setErrors);
   }

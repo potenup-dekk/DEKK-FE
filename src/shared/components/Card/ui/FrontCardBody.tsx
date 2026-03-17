@@ -14,6 +14,8 @@ interface FrontCardBodyProps {
   height: FrontCardProps["height"];
   weight: FrontCardProps["weight"];
   tags: FrontCardProps["tags"];
+  isSwipeEnabled: boolean;
+  onProductScrollInteractionChange: (isInteracting: boolean) => void;
 }
 
 const FrontCardBody = ({
@@ -25,14 +27,28 @@ const FrontCardBody = ({
   height,
   weight,
   tags,
+  isSwipeEnabled,
+  onProductScrollInteractionChange,
 }: FrontCardBodyProps) => {
   const { frontFlipper } = cardStyle();
+
+  const handleTap = () => {
+    if (!isSwipeEnabled) {
+      return;
+    }
+
+    if (Math.abs(x.get()) >= 20) {
+      return;
+    }
+
+    animateFlip();
+  };
 
   return (
     <motion.div
       className={frontFlipper()}
       style={{ rotateY: rotateYSpring, ...frontCardFlipStyle }}
-      onTap={() => Math.abs(x.get()) >= 20 || animateFlip()}
+      onTap={handleTap}
     >
       <FrontFace imageUrl={frontImage} />
       <BackFace
@@ -40,6 +56,7 @@ const FrontCardBody = ({
         weight={weight ?? null}
         products={products ?? []}
         tags={tags ?? null}
+        onProductScrollInteractionChange={onProductScrollInteractionChange}
       />
     </motion.div>
   );
