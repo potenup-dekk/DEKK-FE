@@ -12,6 +12,20 @@ import type { UseDeckStateResult } from "./useDeckState.types";
 
 const DEFAULT_DECK_PAGE_SIZE = 100;
 
+const hasLoadedCustomDeckCards = (decks: DeckItem[], customDeckId: number) => {
+  const targetDeck = decks.find((deck) => deck.id === customDeckId);
+
+  if (!targetDeck || targetDeck.isDefault) {
+    return false;
+  }
+
+  if (targetDeck.cardCount === 0) {
+    return true;
+  }
+
+  return targetDeck.cards.length > 0;
+};
+
 const isDefaultDeck = (decks: DeckItem[], deckId: number | null) => {
   if (deckId === null) {
     return false;
@@ -80,7 +94,19 @@ const createLoadDefaultDeckCards = (
 const createLoadCustomDeckCards = (
   store: ReturnType<typeof useDeckStateStore>,
 ) => {
+  const inFlightCustomDeckIds = new Set<number>();
+
   return async (customDeckId: number) => {
+    if (inFlightCustomDeckIds.has(customDeckId)) {
+      return;
+    }
+
+    if (hasLoadedCustomDeckCards(store.decks, customDeckId)) {
+      return;
+    }
+
+    inFlightCustomDeckIds.add(customDeckId);
+
     try {
       let currentPage = 0;
       let hasNext = true;
@@ -118,7 +144,24 @@ const createLoadCustomDeckCards = (
       });
     } catch {
       return;
+    } finally {
+      inFlightCustomDeckIds.delete(customDeckId);
     }
+  };
+};
+
+const createPrefetchDeckDetailHandler = (
+  store: ReturnType<typeof useDeckStateStore>,
+  loadDefaultDeckCards: () => Promise<void>,
+  loadCustomDeckCards: (customDeckId: number) => Promise<void>,
+): UseDeckStateResult["prefetchDeckDetail"] => {
+  return (deckId) => {
+    if (isDefaultDeck(store.decks, deckId)) {
+      void loadDefaultDeckCards();
+      return;
+    }
+
+    void loadCustomDeckCards(deckId);
   };
 };
 
@@ -158,5 +201,6 @@ export {
   createLoadCustomDeckCards,
   createLoadDefaultDeckCards,
   createOpenDeckHandler,
+  createPrefetchDeckDetailHandler,
   createRetryLoadDefaultDeckHandler,
 };

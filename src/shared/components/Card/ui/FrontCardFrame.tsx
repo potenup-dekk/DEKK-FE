@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { FrontCardProps } from "../model/props.type";
 import FrontCardMotionContainer from "./FrontCardMotionContainer";
 
@@ -7,6 +8,7 @@ interface FrontCardFrameProps {
   x: FrontCardProps["x"];
   rotate: FrontCardProps["rotate"];
   rotateYSpring: FrontCardProps["rotateYSpring"];
+  isSwipeEnabled: boolean;
   setIsSwiping: FrontCardProps["setIsSwiping"];
   onLike: FrontCardProps["onLike"];
   onDislike: FrontCardProps["onDislike"];
@@ -50,6 +52,7 @@ const FrontCardFrame = ({
   x,
   rotate,
   rotateYSpring,
+  isSwipeEnabled,
   setIsSwiping,
   onLike,
   onDislike,
@@ -62,12 +65,41 @@ const FrontCardFrame = ({
   onOpenCustomDeckSheet,
   children,
 }: FrontCardFrameProps) => {
+  const isSwipeEnabledRef = useRef(isSwipeEnabled);
+
+  useEffect(() => {
+    isSwipeEnabledRef.current = isSwipeEnabled;
+  }, [isSwipeEnabled]);
+
+  useEffect(() => {
+    if (isSwipeEnabled) {
+      return;
+    }
+
+    x.set(0);
+    setIsSwiping(false);
+  }, [isSwipeEnabled, setIsSwiping, x]);
+
   const shouldApplyCompressedCard =
     isCardCompressed && !isFocusMode && compressedCardHeight !== null;
   const targetCardHeight = shouldApplyCompressedCard
     ? compressedCardHeight
     : expandedCardHeight;
-  const onDragEnd = createDragEndHandler({ setIsSwiping, onLike, onDislike });
+
+  const baseOnDragEnd = createDragEndHandler({
+    setIsSwiping,
+    onLike,
+    onDislike,
+  });
+
+  const onDragEnd = (_: unknown, info: { offset: { x: number } }) => {
+    if (!isSwipeEnabledRef.current) {
+      setIsSwiping(false);
+      return;
+    }
+
+    baseOnDragEnd(_, info);
+  };
 
   return (
     <FrontCardMotionContainer
@@ -76,6 +108,7 @@ const FrontCardFrame = ({
       rotate={rotate}
       rotateYSpring={rotateYSpring}
       targetCardHeight={targetCardHeight}
+      isSwipeEnabled={isSwipeEnabled}
       isCardCompressed={isCardCompressed}
       shouldApplyCompressedCard={shouldApplyCompressedCard}
       isFocusMode={isFocusMode}

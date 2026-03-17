@@ -7,6 +7,7 @@ import {
   KakaoLoginButton,
 } from "@/shared/components/Button";
 import { useAuthGuard } from "@/shared/hooks";
+import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 
 const LoginPageClient = () => {
   const router = useRouter();
@@ -18,12 +19,12 @@ const LoginPageClient = () => {
     }
 
     if (user.status === "ACTIVE") {
-      router.replace("/");
+      prefetchAndReplace(router, "/");
       return;
     }
 
     if (user.status === "PENDING") {
-      router.replace("/join");
+      prefetchAndReplace(router, "/join");
     }
   }, [isAuthenticated, isLoading, router, user?.status]);
 

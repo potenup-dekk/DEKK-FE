@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Gender } from "@/entities/user";
+import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 
 interface ProfileUser {
   email?: string | null;
@@ -27,7 +28,7 @@ const useProfileClientSync = ({
 }: UseProfileClientSyncParams) => {
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace("/login");
+      prefetchAndReplace(router, "/login");
     }
   }, [isAuthenticated, isLoading, router]);
 

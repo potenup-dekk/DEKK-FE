@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { logout } from "@/shared/api/services";
+import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 
 const toLogoutErrorMessage = (error: unknown) => {
   if (error instanceof Error) {
@@ -25,7 +26,7 @@ const useProfileSettingsActions = () => {
 
     try {
       await logout();
-      router.replace("/login");
+      prefetchAndReplace(router, "/login");
     } catch (error) {
       setSettingsError(toLogoutErrorMessage(error));
     } finally {

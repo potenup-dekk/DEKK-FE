@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { API_BASE } from "@/shared/config/env";
 
+interface RouteParams {
+  token: string;
+}
+
+interface RouteContext {
+  params: Promise<RouteParams>;
+}
+
 const copySetCookieHeaders = (source: Headers, target: Headers) => {
   const responseHeaders = source as Headers & {
     getSetCookie?: () => string[];
@@ -19,11 +27,7 @@ const copyResponseHeaders = (source: Headers) => {
   source.forEach((value, key) => {
     const lowerKey = key.toLowerCase();
 
-    if (
-      lowerKey === "content-length" ||
-      lowerKey === "set-cookie" ||
-      lowerKey === "content-encoding"
-    ) {
+    if (lowerKey === "content-length" || lowerKey === "set-cookie") {
       return;
     }
 
@@ -33,19 +37,12 @@ const copyResponseHeaders = (source: Headers) => {
   return target;
 };
 
-const GET = async (request: NextRequest) => {
-  const upstreamUrl = `${API_BASE}/w/v1/cards${request.nextUrl.search}`;
-
-  const headers = new Headers();
-  const cookie = request.headers.get("cookie");
-
-  if (cookie) {
-    headers.set("cookie", cookie);
-  }
+const GET = async (request: NextRequest, context: RouteContext) => {
+  const { token } = await context.params;
+  const upstreamUrl = `${API_BASE}/w/v1/decks/shared/${token}/cards${request.nextUrl.search}`;
 
   const upstream = await fetch(upstreamUrl, {
     method: "GET",
-    headers,
     cache: "no-store",
   });
 

@@ -16,6 +16,17 @@ const deckHeroBackdropMotion = {
   exit: { opacity: 0 },
 } as const;
 
+const deckSelectionOverlayMotion = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+} as const;
+
+const deckSelectionOverlayTransition = {
+  duration: 0.2,
+  ease: "easeOut",
+} as const;
+
 const deckCreateSheetBackdropMotion = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -56,6 +67,8 @@ export {
   deckCreateSheetTransition,
   deckBackdropMotion,
   deckHeroBackdropMotion,
+  deckSelectionOverlayMotion,
+  deckSelectionOverlayTransition,
   deckHeroCardTransition,
   deckSpreadCardVariants,
   getDeckPreviewCardVisual,

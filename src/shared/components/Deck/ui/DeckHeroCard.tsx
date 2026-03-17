@@ -31,7 +31,8 @@ interface DeckHeroBackContentProps {
 }
 
 const DeckHeroBackContent = ({ card }: DeckHeroBackContentProps) => {
-  const { heroBackContent, heroFallbackText, heroTagList } = deckStyle();
+  const { heroBackContent, heroFallbackText, heroProductsScroll, heroTagList } =
+    deckStyle();
   const backfaceProducts = card.products ?? [];
   const backfaceTags = card.tags ?? [];
   const hasProducts = backfaceProducts.length > 0;
@@ -39,11 +40,13 @@ const DeckHeroBackContent = ({ card }: DeckHeroBackContentProps) => {
 
   return (
     <div className={heroBackContent()}>
-      {hasProducts ? (
-        <ProductList items={backfaceProducts} useCdn />
-      ) : (
-        <p className={heroFallbackText()}>상품 정보가 없습니다.</p>
-      )}
+      <div className={heroProductsScroll()}>
+        {hasProducts ? (
+          <ProductList items={backfaceProducts} useCdn />
+        ) : (
+          <p className={heroFallbackText()}>상품 정보가 없습니다.</p>
+        )}
+      </div>
 
       {hasTags ? (
         <div className={heroTagList()}>

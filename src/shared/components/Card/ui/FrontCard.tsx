@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import FrontCardOverlay from "./FrontCardOverlay";
 import FrontCardFrame from "./FrontCardFrame";
 import FrontCardBody from "./FrontCardBody";
@@ -9,6 +10,7 @@ import useFrontCardOpacity from "../model/useFrontCardOpacity";
 const FrontCard = (props: FrontCardProps) => {
   const { cardId, x } = props;
   const { likeOpacity, dislikeOpacity } = useFrontCardOpacity(props.x);
+  const [isBackfaceInteracting, setIsBackfaceInteracting] = useState(false);
 
   return (
     <FrontCardFrame
@@ -17,6 +19,7 @@ const FrontCard = (props: FrontCardProps) => {
       x={x}
       rotate={props.rotate}
       rotateYSpring={props.rotateYSpring}
+      isSwipeEnabled={!isBackfaceInteracting}
       setIsSwiping={props.setIsSwiping}
       onLike={props.onLike}
       onDislike={props.onDislike}
@@ -46,6 +49,8 @@ const FrontCard = (props: FrontCardProps) => {
         height={props.height ?? null}
         weight={props.weight ?? null}
         tags={props.tags ?? null}
+        isSwipeEnabled={!isBackfaceInteracting}
+        onProductScrollInteractionChange={setIsBackfaceInteracting}
       />
     </FrontCardFrame>
   );

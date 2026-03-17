@@ -24,6 +24,8 @@ const createInitialDecks = (): DeckItem[] => {
     {
       id: 0,
       name: "나의 모든 보관함",
+      type: "DEFAULT",
+      sharedToken: null,
       isDefault: true,
       cardCount: 0,
       previewImageSrcList: [...PREVIEW_IMAGE_SRC_LIST],
@@ -42,6 +44,8 @@ const createCustomDeck = (decks: DeckItem[], name: string): DeckItem[] => {
     {
       id: nextId + 1,
       name,
+      type: "CUSTOM",
+      sharedToken: null,
       isDefault: false,
       cardCount: 0,
       previewImageSrcList: [...PREVIEW_IMAGE_SRC_LIST],

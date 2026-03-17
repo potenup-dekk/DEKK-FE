@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 
 const useProfilePendingRedirect = (
   router: AppRouterInstance,
@@ -13,7 +14,7 @@ const useProfilePendingRedirect = (
     }
 
     if (userStatus === "PENDING") {
-      router.replace("/join");
+      prefetchAndReplace(router, "/join");
     }
   }, [isAuthenticated, isLoading, router, userStatus]);
 };

@@ -2,6 +2,8 @@ import {
   createCustomDeckAction,
   deleteCustomDeckAction,
   saveCardToCustomDeckAction,
+  shareCustomDeckAction,
+  stopCustomDeckShareAction,
   updateCustomDeckNameAction,
 } from "@/shared/api/actions";
 import { getDecks } from "@/shared/api/services";
@@ -15,6 +17,7 @@ import {
   createLoadCustomDeckCards,
   createLoadDefaultDeckCards,
   createOpenDeckHandler,
+  createPrefetchDeckDetailHandler,
   createRetryLoadDefaultDeckHandler,
 } from "./useDeckState.handlers";
 
@@ -26,6 +29,11 @@ const createDeckStateRuntimeHandlers = (
 ) => {
   const loadDefaultDeckCards = createLoadDefaultDeckCards(store);
   const loadCustomDeckCards = createLoadCustomDeckCards(store);
+  const prefetchDeckDetail = createPrefetchDeckDetailHandler(
+    store,
+    loadDefaultDeckCards,
+    loadCustomDeckCards,
+  );
 
   const wait = (milliseconds: number) => {
     return new Promise<void>((resolve) => {
@@ -190,7 +198,40 @@ const createDeckStateRuntimeHandlers = (
     return true;
   };
 
+  const shareActiveDeck = async () => {
+    if (!activeDeck || activeDeck.isDefault) {
+      return null;
+    }
+
+    try {
+      const response = await shareCustomDeckAction(activeDeck.id);
+      return response.data ?? null;
+    } catch {
+      return null;
+    }
+  };
+
+  const stopShareActiveDeck = async () => {
+    if (!activeDeck || activeDeck.isDefault) {
+      return false;
+    }
+
+    try {
+      await stopCustomDeckShareAction(activeDeck.id);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const closeDeck = () => {
+    actions.closeDeck();
+
+    void syncDeckListFromServer();
+  };
+
   return {
+    closeDeck,
     createDeck,
     deleteActiveDeck,
     deleteSelectedCard: createDeleteSelectedCardHandler(
@@ -205,6 +246,7 @@ const createDeckStateRuntimeHandlers = (
       loadDefaultDeckCards,
       loadCustomDeckCards,
     ),
+    prefetchDeckDetail,
 
     retryLoadDefaultDeck: createRetryLoadDefaultDeckHandler(
       store,
@@ -212,6 +254,8 @@ const createDeckStateRuntimeHandlers = (
       loadDefaultDeckCards,
     ),
     saveSelectedCardToCustomDeck,
+    shareActiveDeck,
+    stopShareActiveDeck,
     updateActiveDeckName,
   };
 };

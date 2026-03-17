@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getValidationErrors, submitOnboarding } from "./joinFormHelpers";
+import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 import type { JoinFormErrors, JoinFormValue } from "./joinForm.types";
 
 interface UseJoinFormResult {
@@ -60,7 +61,7 @@ const createSubmitHandler = (
 const createCancelHandler = (router: ReturnType<typeof useRouter>) => {
   return async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    router.replace("/login");
+    prefetchAndReplace(router, "/login");
   };
 };
 

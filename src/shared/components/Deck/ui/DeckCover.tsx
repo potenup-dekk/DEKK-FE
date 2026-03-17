@@ -9,16 +9,23 @@ import { motion } from "framer-motion";
 interface DeckCoverProps {
   deck: DeckItem;
   onOpen: (deckId: number, sourceRect: DOMRect) => void;
+  onPrefetchDetail: (deckId: number) => void;
 }
 
 interface DeckCoverButtonProps {
   deck: DeckItem;
   buttonRef: RefObject<HTMLButtonElement | null>;
   onOpen: () => void;
+  onPrefetch: () => void;
 }
 
-const DeckCover = ({ deck, onOpen }: DeckCoverProps) => {
+const DeckCover = ({ deck, onOpen, onPrefetchDetail }: DeckCoverProps) => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  const handlePrefetch = () => {
+    onPrefetchDetail(deck.id);
+  };
+
   const handleOpen = () => {
     if (!buttonRef.current) {
       return;
@@ -28,11 +35,21 @@ const DeckCover = ({ deck, onOpen }: DeckCoverProps) => {
   };
 
   return (
-    <DeckCoverButton deck={deck} buttonRef={buttonRef} onOpen={handleOpen} />
+    <DeckCoverButton
+      deck={deck}
+      buttonRef={buttonRef}
+      onOpen={handleOpen}
+      onPrefetch={handlePrefetch}
+    />
   );
 };
 
-const DeckCoverButton = ({ deck, buttonRef, onOpen }: DeckCoverButtonProps) => {
+const DeckCoverButton = ({
+  deck,
+  buttonRef,
+  onOpen,
+  onPrefetch,
+}: DeckCoverButtonProps) => {
   const { coverButton, coverMeta, coverTitle } = deckStyle();
 
   return (
@@ -40,6 +57,9 @@ const DeckCoverButton = ({ deck, buttonRef, onOpen }: DeckCoverButtonProps) => {
       ref={buttonRef}
       type="button"
       className={coverButton()}
+      onMouseEnter={onPrefetch}
+      onFocus={onPrefetch}
+      onTouchStart={onPrefetch}
       onClick={onOpen}
       whileTap={{ scale: 0.98 }}
     >
@@ -47,6 +67,7 @@ const DeckCoverButton = ({ deck, buttonRef, onOpen }: DeckCoverButtonProps) => {
         deckId={deck.id}
         deckName={deck.name}
         isEmpty={deck.cardCount === 0}
+        isShared={deck.type === "SHARED"}
         previewImageSrcList={deck.previewImageSrcList}
       />
 

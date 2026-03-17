@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { BackFaceProps } from "../props.type";
 import { motion } from "framer-motion";
 import Tag from "../../Badge";
@@ -10,9 +10,96 @@ import { MOCK_PRODUCTS } from "../model/mockProducts";
 import ProductList from "@/shared/components/ProductList";
 import { GoogleLoginButton, KakaoLoginButton } from "../../Button";
 
-const BackFace = ({ products, tags }: BackFaceProps) => {
+const SCROLL_UNLOCK_DELAY = 120;
+
+const BackFace = ({
+  products,
+  tags,
+  onProductScrollInteractionChange,
+}: BackFaceProps) => {
   const { isLoggedIn } = useCardAuth();
   const guestPreviewProducts = MOCK_PRODUCTS.slice(0, 1);
+  const scrollUnlockTimerRef = useRef<number | null>(null);
+  const didScrollRef = useRef(false);
+
+  const clearScrollUnlockTimer = () => {
+    if (scrollUnlockTimerRef.current === null) {
+      return;
+    }
+
+    window.clearTimeout(scrollUnlockTimerRef.current);
+    scrollUnlockTimerRef.current = null;
+  };
+
+  const lockSwipe = () => {
+    onProductScrollInteractionChange?.(true);
+  };
+
+  const canScrollVertically = (element: HTMLDivElement) => {
+    return element.scrollHeight > element.clientHeight;
+  };
+
+  const handleInteractionStart = (
+    event: React.SyntheticEvent<HTMLDivElement>,
+  ) => {
+    const element = event.currentTarget;
+
+    if (!canScrollVertically(element)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const nativeEvent = event.nativeEvent as Event & {
+      stopImmediatePropagation?: () => void;
+    };
+    nativeEvent.stopImmediatePropagation?.();
+
+    lockSwipe();
+  };
+
+  const unlockSwipe = () => {
+    onProductScrollInteractionChange?.(false);
+  };
+
+  const scheduleSwipeUnlock = () => {
+    clearScrollUnlockTimer();
+    scrollUnlockTimerRef.current = window.setTimeout(() => {
+      unlockSwipe();
+      scrollUnlockTimerRef.current = null;
+    }, SCROLL_UNLOCK_DELAY);
+  };
+
+  const handleProductScroll = () => {
+    didScrollRef.current = true;
+    lockSwipe();
+    scheduleSwipeUnlock();
+  };
+
+  const handleInteractionRelease = (
+    event: React.SyntheticEvent<HTMLDivElement>,
+  ) => {
+    const element = event.currentTarget;
+
+    if (canScrollVertically(element)) {
+      event.stopPropagation();
+    }
+
+    if (didScrollRef.current) {
+      event.stopPropagation();
+      didScrollRef.current = false;
+    }
+
+    scheduleSwipeUnlock();
+  };
+
+  useEffect(() => {
+    return () => {
+      clearScrollUnlockTimer();
+      unlockSwipe();
+    };
+  }, []);
 
   return (
     <motion.div
@@ -39,12 +126,23 @@ const BackFace = ({ products, tags }: BackFaceProps) => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col flex-1">
+          <div
+            className="min-h-0 flex-1 overflow-y-auto touch-pan-y pr-1"
+            onScroll={handleProductScroll}
+            onPointerDown={handleInteractionStart}
+            onMouseDown={handleInteractionStart}
+            onPointerUp={handleInteractionRelease}
+            onMouseUp={handleInteractionRelease}
+            onPointerCancel={handleInteractionRelease}
+            onTouchStart={handleInteractionStart}
+            onTouchEnd={handleInteractionRelease}
+            onTouchCancel={handleInteractionRelease}
+          >
             {products ? <ProductList items={products} useCdn /> : null}
           </div>
         )}
 
-        <div className="flex flex-wrap">
+        <div className="flex max-h-16 flex-wrap content-start overflow-hidden">
           {tags && tags.map((tag, index) => <Tag key={index} label={tag} />)}
         </div>
       </div>
