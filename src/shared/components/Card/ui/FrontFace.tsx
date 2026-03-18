@@ -20,7 +20,7 @@ const FrontFace = ({ imageUrl }: FrontFaceProps) => {
         fill
         sizes="(max-width: 768px) 83vw, 66vw"
         loading="eager"
-        alt="asdf"
+        alt="코디"
       />
     </motion.div>
   );

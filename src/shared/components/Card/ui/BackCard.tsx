@@ -42,7 +42,7 @@ const BackCard = ({
           draggable={false}
           fill
           sizes="(max-width: 768px) 83vw, 66vw"
-          alt="asdf"
+          alt="코디"
         />
       </motion.div>
     </motion.div>
