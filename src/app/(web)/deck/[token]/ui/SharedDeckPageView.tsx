@@ -107,7 +107,7 @@ const SharedDeckPageView = ({
       router.replace("/deck");
     } catch (error) {
       setJoinError(
-        error instanceof Error ? error.message : "쉐어덱 참여에 실패했습니다.",
+        error instanceof Error ? error.message : "공유 덱 참여에 실패했습니다.",
       );
     } finally {
       setIsJoinPending(false);
@@ -140,7 +140,7 @@ const SharedDeckPageView = ({
               <button
                 type="button"
                 className={closeButton()}
-                aria-label="쉐어덱 참여"
+                aria-label="공유 덱 참여"
                 onClick={() => {
                   void handleJoinSharedDeck();
                 }}

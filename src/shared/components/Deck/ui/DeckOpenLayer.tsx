@@ -91,7 +91,7 @@ const DeckOpenHeader = ({
           <button
             type="button"
             className={closeButton()}
-            aria-label={isGuestSharedDeck ? "쉐어덱 나가기" : "쉐어덱 공유"}
+            aria-label={isGuestSharedDeck ? "공유 덱 나가기" : "공유 덱 공유"}
             onClick={onOpenShareSheet}
           >
             {isGuestSharedDeck ? (
@@ -137,7 +137,7 @@ const DeckShareToggle = ({
       type="button"
       role="switch"
       aria-checked={isOn}
-      aria-label="쉐어덱 공유 토글"
+      aria-label="공유 덱 공유 토글"
       className={clsx(
         sheetToggleButton(),
         isOn ? sheetToggleButtonOn() : sheetToggleButtonOff(),
@@ -318,7 +318,7 @@ const DeckOpenLayer = ({
       if (!nextShareData?.token) {
         setIsShareEnabled(previousShareEnabled);
         setShareData(previousShareData);
-        setShareError("쉐어덱 공유 링크를 생성하지 못했습니다.");
+        setShareError("공유 덱 공유 링크를 생성하지 못했습니다.");
         return;
       }
 
@@ -482,13 +482,13 @@ const DeckOpenLayer = ({
 
       <DeckBottomSheet
         isOpen={isShareSheetOpen}
-        title={isGuestSharedDeck ? "쉐어덱 나가기" : "쉐어덱 공유"}
+        title={isGuestSharedDeck ? "공유 덱 나가기" : "공유 덱 공유"}
         description={
           isGuestSharedDeck
             ? "정말 공유 덱에서 퇴장하시겠습니까?"
             : "토글을 켜면 공유가 시작되고, 끄면 공유가 중단됩니다."
         }
-        closeAriaLabel="쉐어덱 공유 시트 닫기"
+        closeAriaLabel="공유 덱 공유 시트 닫기"
         onClose={closeShareSheet}
       >
         {isGuestSharedDeck ? null : (

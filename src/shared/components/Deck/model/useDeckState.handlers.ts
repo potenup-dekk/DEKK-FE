@@ -23,6 +23,13 @@ const hasLoadedCustomDeckCards = (decks: DeckItem[], customDeckId: number) => {
     return true;
   }
 
+  if (
+    targetDeck.type === "SHARED" &&
+    (!targetDeck.sharedToken || targetDeck.sharedExpiredInSeconds === null)
+  ) {
+    return false;
+  }
+
   return targetDeck.cards.length > 0;
 };
 
@@ -96,12 +103,12 @@ const createLoadCustomDeckCards = (
 ) => {
   const inFlightCustomDeckIds = new Set<number>();
 
-  return async (customDeckId: number) => {
+  return async (customDeckId: number, forceRefetch = false) => {
     if (inFlightCustomDeckIds.has(customDeckId)) {
       return;
     }
 
-    if (hasLoadedCustomDeckCards(store.decks, customDeckId)) {
+    if (!forceRefetch && hasLoadedCustomDeckCards(store.decks, customDeckId)) {
       return;
     }
 
@@ -162,7 +169,10 @@ const createLoadCustomDeckCards = (
 const createPrefetchDeckDetailHandler = (
   store: ReturnType<typeof useDeckStateStore>,
   loadDefaultDeckCards: () => Promise<void>,
-  loadCustomDeckCards: (customDeckId: number) => Promise<void>,
+  loadCustomDeckCards: (
+    customDeckId: number,
+    forceRefetch?: boolean,
+  ) => Promise<void>,
 ): UseDeckStateResult["prefetchDeckDetail"] => {
   return (deckId) => {
     if (isDefaultDeck(store.decks, deckId)) {
@@ -178,7 +188,10 @@ const createOpenDeckHandler = (
   store: ReturnType<typeof useDeckStateStore>,
   actions: ReturnType<typeof createDeckStateActions>,
   loadDefaultDeckCards: () => Promise<void>,
-  loadCustomDeckCards: (customDeckId: number) => Promise<void>,
+  loadCustomDeckCards: (
+    customDeckId: number,
+    forceRefetch?: boolean,
+  ) => Promise<void>,
 ): UseDeckStateResult["openDeck"] => {
   return (deckId, sourceRect) => {
     actions.openDeck(deckId, sourceRect);
@@ -188,7 +201,7 @@ const createOpenDeckHandler = (
       return;
     }
 
-    void loadCustomDeckCards(deckId);
+    void loadCustomDeckCards(deckId, true);
   };
 };
 

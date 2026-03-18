@@ -5,8 +5,8 @@ import sharedDeckPageStyle from "./style";
 import SharedDeckGuestPage from "./ui/SharedDeckGuestPage";
 
 export const metadata: Metadata = {
-  title: "DEKK 쉐어덱",
-  description: "공유 링크로 쉐어덱 카드 프리뷰를 확인할 수 있어요",
+  title: "DEKK 공유 덱",
+  description: "공유 링크로 공유 덱 카드 프리뷰를 확인할 수 있어요",
 };
 
 interface SharedDeckPageProps {
@@ -34,7 +34,7 @@ const SharedDeckTokenPage = async ({ params }: SharedDeckPageProps) => {
 
     return (
       <section className={page()}>
-        <p className={errorText()}>쉐어덱을 불러오지 못했습니다.</p>
+        <p className={errorText()}>공유 덱을 불러오지 못했습니다.</p>
       </section>
     );
   }
