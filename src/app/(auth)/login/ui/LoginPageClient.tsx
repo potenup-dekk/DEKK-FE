@@ -29,10 +29,10 @@ const LoginPageClient = () => {
   }, [isAuthenticated, isLoading, router, user?.status]);
 
   return (
-    <div className="flex flex-col justify-center h-full items-center m-auto gap-2.5 p-3">
+    <div className="flex flex-col justify-center h-full w-80 items-center m-auto gap-2.5 p-3">
       <div className="flex flex-col gap-3 w-full">
         <span className="text-primary text-[11px] text-center">
-          소셜 로그인으로 빠르게 시작하기
+          나만의 핏을 탐색하고 수집해보세요!
         </span>
 
         <GoogleLoginButton />

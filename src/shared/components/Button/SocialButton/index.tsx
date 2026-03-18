@@ -15,24 +15,12 @@ const SocialButton = ({
       onClick={onClick}
       disabled={disabled}
       className={[
-        "flex items-center justify-center gap-2.5 min-w-75 w-full h-10 rounded-lg text-xl lh-1 py-1.5",
+        "flex items-center justify-center gap-2.5 flex-1 w-full h-10 rounded-lg text-xl lh-1 py-1.5",
         disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className,
       ].join(" ")}
-
-      // csswegwegrgwqf.css
-      // display: flex;
-      // .flex {
-      // display:flex;
-      // }
     >
-      <Image
-        src={iconSrc}
-        alt={iconAlt}
-        width={21}
-        height={21}
-        style={{ width: "auto", height: "auto" }}
-      />
+      <Image src={iconSrc} alt={iconAlt} width={24} height={24} />
       <span className="text-sm">{label}</span>
     </button>
   );
