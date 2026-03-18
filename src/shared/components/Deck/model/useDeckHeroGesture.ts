@@ -1,4 +1,9 @@
-import { animate, type PanInfo, useMotionValue } from "framer-motion";
+import {
+  animate,
+  type PanInfo,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 
 interface UseDeckHeroGestureParams {
   onSwipeClose: () => void;
@@ -9,6 +14,7 @@ interface UseDeckHeroGestureParams {
 interface UseDeckHeroGestureResult {
   x: ReturnType<typeof useMotionValue<number>>;
   y: ReturnType<typeof useMotionValue<number>>;
+  rotate: ReturnType<typeof useTransform<number, number>>;
   onDragEnd: (
     _event: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
@@ -17,6 +23,8 @@ interface UseDeckHeroGestureResult {
 }
 
 const SWIPE_CLOSE_THRESHOLD = 100;
+const HERO_CARD_MAX_X = 250;
+const HERO_CARD_MAX_ROTATE = 12;
 
 const useDeckHeroGesture = ({
   onSwipeClose,
@@ -25,6 +33,11 @@ const useDeckHeroGesture = ({
 }: UseDeckHeroGestureParams): UseDeckHeroGestureResult => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const rotate = useTransform(
+    x,
+    [-HERO_CARD_MAX_X, 0, HERO_CARD_MAX_X],
+    [-HERO_CARD_MAX_ROTATE, 0, HERO_CARD_MAX_ROTATE],
+  );
 
   const resetPosition = () => {
     animate(x, 0, { duration: 0.2, ease: "easeOut" });
@@ -53,6 +66,7 @@ const useDeckHeroGesture = ({
   return {
     x,
     y,
+    rotate,
     onDragEnd,
     onTap,
   };

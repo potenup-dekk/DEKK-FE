@@ -28,17 +28,22 @@ interface SharedDeckPageViewProps {
   cards: GuestSharedDeckCardData[];
 }
 
+const GUEST_PREVIEW_DETAIL_MESSAGE =
+  "로그인 후 코디 상세 정보를 확인할 수 있어요!";
+const MEMBER_PREVIEW_DETAIL_MESSAGE =
+  "내 덱에 추가해 최신 업데이트를 받으세요!";
+
 const SharedDeckPageView = ({
   token,
   title,
   description,
   cards,
 }: SharedDeckPageViewProps) => {
-  const { emptyText, heroCloseAction, heroOverlay, heroOverlayContent } =
-    sharedDeckPageStyle();
+  const { emptyText, heroOverlay, heroOverlayContent } = sharedDeckPageStyle();
   const {
     backdrop,
     closeButton,
+    heroActions,
     heroBackdrop,
     heroActionButton,
     openContent,
@@ -114,12 +119,15 @@ const SharedDeckPageView = ({
     }
   };
 
-  const { onDragEnd, onTap, x, y } = useDeckHeroGesture({
+  const { onDragEnd, onTap, rotate, x, y } = useDeckHeroGesture({
     onSwipeClose: closeHero,
     onTapFlip: () => {
       setIsHeroFlipped((previous) => !previous);
     },
   });
+  const sharedPreviewDetailMessage = isAuthenticated
+    ? MEMBER_PREVIEW_DETAIL_MESSAGE
+    : GUEST_PREVIEW_DETAIL_MESSAGE;
 
   const modalContent = (
     <>
@@ -204,7 +212,14 @@ const SharedDeckPageView = ({
                 transition={deckSelectionOverlayTransition}
               >
                 <div className={heroOverlayContent()}>
-                  <div className={heroCloseAction()}>
+                  <DeckHeroCard
+                    card={selectedCard}
+                    isFlipped={isHeroFlipped}
+                    previewMessage={sharedPreviewDetailMessage}
+                    gestureBindings={{ x, y, rotate, onDragEnd, onTap }}
+                  />
+
+                  <div className={heroActions()}>
                     <button
                       type="button"
                       className={heroActionButton()}
@@ -214,12 +229,6 @@ const SharedDeckPageView = ({
                       <X size={20} />
                     </button>
                   </div>
-
-                  <DeckHeroCard
-                    card={selectedCard}
-                    isFlipped={isHeroFlipped}
-                    gestureBindings={{ x, y, onDragEnd, onTap }}
-                  />
                 </div>
               </motion.section>
             </>

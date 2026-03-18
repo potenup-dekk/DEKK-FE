@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Pencil, UserPlus, UsersRound, X } from "lucide-react";
+import { Clipboard, Pencil, UserPlus, UsersRound, X } from "lucide-react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import type { DeckItem, DeckOriginOffset } from "../model/deckState.helpers";
@@ -8,6 +8,7 @@ import type { CustomDeckShareData } from "@/entities/deck";
 import deckStyle from "../style";
 import DeckBottomSheet from "./DeckBottomSheet";
 import DeckCardList from "./DeckCardList";
+import DeckShareNoticeNumberBadge from "./DeckShareNoticeNumberBadge";
 import DeckSelectionOverlay from "./DeckSelectionOverlay";
 
 interface DeckOpenLayerProps {
@@ -46,6 +47,28 @@ interface DeckShareToggleProps {
 
 const HEADER_ACTION_ICON_SIZE = 18;
 const HEADER_ACTION_ICON_STROKE = 2;
+const COPY_TOOLTIP_DURATION_MS = 1500;
+
+interface ShareOnboardingNoticeItem {
+  order: number;
+  message: string;
+}
+
+const SHARE_ONBOARDING_NOTICE_ITEMS: ShareOnboardingNoticeItem[] = [
+  {
+    order: 1,
+    message:
+      "덱을 공유하면 공유받은 사람과 덱에 카드를 추가, 삭제할 수 있습니다.",
+  },
+  {
+    order: 2,
+    message: "덱 공유를 중단하면 공유받던 사용자는 덱이 사라집니다.",
+  },
+  {
+    order: 3,
+    message: "공유된 덱 주소는 24시간 동안만 유지 됩니다.",
+  },
+];
 
 const DeckOpenHeader = ({
   deckName,
@@ -91,7 +114,7 @@ const DeckOpenHeader = ({
           <button
             type="button"
             className={closeButton()}
-            aria-label={isGuestSharedDeck ? "공유 덱 나가기" : "공유 덱 공유"}
+            aria-label={isGuestSharedDeck ? "공유 덱 나가기" : "덱 공유"}
             onClick={onOpenShareSheet}
           >
             {isGuestSharedDeck ? (
@@ -137,7 +160,7 @@ const DeckShareToggle = ({
       type="button"
       role="switch"
       aria-checked={isOn}
-      aria-label="공유 덱 공유 토글"
+      aria-label="공유 덱 토글"
       className={clsx(
         sheetToggleButton(),
         isOn ? sheetToggleButtonOn() : sheetToggleButtonOff(),
@@ -179,6 +202,7 @@ const DeckOpenLayer = ({
     sheetDangerButton,
     sheetToggleLabel,
     sheetToggleRow,
+    sheetShareInfoStack,
     sheetDeckItem,
     sheetDeckMeta,
     sheetDeckName,
@@ -186,18 +210,76 @@ const DeckOpenLayer = ({
     sheetButtonPrimary,
     sheetInput,
     sheetErrorText,
+    sheetShareAddressContainer,
+    sheetShareAddressRow,
+    sheetShareCopyButton,
+    sheetShareCopyIcon,
+    sheetShareCopyTooltip,
+    sheetOnboardingItem,
+    sheetOnboardingList,
+    sheetOnboardingMessage,
   } = deckStyle();
   const previousSelectedCardIdRef = useRef<number | null>(null);
+  const copyTooltipTimeoutRef = useRef<number | null>(null);
   const [isManageSheetOpen, setIsManageSheetOpen] = useState(false);
   const [isShareSheetOpen, setIsShareSheetOpen] = useState(false);
   const [isManagePending, setIsManagePending] = useState(false);
   const [isSharePending, setIsSharePending] = useState(false);
+  const [isShareOnboardingConfirmed, setIsShareOnboardingConfirmed] =
+    useState(false);
   const [shouldStaggerCards, setShouldStaggerCards] = useState(true);
   const [nextDeckName, setNextDeckName] = useState(deck.name);
   const [isShareEnabled, setIsShareEnabled] = useState(false);
   const [shareData, setShareData] = useState<CustomDeckShareData | null>(null);
+  const [remainingShareSeconds, setRemainingShareSeconds] = useState<
+    number | null
+  >(null);
+  const [isCopyTooltipVisible, setIsCopyTooltipVisible] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
   const isGuestSharedDeck = deck.sharedRole === "GUEST";
+
+  const toSecondsFromRemainingTime = (remainingTime: string | null) => {
+    if (!remainingTime) {
+      return null;
+    }
+
+    const parts = remainingTime.split(":").map((part) => Number(part));
+
+    if (parts.length !== 3 || parts.some((part) => Number.isNaN(part))) {
+      return null;
+    }
+
+    const [hours, minutes, seconds] = parts;
+
+    return hours * 3600 + minutes * 60 + seconds;
+  };
+
+  const toRemainingTimeText = (
+    seconds: number | null,
+    data: CustomDeckShareData | null,
+  ) => {
+    if (typeof seconds === "number") {
+      const hh = String(Math.floor(seconds / 3600)).padStart(2, "0");
+      const mm = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+      const ss = String(seconds % 60).padStart(2, "0");
+
+      return `${hh}:${mm}:${ss}`;
+    }
+
+    if (!data) {
+      return "";
+    }
+
+    if (data.remainingTime) {
+      return data.remainingTime;
+    }
+
+    if (data.expiredAt) {
+      return data.expiredAt;
+    }
+
+    return "정보 없음";
+  };
 
   const getShareUrl = (token: string) => {
     if (!token) {
@@ -211,37 +293,17 @@ const DeckOpenLayer = ({
     return `${window.location.origin}/deck/${token}`;
   };
 
-  const toRemainingTimeText = (data: CustomDeckShareData | null) => {
-    if (!data) {
-      return "";
-    }
-
-    if (data.remainingTime) {
-      return data.remainingTime;
-    }
-
-    if (typeof data.expiredInSeconds === "number") {
-      const hours = Math.floor(data.expiredInSeconds / 3600);
-      const minutes = Math.floor((data.expiredInSeconds % 3600) / 60);
-      const seconds = data.expiredInSeconds % 60;
-
-      const hh = String(hours).padStart(2, "0");
-      const mm = String(minutes).padStart(2, "0");
-      const ss = String(seconds).padStart(2, "0");
-
-      return `${hh}:${mm}:${ss}`;
-    }
-
-    if (data.expiredAt) {
-      return data.expiredAt;
-    }
-
-    return "정보 없음";
-  };
-
   useEffect(() => {
     previousSelectedCardIdRef.current = selectedCardId;
   }, [selectedCardId]);
+
+  useEffect(() => {
+    return () => {
+      if (copyTooltipTimeoutRef.current) {
+        window.clearTimeout(copyTooltipTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setNextDeckName(deck.name);
@@ -274,6 +336,46 @@ const DeckOpenLayer = ({
     });
   }, [deck.id, deck.sharedExpiredInSeconds, deck.sharedToken, deck.type]);
 
+  useEffect(() => {
+    if (!isShareEnabled) {
+      setRemainingShareSeconds(null);
+      return;
+    }
+
+    if (typeof shareData?.expiredInSeconds === "number") {
+      setRemainingShareSeconds(shareData.expiredInSeconds);
+      return;
+    }
+
+    setRemainingShareSeconds(
+      toSecondsFromRemainingTime(shareData?.remainingTime ?? null),
+    );
+  }, [isShareEnabled, shareData?.expiredInSeconds, shareData?.remainingTime]);
+
+  useEffect(() => {
+    if (
+      !isShareEnabled ||
+      typeof remainingShareSeconds !== "number" ||
+      remainingShareSeconds <= 0
+    ) {
+      return;
+    }
+
+    const timerId = window.setInterval(() => {
+      setRemainingShareSeconds((previous) => {
+        if (typeof previous !== "number") {
+          return previous;
+        }
+
+        return Math.max(previous - 1, 0);
+      });
+    }, 1000);
+
+    return () => {
+      window.clearInterval(timerId);
+    };
+  }, [isShareEnabled, remainingShareSeconds]);
+
   const openManageSheet = () => {
     setNextDeckName(deck.name);
     setIsManageSheetOpen(true);
@@ -288,6 +390,7 @@ const DeckOpenLayer = ({
       return;
     }
 
+    setIsCopyTooltipVisible(false);
     setIsShareSheetOpen(false);
   };
 
@@ -297,8 +400,13 @@ const DeckOpenLayer = ({
     }
 
     setShareError(null);
+    setIsShareOnboardingConfirmed(false);
+    setIsCopyTooltipVisible(false);
     setIsShareSheetOpen(true);
   };
+
+  const shouldShowShareOnboarding =
+    !isGuestSharedDeck && deck.type !== "SHARED" && !isShareEnabled;
 
   const handleShareToggle = async () => {
     if (isSharePending) {
@@ -318,7 +426,7 @@ const DeckOpenLayer = ({
       if (!nextShareData?.token) {
         setIsShareEnabled(previousShareEnabled);
         setShareData(previousShareData);
-        setShareError("공유 덱 공유 링크를 생성하지 못했습니다.");
+        setShareError("공유 덱 링크를 생성하지 못했습니다.");
         return;
       }
 
@@ -328,6 +436,7 @@ const DeckOpenLayer = ({
 
     setIsShareEnabled(false);
     setShareData(null);
+    setRemainingShareSeconds(null);
     const didStop = await onStopShareDeck();
     setIsSharePending(false);
 
@@ -348,6 +457,16 @@ const DeckOpenLayer = ({
     }
 
     await navigator.clipboard.writeText(shareUrl);
+    setIsCopyTooltipVisible(true);
+
+    if (copyTooltipTimeoutRef.current) {
+      window.clearTimeout(copyTooltipTimeoutRef.current);
+    }
+
+    copyTooltipTimeoutRef.current = window.setTimeout(() => {
+      setIsCopyTooltipVisible(false);
+      copyTooltipTimeoutRef.current = null;
+    }, COPY_TOOLTIP_DURATION_MS);
   };
 
   const handleLeaveSharedDeck = async () => {
@@ -482,47 +601,100 @@ const DeckOpenLayer = ({
 
       <DeckBottomSheet
         isOpen={isShareSheetOpen}
-        title={isGuestSharedDeck ? "공유 덱 나가기" : "공유 덱 공유"}
+        title={isGuestSharedDeck ? "공유 덱 나가기" : "공유 덱"}
         description={
           isGuestSharedDeck
             ? "정말 공유 덱에서 퇴장하시겠습니까?"
-            : "토글을 켜면 공유가 시작되고, 끄면 공유가 중단됩니다."
+            : shouldShowShareOnboarding && !isShareOnboardingConfirmed
+              ? "덱 공유 전 아래 주의사항을 확인해 주세요."
+              : "토글을 켜면 공유가 시작되고, 끄면 공유가 중단됩니다."
         }
-        closeAriaLabel="공유 덱 공유 시트 닫기"
+        closeAriaLabel="공유 덱 시트 닫기"
         onClose={closeShareSheet}
       >
-        {isGuestSharedDeck ? null : (
+        {isGuestSharedDeck ? null : shouldShowShareOnboarding &&
+          !isShareOnboardingConfirmed ? (
           <>
-            <div className={sheetToggleRow()}>
-              <p className={sheetToggleLabel()}>공유 상태</p>
-              <DeckShareToggle
-                isOn={isShareEnabled}
-                isPending={isSharePending}
-                onToggle={() => {
-                  void handleShareToggle();
+            <ul className={sheetOnboardingList()}>
+              {SHARE_ONBOARDING_NOTICE_ITEMS.map((notice) => {
+                return (
+                  <li key={notice.order} className={sheetOnboardingItem()}>
+                    <DeckShareNoticeNumberBadge value={notice.order} />
+                    <p className={sheetOnboardingMessage()}>{notice.message}</p>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className={sheetActionRowBetween()}>
+              <button
+                type="button"
+                className={clsx(sheetButtonPrimary(), "w-full justify-center")}
+                onClick={() => {
+                  setIsShareOnboardingConfirmed(true);
                 }}
-              />
+              >
+                확인
+              </button>
             </div>
-
-            <div className={sheetDeckItem()}>
-              <div>
-                <p className={sheetDeckName()}>남은 시간</p>
-                <p className={sheetDeckMeta()}>
-                  {isShareEnabled
-                    ? toRemainingTimeText(shareData)
-                    : "공유 꺼짐"}
-                </p>
+          </>
+        ) : (
+          <>
+            <div className={sheetShareInfoStack()}>
+              <div className={sheetToggleRow()}>
+                <p className={sheetToggleLabel()}>공유 상태</p>
+                <DeckShareToggle
+                  isOn={isShareEnabled}
+                  isPending={isSharePending}
+                  onToggle={() => {
+                    void handleShareToggle();
+                  }}
+                />
               </div>
-            </div>
 
-            <div className={sheetDeckItem()}>
-              <div className="w-full min-w-0">
-                <p className={sheetDeckName()}>공유 주소</p>
-                <p className={`${sheetDeckMeta()} truncate`}>
-                  {isShareEnabled && shareData?.token
-                    ? getShareUrl(shareData.token)
-                    : "정보 없음"}
-                </p>
+              <div className={sheetDeckItem()}>
+                <div>
+                  <p className={sheetDeckName()}>남은 시간</p>
+                  <p className={sheetDeckMeta()}>
+                    {isShareEnabled
+                      ? toRemainingTimeText(remainingShareSeconds, shareData)
+                      : "공유 꺼짐"}
+                  </p>
+                </div>
+              </div>
+
+              <div className={sheetDeckItem()}>
+                <div className={sheetShareAddressContainer()}>
+                  <div className={sheetShareAddressRow()}>
+                    <div className="min-w-0 flex-1">
+                      <p className={sheetDeckName()}>공유 주소</p>
+                      <p className={`${sheetDeckMeta()} truncate`}>
+                        {isShareEnabled && shareData?.token
+                          ? getShareUrl(shareData.token)
+                          : "정보 없음"}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      className={sheetShareCopyButton()}
+                      onClick={() => {
+                        void handleCopyShareUrl();
+                      }}
+                      disabled={
+                        !isShareEnabled || !shareData?.token || isSharePending
+                      }
+                      aria-label="공유 주소 복사"
+                    >
+                      <Clipboard className={sheetShareCopyIcon()} />
+                      {isCopyTooltipVisible ? (
+                        <span className={sheetShareCopyTooltip()}>
+                          복사 완료
+                        </span>
+                      ) : null}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </>
@@ -530,8 +702,8 @@ const DeckOpenLayer = ({
 
         {shareError ? <p className={sheetErrorText()}>{shareError}</p> : null}
 
-        <div className={sheetActionRowBetween()}>
-          {isGuestSharedDeck ? (
+        {isGuestSharedDeck ? (
+          <div className={sheetActionRowBetween()}>
             <>
               <button
                 type="button"
@@ -552,19 +724,8 @@ const DeckOpenLayer = ({
                 나가기
               </button>
             </>
-          ) : (
-            <button
-              type="button"
-              className={sheetButton()}
-              onClick={() => {
-                void handleCopyShareUrl();
-              }}
-              disabled={!isShareEnabled || !shareData?.token || isSharePending}
-            >
-              링크 복사
-            </button>
-          )}
-        </div>
+          </div>
+        ) : null}
       </DeckBottomSheet>
     </motion.section>
   );
