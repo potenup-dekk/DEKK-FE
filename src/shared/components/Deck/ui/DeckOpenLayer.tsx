@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Pencil, UserPlus, X } from "lucide-react";
+import { Pencil, UserPlus, UsersRound, X } from "lucide-react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import type { DeckItem, DeckOriginOffset } from "../model/deckState.helpers";
@@ -23,12 +23,14 @@ interface DeckOpenLayerProps {
   onUpdateDeckName: (name: string) => Promise<boolean>;
   onDeleteDeck: () => Promise<boolean>;
   onShareDeck: () => Promise<CustomDeckShareData | null>;
+  onLeaveSharedDeck: () => Promise<boolean>;
   onStopShareDeck: () => Promise<boolean>;
 }
 
 interface DeckOpenHeaderProps {
   deckName: string;
   cardCount: number;
+  isGuestSharedDeck: boolean;
   canManageDeck: boolean;
   canShareDeck: boolean;
   onOpenShareSheet: () => void;
@@ -48,6 +50,7 @@ const HEADER_ACTION_ICON_STROKE = 2;
 const DeckOpenHeader = ({
   deckName,
   cardCount,
+  isGuestSharedDeck,
   canManageDeck,
   canShareDeck,
   onOpenShareSheet,
@@ -88,13 +91,20 @@ const DeckOpenHeader = ({
           <button
             type="button"
             className={closeButton()}
-            aria-label="쉐어덱 공유"
+            aria-label={isGuestSharedDeck ? "쉐어덱 나가기" : "쉐어덱 공유"}
             onClick={onOpenShareSheet}
           >
-            <UserPlus
-              size={HEADER_ACTION_ICON_SIZE}
-              strokeWidth={HEADER_ACTION_ICON_STROKE}
-            />
+            {isGuestSharedDeck ? (
+              <UsersRound
+                size={HEADER_ACTION_ICON_SIZE}
+                strokeWidth={HEADER_ACTION_ICON_STROKE}
+              />
+            ) : (
+              <UserPlus
+                size={HEADER_ACTION_ICON_SIZE}
+                strokeWidth={HEADER_ACTION_ICON_STROKE}
+              />
+            )}
           </button>
         ) : null}
         <button type="button" className={closeButton()} onClick={onCloseDeck}>
@@ -158,6 +168,7 @@ const DeckOpenLayer = ({
   onUpdateDeckName,
   onDeleteDeck,
   onShareDeck,
+  onLeaveSharedDeck,
   onStopShareDeck,
 }: DeckOpenLayerProps) => {
   const {
@@ -186,6 +197,7 @@ const DeckOpenLayer = ({
   const [isShareEnabled, setIsShareEnabled] = useState(false);
   const [shareData, setShareData] = useState<CustomDeckShareData | null>(null);
   const [shareError, setShareError] = useState<string | null>(null);
+  const isGuestSharedDeck = deck.sharedRole === "GUEST";
 
   const getShareUrl = (token: string) => {
     if (!token) {
@@ -240,7 +252,8 @@ const DeckOpenLayer = ({
   }, []);
 
   useEffect(() => {
-    const isInitiallyShared = deck.type === "SHARED";
+    const isInitiallyShared =
+      deck.type === "SHARED" || Boolean(deck.sharedToken);
 
     setIsShareEnabled(isInitiallyShared);
     setShareData((previous) => {
@@ -254,12 +267,12 @@ const DeckOpenLayer = ({
 
       return {
         token: deck.sharedToken ?? "",
-        expiredInSeconds: null,
+        expiredInSeconds: deck.sharedExpiredInSeconds,
         expiredAt: null,
         remainingTime: null,
       };
     });
-  }, [deck.id, deck.sharedToken, deck.type]);
+  }, [deck.id, deck.sharedExpiredInSeconds, deck.sharedToken, deck.type]);
 
   const openManageSheet = () => {
     setNextDeckName(deck.name);
@@ -337,6 +350,25 @@ const DeckOpenLayer = ({
     await navigator.clipboard.writeText(shareUrl);
   };
 
+  const handleLeaveSharedDeck = async () => {
+    if (isSharePending) {
+      return;
+    }
+
+    setShareError(null);
+    setIsSharePending(true);
+    const didLeave = await onLeaveSharedDeck();
+    setIsSharePending(false);
+
+    if (!didLeave) {
+      setShareError("공유 덱 나가기에 실패했습니다.");
+      return;
+    }
+
+    setIsShareSheetOpen(false);
+    onCloseDeck();
+  };
+
   const handleRenameDeck = async () => {
     if (isManagePending) {
       return;
@@ -385,6 +417,7 @@ const DeckOpenLayer = ({
         <DeckOpenHeader
           deckName={deck.name}
           cardCount={deck.cardCount}
+          isGuestSharedDeck={isGuestSharedDeck}
           canManageDeck={!deck.isDefault}
           canShareDeck={!deck.isDefault}
           onOpenShareSheet={() => {
@@ -449,55 +482,88 @@ const DeckOpenLayer = ({
 
       <DeckBottomSheet
         isOpen={isShareSheetOpen}
-        title="쉐어덱 공유"
-        description="토글을 켜면 공유가 시작되고, 끄면 공유가 중단됩니다."
+        title={isGuestSharedDeck ? "쉐어덱 나가기" : "쉐어덱 공유"}
+        description={
+          isGuestSharedDeck
+            ? "정말 공유 덱에서 퇴장하시겠습니까?"
+            : "토글을 켜면 공유가 시작되고, 끄면 공유가 중단됩니다."
+        }
         closeAriaLabel="쉐어덱 공유 시트 닫기"
         onClose={closeShareSheet}
       >
-        <div className={sheetToggleRow()}>
-          <p className={sheetToggleLabel()}>공유 상태</p>
-          <DeckShareToggle
-            isOn={isShareEnabled}
-            isPending={isSharePending}
-            onToggle={() => {
-              void handleShareToggle();
-            }}
-          />
-        </div>
+        {isGuestSharedDeck ? null : (
+          <>
+            <div className={sheetToggleRow()}>
+              <p className={sheetToggleLabel()}>공유 상태</p>
+              <DeckShareToggle
+                isOn={isShareEnabled}
+                isPending={isSharePending}
+                onToggle={() => {
+                  void handleShareToggle();
+                }}
+              />
+            </div>
 
-        <div className={sheetDeckItem()}>
-          <div>
-            <p className={sheetDeckName()}>남은 시간</p>
-            <p className={sheetDeckMeta()}>
-              {isShareEnabled ? toRemainingTimeText(shareData) : "공유 꺼짐"}
-            </p>
-          </div>
-        </div>
+            <div className={sheetDeckItem()}>
+              <div>
+                <p className={sheetDeckName()}>남은 시간</p>
+                <p className={sheetDeckMeta()}>
+                  {isShareEnabled
+                    ? toRemainingTimeText(shareData)
+                    : "공유 꺼짐"}
+                </p>
+              </div>
+            </div>
 
-        <div className={sheetDeckItem()}>
-          <div className="w-full min-w-0">
-            <p className={sheetDeckName()}>공유 주소</p>
-            <p className={`${sheetDeckMeta()} truncate`}>
-              {isShareEnabled && shareData?.token
-                ? getShareUrl(shareData.token)
-                : "정보 없음"}
-            </p>
-          </div>
-        </div>
+            <div className={sheetDeckItem()}>
+              <div className="w-full min-w-0">
+                <p className={sheetDeckName()}>공유 주소</p>
+                <p className={`${sheetDeckMeta()} truncate`}>
+                  {isShareEnabled && shareData?.token
+                    ? getShareUrl(shareData.token)
+                    : "정보 없음"}
+                </p>
+              </div>
+            </div>
+          </>
+        )}
 
         {shareError ? <p className={sheetErrorText()}>{shareError}</p> : null}
 
         <div className={sheetActionRowBetween()}>
-          <button
-            type="button"
-            className={sheetButton()}
-            onClick={() => {
-              void handleCopyShareUrl();
-            }}
-            disabled={!isShareEnabled || !shareData?.token || isSharePending}
-          >
-            링크 복사
-          </button>
+          {isGuestSharedDeck ? (
+            <>
+              <button
+                type="button"
+                className={clsx(sheetButton(), "flex-1 justify-center")}
+                onClick={closeShareSheet}
+                disabled={isSharePending}
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                className={clsx(sheetDangerButton(), "flex-1 justify-center")}
+                onClick={() => {
+                  void handleLeaveSharedDeck();
+                }}
+                disabled={isSharePending}
+              >
+                나가기
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className={sheetButton()}
+              onClick={() => {
+                void handleCopyShareUrl();
+              }}
+              disabled={!isShareEnabled || !shareData?.token || isSharePending}
+            >
+              링크 복사
+            </button>
+          )}
         </div>
       </DeckBottomSheet>
     </motion.section>

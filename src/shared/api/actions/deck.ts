@@ -7,6 +7,7 @@ import {
   deleteCustomDeck,
   deleteDefaultDeckCard,
   joinSharedDeck,
+  leaveSharedDeck,
   saveCardToCustomDeck,
   shareCustomDeck,
   stopCustomDeckShare,
@@ -93,12 +94,20 @@ const joinSharedDeckAction = async (token: string) => {
   return joinSharedDeck({ token }, cookieHeader || undefined);
 };
 
+const leaveSharedDeckAction = async (sharedDeckId: number) => {
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+
+  return leaveSharedDeck(sharedDeckId, cookieHeader || undefined);
+};
+
 export {
   createCustomDeckAction,
   deleteCardFromCustomDeckAction,
   deleteCustomDeckAction,
   deleteDefaultDeckCardAction,
   joinSharedDeckAction,
+  leaveSharedDeckAction,
   saveCardToCustomDeckAction,
   shareCustomDeckAction,
   stopCustomDeckShareAction,

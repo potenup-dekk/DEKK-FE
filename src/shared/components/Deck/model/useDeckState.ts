@@ -15,6 +15,7 @@ const useDeckState = (): UseDeckStateResult => {
     retryLoadDefaultDeck,
     saveSelectedCardToCustomDeck,
     shareActiveDeck,
+    leaveSharedActiveDeck,
     stopShareActiveDeck,
     selectedCard,
     store,
@@ -36,6 +37,7 @@ const useDeckState = (): UseDeckStateResult => {
     updateActiveDeckName,
     deleteActiveDeck,
     shareActiveDeck,
+    leaveSharedActiveDeck,
     stopShareActiveDeck,
   );
 };
