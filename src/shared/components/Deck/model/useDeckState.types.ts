@@ -33,6 +33,7 @@ interface UseDeckStateResult {
   updateActiveDeckName: (name: string) => Promise<boolean>;
   deleteActiveDeck: () => Promise<boolean>;
   shareActiveDeck: () => Promise<CustomDeckShareData | null>;
+  leaveSharedActiveDeck: () => Promise<boolean>;
   stopShareActiveDeck: () => Promise<boolean>;
 }
 

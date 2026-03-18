@@ -26,6 +26,7 @@ const DeckContent = ({ deckState }: DeckContentProps) => {
         onUpdateDeckName={deckState.updateActiveDeckName}
         onDeleteDeck={deckState.deleteActiveDeck}
         onShareDeck={deckState.shareActiveDeck}
+        onLeaveSharedDeck={deckState.leaveSharedActiveDeck}
         onStopShareDeck={deckState.stopShareActiveDeck}
       />
 

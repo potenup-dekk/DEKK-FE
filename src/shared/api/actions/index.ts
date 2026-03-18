@@ -10,6 +10,7 @@ export {
   deleteCustomDeckAction,
   deleteDefaultDeckCardAction,
   joinSharedDeckAction,
+  leaveSharedDeckAction,
   saveCardToCustomDeckAction,
   shareCustomDeckAction,
   stopCustomDeckShareAction,

@@ -5,6 +5,7 @@ import type {
   CustomDeckData,
   CustomDeckShareData,
   DeckCardContentData,
+  DeckRole,
   DeckType,
   DefaultDeckCardsResponse,
   UpdateCustomDeckPayload,
@@ -18,6 +19,9 @@ interface CustomDeckCardsPageData {
   totalElements: number;
   totalPages: number;
   hasNext: boolean;
+  token: string | null;
+  expiredInSeconds: number | null;
+  role: DeckRole;
 }
 
 const toCustomDeckList = (data: unknown): CustomDeckData[] => {
@@ -164,6 +168,9 @@ const toCustomDeckCardsPageData = (
         totalElements: 0,
         totalPages: 0,
         hasNext: false,
+        token: null,
+        expiredInSeconds: null,
+        role: "GUEST",
       };
     }
 
@@ -174,6 +181,9 @@ const toCustomDeckCardsPageData = (
       totalElements: cards.length,
       totalPages: 1,
       hasNext: false,
+      token: (data as CustomDeckCardsResultData).token,
+      expiredInSeconds: (data as CustomDeckCardsResultData).expiredInSeconds,
+      role: (data as CustomDeckCardsResultData).role,
     };
   }
 
@@ -185,6 +195,9 @@ const toCustomDeckCardsPageData = (
       totalElements: data.length,
       totalPages: 1,
       hasNext: false,
+      token: null,
+      expiredInSeconds: null,
+      role: "GUEST",
     };
   }
 
@@ -199,6 +212,9 @@ const toCustomDeckCardsPageData = (
         totalElements: 0,
         totalPages: 0,
         hasNext: false,
+        token: null,
+        expiredInSeconds: null,
+        role: "GUEST",
       };
     }
 
@@ -219,6 +235,9 @@ const toCustomDeckCardsPageData = (
       totalPages:
         typeof pagedData.totalPages === "number" ? pagedData.totalPages : 1,
       hasNext: Boolean(pagedData.hasNext),
+      token: null,
+      expiredInSeconds: null,
+      role: "GUEST",
     };
   }
 
@@ -229,6 +248,9 @@ const toCustomDeckCardsPageData = (
     totalElements: 0,
     totalPages: 0,
     hasNext: false,
+    token: null,
+    expiredInSeconds: null,
+    role: "GUEST",
   };
 };
 
@@ -324,12 +346,21 @@ const toDeckType = (value: unknown): DeckType => {
   return "CUSTOM";
 };
 
+const toDeckRole = (value: unknown): DeckRole => {
+  if (value === "HOST" || value === "GUEST") {
+    return value;
+  }
+
+  return "GUEST";
+};
+
 const toCustomDeckDetailData = (data: unknown): CustomDeckCardsResultData => {
   if (!data || typeof data !== "object") {
     return {
       deckType: "CUSTOM",
       token: null,
       expiredInSeconds: null,
+      role: "GUEST",
       cards: [],
     };
   }
@@ -341,6 +372,7 @@ const toCustomDeckDetailData = (data: unknown): CustomDeckCardsResultData => {
     token: typeof raw.token === "string" ? raw.token : null,
     expiredInSeconds:
       typeof raw.expiredInSeconds === "number" ? raw.expiredInSeconds : null,
+    role: toDeckRole(raw.role),
     cards: toDeckCardList(raw.cards),
   };
 };
@@ -410,10 +442,15 @@ const getCustomDecks = async () => {
 const getCustomDeckCards = async (
   customDeckId: number,
   page = 0,
-  _size = 100,
+  size = 100,
 ) => {
+  const searchParams = new URLSearchParams({
+    page: String(page),
+    size: String(size),
+  });
+
   const response = await requestJson<ApiResponse<unknown>>(
-    `/api/decks/custom/${customDeckId}/cards`,
+    `/api/decks/custom/${customDeckId}/cards?${searchParams.toString()}`,
     {
       method: "GET",
     },

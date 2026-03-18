@@ -111,6 +111,9 @@ const createLoadCustomDeckCards = (
       let currentPage = 0;
       let hasNext = true;
       const allCards: DeckCardItem[] = [];
+      let latestShareToken: string | null = null;
+      let latestExpiredInSeconds: number | null = null;
+      let latestRole: "HOST" | "GUEST" | null = null;
 
       while (hasNext) {
         const response = await getCustomDeckCards(
@@ -125,6 +128,9 @@ const createLoadCustomDeckCards = (
         }
 
         allCards.push(...mapDefaultDeckCards(responseData.content));
+        latestShareToken = responseData.token;
+        latestExpiredInSeconds = responseData.expiredInSeconds;
+        latestRole = responseData.role;
         hasNext = responseData.hasNext;
         currentPage += 1;
       }
@@ -137,6 +143,9 @@ const createLoadCustomDeckCards = (
 
           return {
             ...deck,
+            sharedToken: latestShareToken,
+            sharedExpiredInSeconds: latestExpiredInSeconds,
+            sharedRole: latestRole,
             cardCount: allCards.length,
             cards: allCards,
           };
