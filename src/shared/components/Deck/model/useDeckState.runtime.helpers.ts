@@ -50,6 +50,12 @@ const createDeckStateRuntimeHandlers = (
       const nextDecks = mapDeckSummaries(summaryResponse.data ?? []);
 
       store.setDecks((currentDecks) => {
+        const currentDeckMap = new Map(
+          currentDecks.map((deck) => {
+            return [deck.id, deck] as const;
+          }),
+        );
+
         const currentCardMap = new Map(
           currentDecks.map((deck) => {
             return [deck.id, deck.cards] as const;
@@ -57,8 +63,23 @@ const createDeckStateRuntimeHandlers = (
         );
 
         return nextDecks.map((deck) => {
+          const currentDeck = currentDeckMap.get(deck.id) ?? null;
+          const shouldPreserveSharedMeta =
+            deck.type === "SHARED" && currentDeck?.type === "SHARED";
+
           return {
             ...deck,
+            sharedToken:
+              deck.sharedToken ??
+              (shouldPreserveSharedMeta ? currentDeck.sharedToken : null),
+            sharedExpiredInSeconds:
+              deck.sharedExpiredInSeconds ??
+              (shouldPreserveSharedMeta
+                ? currentDeck.sharedExpiredInSeconds
+                : null),
+            sharedRole:
+              deck.sharedRole ??
+              (shouldPreserveSharedMeta ? currentDeck.sharedRole : null),
             cards: currentCardMap.get(deck.id) ?? [],
           };
         });

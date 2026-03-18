@@ -53,6 +53,11 @@ const deckStyle = tv({
       "absolute inset-0 rounded-lg bg-white p-5 text-sm text-white backface-hidden transform-[rotateY(180deg)]",
     heroBackContent: "flex h-full min-h-0 flex-col justify-between gap-4",
     heroProductsScroll: "min-h-0 flex-1 overflow-y-auto",
+    heroPreviewProductViewport: "relative overflow-hidden rounded-md",
+    heroPreviewProductList: "h-11 overflow-hidden",
+    heroPreviewProductFade:
+      "pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-b from-transparent via-white/70 to-white",
+    heroPreviewMessage: "text-center text-sm font-bold text-primary",
     heroFallbackText: "m-auto text-sm text-zinc-200",
     heroImage: "h-full w-full object-cover",
     heroCardName:
@@ -64,15 +69,16 @@ const deckStyle = tv({
       "inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white transition-colors hover:bg-black/65",
     sheetBackdrop: "fixed inset-0 z-70 bg-black/30 backdrop-blur-sm",
     sheetPanel:
-      "fixed inset-x-0 bottom-0 z-71 mx-auto w-full max-w-xl translate-y-3 rounded-t-3xl border border-zinc-200 bg-white p-6 shadow-[0_-8px_24px_rgba(0,0,0,0.08)]",
+      "fixed inset-x-0 bottom-0 z-71 mx-auto w-full max-w-xl translate-y-3 rounded-t-3xl border border-zinc-200 bg-white px-5 pt-5 pb-10 shadow-[0_-8px_24px_rgba(0,0,0,0.08)]",
     sheetTitle: "text-base font-semibold text-zinc-900",
     sheetDescription: "mt-1 text-sm text-zinc-600",
     sheetSectionTitle: "mt-4 text-xs font-semibold text-zinc-500",
     sheetDeckList: "mt-2 flex max-h-50 flex-col gap-2 overflow-y-auto pr-1",
     sheetDeckItem:
-      "flex w-full items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-left text-zinc-900 transition-colors hover:bg-zinc-100 disabled:opacity-60",
+      "flex w-full items-center justify-between gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-left text-zinc-900 transition-colors hover:bg-zinc-100 disabled:opacity-60",
     sheetToggleRow:
-      "mt-4 flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-3",
+      "mt-4 flex items-center justify-between gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-3",
+    sheetShareInfoStack: "mt-4 flex flex-col gap-2",
     sheetToggleLabel: "text-sm font-medium text-zinc-900",
     sheetToggleButton:
       "relative inline-flex h-7 w-12 items-center rounded-full border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-300 disabled:cursor-not-allowed disabled:opacity-50",
@@ -84,6 +90,22 @@ const deckStyle = tv({
     sheetToggleThumbOff: "translate-x-1",
     sheetDeckName: "text-sm font-medium text-zinc-900",
     sheetDeckMeta: "text-xs text-zinc-500",
+    sheetShareAddressContainer: "w-full min-w-0",
+    sheetShareAddressRow: "flex items-start justify-between gap-2",
+    sheetShareCopyButton:
+      "relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-zinc-300 bg-white text-zinc-700 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50",
+    sheetShareCopyIcon: "h-4 w-4",
+    sheetShareCopyTooltip:
+      "pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-2 py-1 text-[11px] font-medium leading-none text-white shadow-sm",
+    sheetOnboardingList: "mt-4 flex flex-col gap-3",
+    sheetOnboardingItem:
+      "flex items-start gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-3",
+    sheetOnboardingMessage: "text-sm leading-5 text-zinc-700",
+    sheetOnboardingNumberBadge:
+      "inline-flex shrink-0 items-center justify-center rounded-md bg-primary font-semibold leading-none text-white",
+    sheetOnboardingNumberBadgeSm: "h-6 w-6 text-xs",
+    sheetOnboardingNumberBadgeMd: "h-7 w-7 text-sm",
+    sheetOnboardingNumberBadgeLg: "h-8 w-8 text-base",
     sheetInput:
       "mt-4 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-zinc-400 focus:outline-none",
     sheetErrorText: "mt-2 text-xs text-rose-400",

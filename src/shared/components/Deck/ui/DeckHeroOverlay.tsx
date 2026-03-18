@@ -36,7 +36,7 @@ const DeckHeroOverlayContent = ({
   onOpenCreateDeckSheet,
 }: DeckHeroOverlayContentProps) => {
   const { heroContainer } = deckStyle();
-  const { onDragEnd, onTap, x, y } = useDeckHeroGesture({
+  const { onDragEnd, onTap, rotate, x, y } = useDeckHeroGesture({
     onSwipeClose: onClose,
     onTapFlip,
   });
@@ -51,7 +51,7 @@ const DeckHeroOverlayContent = ({
       <DeckHeroCard
         card={selectedCard}
         isFlipped={isFlipped}
-        gestureBindings={{ x, y, onDragEnd, onTap }}
+        gestureBindings={{ x, y, rotate, onDragEnd, onTap }}
       />
       <DeckHeroActions
         onClose={onClose}

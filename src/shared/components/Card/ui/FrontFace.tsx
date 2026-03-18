@@ -19,7 +19,7 @@ const FrontFace = ({ imageUrl }: FrontFaceProps) => {
         draggable={false}
         fill
         priority
-        sizes="(max-width: 768px) 83vw, 66vw"
+        // sizes="(max-width: 768px) 83vw, 66vw"
         loading="eager"
         alt="코디"
       />
