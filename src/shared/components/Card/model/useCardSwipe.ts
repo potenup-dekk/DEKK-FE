@@ -1,6 +1,7 @@
 import { useMotionValue } from "framer-motion";
 import { useCallback, useState } from "react";
 import type { CardItem } from "./useCardStack.types";
+import { pushCardSwipeEvent } from "./useCardSwipe.analytics";
 import { resolveRemovingId, saveSwipeEvaluation } from "./useCardSwipe.helpers";
 import useSwipeAnimationHandlers from "./useCardSwipe.animation";
 import useCardSwipeEvents from "./useCardSwipeEvents";
@@ -13,10 +14,12 @@ const useCardSwipe = (
   const [isSwiping, setIsSwiping] = useState(false);
   const [removingCardId, setRemovingCardId] = useState<string | null>(null);
   const onLike = useCallback(() => {
+    pushCardSwipeEvent(cards, "LIKE", isLoggedIn);
     saveSwipeEvaluation(cards, isLoggedIn, "LIKE");
     setRemovingCardId(resolveRemovingId(cards));
   }, [cards, isLoggedIn]);
   const onDislike = useCallback(() => {
+    pushCardSwipeEvent(cards, "DISLIKE", isLoggedIn);
     saveSwipeEvaluation(cards, isLoggedIn, "DISLIKE");
     setRemovingCardId(resolveRemovingId(cards));
   }, [cards, isLoggedIn]);
