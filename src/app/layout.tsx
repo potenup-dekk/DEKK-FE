@@ -11,6 +11,8 @@ const DEFAULT_SITE_URL = "http://localhost:3000";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
 const DEFAULT_GTM_ID = "GTM-MMJPPM5Z";
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID ?? DEFAULT_GTM_ID;
+const DEFAULT_GA4_ID = "G-W71BFR2FT7";
+const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID ?? DEFAULT_GA4_ID;
 
 export const metadata: Metadata = {
   title: "DEKK",
@@ -52,6 +54,16 @@ const RootLayout = ({
   return (
     <html lang="ko">
       <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA4_ID}');`}
+        </Script>
         <Script id="gtm-script" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
