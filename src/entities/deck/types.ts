@@ -28,6 +28,7 @@ export interface DefaultDeckCardsResponse {
 }
 
 export type DeckType = "DEFAULT" | "CUSTOM" | "SHARED";
+export type DeckRole = "HOST" | "GUEST";
 
 export interface DeckSummaryData {
   deckId: number;
@@ -49,6 +50,7 @@ export interface CustomDeckCardsResultData {
   deckType: DeckType;
   token: string | null;
   expiredInSeconds: number | null;
+  role: DeckRole;
   cards: DeckCardContentData[];
 }
 

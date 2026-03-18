@@ -1,3 +1,5 @@
+import type { DeckRole } from "@/entities/deck";
+
 interface DeckCardProductItem {
   productId: number;
   brand: string;
@@ -27,6 +29,8 @@ interface DeckItem {
   name: string;
   type: "DEFAULT" | "CUSTOM" | "SHARED";
   sharedToken: string | null;
+  sharedExpiredInSeconds: number | null;
+  sharedRole: DeckRole | null;
   isDefault: boolean;
   cardCount: number;
   previewImageSrcList: string[];

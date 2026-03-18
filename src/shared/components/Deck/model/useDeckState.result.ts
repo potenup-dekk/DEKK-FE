@@ -17,6 +17,7 @@ const toUseDeckStateResult = (
   updateActiveDeckName: UseDeckStateResult["updateActiveDeckName"],
   deleteActiveDeck: UseDeckStateResult["deleteActiveDeck"],
   shareActiveDeck: UseDeckStateResult["shareActiveDeck"],
+  leaveSharedActiveDeck: UseDeckStateResult["leaveSharedActiveDeck"],
   stopShareActiveDeck: UseDeckStateResult["stopShareActiveDeck"],
 ): UseDeckStateResult => {
   return {
@@ -44,6 +45,7 @@ const toUseDeckStateResult = (
     updateActiveDeckName,
     deleteActiveDeck,
     shareActiveDeck,
+    leaveSharedActiveDeck,
     stopShareActiveDeck,
   };
 };

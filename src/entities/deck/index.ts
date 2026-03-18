@@ -1,6 +1,7 @@
 export {
   type DeckSummaryData,
   type DeckType,
+  type DeckRole,
   type DeckProductData,
   type DeckCardContentData,
   type DefaultDeckCardsResponse,

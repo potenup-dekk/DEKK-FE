@@ -20,6 +20,7 @@ interface DeckFrameProps {
   onUpdateDeckName: (name: string) => Promise<boolean>;
   onDeleteDeck: () => Promise<boolean>;
   onShareDeck: () => Promise<CustomDeckShareData | null>;
+  onLeaveSharedDeck: () => Promise<boolean>;
   onStopShareDeck: () => Promise<boolean>;
 }
 
@@ -39,6 +40,7 @@ const DeckFrame = ({
   onUpdateDeckName,
   onDeleteDeck,
   onShareDeck,
+  onLeaveSharedDeck,
   onStopShareDeck,
 }: DeckFrameProps) => {
   const isOpenLayerVisible = mode !== "closed" && activeDeck;
@@ -68,6 +70,7 @@ const DeckFrame = ({
           onUpdateDeckName={onUpdateDeckName}
           onDeleteDeck={onDeleteDeck}
           onShareDeck={onShareDeck}
+          onLeaveSharedDeck={onLeaveSharedDeck}
           onStopShareDeck={onStopShareDeck}
         />
       ) : null}

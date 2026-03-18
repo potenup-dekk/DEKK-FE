@@ -6,6 +6,19 @@ interface SharedDeckJoinPayload {
   token: string;
 }
 
+const assertSharedDeckLeaveResponse = <T>(response: ApiResponse<T>) => {
+  if (response.code.startsWith("SD2") || response.code.endsWith("OK")) {
+    return response;
+  }
+
+  throw new ApiRequestError(
+    400,
+    response.message,
+    response.code,
+    response.errors,
+  );
+};
+
 const assertSharedDeckPreviewResponse = <T>(response: ApiResponse<T>) => {
   switch (response.code) {
     case "SD20017": {
@@ -123,4 +136,23 @@ const joinSharedDeck = async (
   return assertSharedDeckJoinResponse(response);
 };
 
-export { getSharedDeckCards, getSharedDeckPreview, joinSharedDeck };
+const leaveSharedDeck = async (sharedDeckId: number, cookieHeader?: string) => {
+  const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
+
+  const response = await requestJson<ApiResponse<null>>(
+    `/api/decks/shared/${sharedDeckId}/leave`,
+    {
+      method: "DELETE",
+      headers,
+    },
+  );
+
+  return assertSharedDeckLeaveResponse(response);
+};
+
+export {
+  getSharedDeckCards,
+  getSharedDeckPreview,
+  joinSharedDeck,
+  leaveSharedDeck,
+};

@@ -22,5 +22,6 @@ export {
   getSharedDeckCards,
   getSharedDeckPreview,
   joinSharedDeck,
+  leaveSharedDeck,
 } from "./deck.shared";
 export { logout } from "./auth";

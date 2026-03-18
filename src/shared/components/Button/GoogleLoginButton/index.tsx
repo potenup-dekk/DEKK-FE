@@ -10,7 +10,7 @@ const GoogleLoginButton = () => {
 
   return (
     <SocialButton
-      iconSrc="/ico_google.png"
+      iconSrc="/icons/google.svg"
       iconAlt="구글 로그인"
       label="Google 로그인"
       onClick={handleClick}

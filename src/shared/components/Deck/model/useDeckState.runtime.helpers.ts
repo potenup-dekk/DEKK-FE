@@ -1,6 +1,7 @@
 import {
   createCustomDeckAction,
   deleteCustomDeckAction,
+  leaveSharedDeckAction,
   saveCardToCustomDeckAction,
   shareCustomDeckAction,
   stopCustomDeckShareAction,
@@ -224,6 +225,19 @@ const createDeckStateRuntimeHandlers = (
     }
   };
 
+  const leaveSharedActiveDeck = async () => {
+    if (!activeDeck || activeDeck.isDefault) {
+      return false;
+    }
+
+    try {
+      await leaveSharedDeckAction(activeDeck.id);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const closeDeck = () => {
     actions.closeDeck();
 
@@ -255,6 +269,7 @@ const createDeckStateRuntimeHandlers = (
     ),
     saveSelectedCardToCustomDeck,
     shareActiveDeck,
+    leaveSharedActiveDeck,
     stopShareActiveDeck,
     updateActiveDeckName,
   };
