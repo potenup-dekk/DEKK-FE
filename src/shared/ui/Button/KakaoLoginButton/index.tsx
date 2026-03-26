@@ -15,7 +15,7 @@ const KakaoLoginButton = () => {
 
   return (
     <SocialButton
-      iconSrc="/ico_kakao.png"
+      iconSrc="/icons/kakao.png"
       iconAlt="카카오 로그인"
       label="카카오 로그인"
       onClick={handleClick}

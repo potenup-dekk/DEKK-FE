@@ -140,7 +140,7 @@ const leaveSharedDeck = async (sharedDeckId: number, cookieHeader?: string) => {
   const headers = cookieHeader ? { cookie: cookieHeader } : undefined;
 
   const response = await requestJson<ApiResponse<null>>(
-    `/api/decks/shared/${sharedDeckId}/leave`,
+    `/w/v1/decks/shared/${sharedDeckId}/leave`,
     {
       method: "DELETE",
       headers,

@@ -7,7 +7,7 @@ import Tag from "../../Badge";
 import { useCardAuth } from "../model/cardAuthContext";
 import { backFaceMotionStyle } from "../model/animate";
 import { MOCK_PRODUCTS } from "../model/mockProducts";
-import ProductList from "@/shared/components/ProductList";
+import ProductList from "@/shared/ui/ProductList";
 import { GoogleLoginButton, KakaoLoginButton } from "../../Button";
 
 const SCROLL_UNLOCK_DELAY = 120;

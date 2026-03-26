@@ -4,11 +4,11 @@ import Logo from "../../../../../public/logo.svg";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Profile } from "@/shared/components/Tab";
+import { Profile } from "@/shared/ui/Tab";
 import { useAuthGuard, useLayoutChromeVisibility } from "@/shared/hooks";
 import { headerVariants } from "../model/animate";
 import { headerStyle } from "../style";
-import { ActionButton } from "@/shared/components/Button";
+import { ActionButton } from "@/shared/ui/Button";
 
 const renderAuthAction = (isAuthenticated: boolean) => {
   if (isAuthenticated) {

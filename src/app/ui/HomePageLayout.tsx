@@ -1,4 +1,4 @@
-import Card from "@/shared/components/Card";
+import Card from "@/shared/ui/Card";
 import HomeCardControls from "./HomeCardControls";
 import { homePageStyle } from "./style";
 

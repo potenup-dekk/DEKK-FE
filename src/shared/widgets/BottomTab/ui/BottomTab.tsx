@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Tab, TabItem } from "@/shared/components/Tab";
+import { Tab, TabItem } from "@/shared/ui/Tab";
 import APP_ROUTES from "@/shared/constants/routes";
 import { useLayoutChromeVisibility } from "@/shared/hooks";
 import { HomeIcon, LayersIcon, ShirtIcon } from "lucide-react";

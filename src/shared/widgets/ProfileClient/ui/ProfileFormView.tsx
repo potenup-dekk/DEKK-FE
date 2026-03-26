@@ -1,9 +1,4 @@
-import {
-  Section,
-  Select,
-  SelectItem,
-  SelectTab,
-} from "@/shared/components/SelectTab";
+import { Section, Select, SelectItem, SelectTab } from "@/shared/ui/SelectTab";
 import type {
   ProfileFormErrors,
   ProfileFormValue,

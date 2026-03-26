@@ -1,4 +1,4 @@
-import InputField from "@/shared/components/Input";
+import InputField from "@/shared/ui/Input";
 import GenderField from "./GenderField";
 import type { JoinFormValue, JoinFormErrors } from "../model/joinForm.types";
 

@@ -11,14 +11,14 @@ import { useAuthGuard } from "@/shared/hooks";
 import {
   deckHeroBackdropMotion,
   deckSelectionOverlayTransition,
-} from "@/shared/components/Deck/model/animate";
-import DeckCardList from "@/shared/components/Deck/ui/DeckCardList";
-import DeckHeroCard from "@/shared/components/Deck/ui/DeckHeroCard";
-import DeckSelectionOverlay from "@/shared/components/Deck/ui/DeckSelectionOverlay";
-import useDeckHeroGesture from "@/shared/components/Deck/model/useDeckHeroGesture";
-import type { DeckCardItem } from "@/shared/components/Deck/model/deckState.helpers";
-import { resolveCdnImageUrl } from "@/shared/components/Deck/model/deckState.images";
-import deckStyle from "@/shared/components/Deck/style";
+} from "@/shared/ui/Deck/model/animate";
+import DeckCardList from "@/shared/ui/Deck/ui/DeckCardList";
+import DeckHeroCard from "@/shared/ui/Deck/ui/DeckHeroCard";
+import DeckSelectionOverlay from "@/shared/ui/Deck/ui/DeckSelectionOverlay";
+import useDeckHeroGesture from "@/shared/ui/Deck/model/useDeckHeroGesture";
+import type { DeckCardItem } from "@/shared/ui/Deck/model/deckState.helpers";
+import { resolveCdnImageUrl } from "@/shared/ui/Deck/model/deckState.images";
+import deckStyle from "@/shared/ui/Deck/style";
 import sharedDeckPageStyle from "../style";
 
 interface SharedDeckPageViewProps {
