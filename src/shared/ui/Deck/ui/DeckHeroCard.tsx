@@ -1,7 +1,7 @@
 import { motion, type MotionValue, type PanInfo } from "framer-motion";
-import Tag from "@/shared/components/Badge";
-import ProductList from "@/shared/components/ProductList";
-import { MOCK_PRODUCTS } from "@/shared/components/Card/model/mockProducts";
+import Tag from "@/shared/ui/Badge";
+import ProductList from "@/shared/ui/ProductList";
+import { MOCK_PRODUCTS } from "@/shared/ui/Card/model/mockProducts";
 import {
   deckCardFlipTransition,
   deckHeroCardTransition,

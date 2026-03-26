@@ -1,6 +1,6 @@
-import Tag from "@/shared/components/Badge";
-import { ActionButton } from "@/shared/components/Button";
-import InputField from "@/shared/components/Input";
+import Tag from "@/shared/ui/Badge";
+import { ActionButton } from "@/shared/ui/Button";
+import InputField from "@/shared/ui/Input";
 import postPageStyle from "../style";
 
 interface PostTagStepProps {

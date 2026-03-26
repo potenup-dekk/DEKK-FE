@@ -1,6 +1,6 @@
 "use client";
 
-import { Deck } from "@/shared/components/Deck";
+import { Deck } from "@/shared/ui/Deck";
 
 const DeckPageClient = () => {
   return (

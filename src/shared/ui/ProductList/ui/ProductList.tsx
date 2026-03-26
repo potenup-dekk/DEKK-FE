@@ -1,4 +1,4 @@
-import Product from "@/shared/components/Product";
+import Product from "@/shared/ui/Product";
 import type { ProductListProps } from "../model/props.type";
 
 const CDN_BASE_URL =

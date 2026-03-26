@@ -1,4 +1,4 @@
-import DeckCreateSheet from "@/shared/components/Deck/ui/DeckCreateSheet";
+import DeckCreateSheet from "@/shared/ui/Deck/ui/DeckCreateSheet";
 import type { UseDeckStateResult } from "../model/useDeckState.types";
 import DeckFrame from "./DeckFrame";
 import DeckHeroOverlay from "./DeckHeroOverlay";
