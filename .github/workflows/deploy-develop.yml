@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '25' # 사용하는 노드 버전
+          node-version: '24' # 사용하는 노드 버전
 
       - name: Install Dependencies
         run: npm install # pnpm이나 yarn을 쓴다면 맞게 변경
