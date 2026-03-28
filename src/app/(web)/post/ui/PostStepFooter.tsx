@@ -1,4 +1,4 @@
-import { ActionButton } from "@/shared/components/Button";
+import { ActionButton } from "@/shared/ui/Button";
 import postPageStyle from "../style";
 
 interface PostStepFooterProps {

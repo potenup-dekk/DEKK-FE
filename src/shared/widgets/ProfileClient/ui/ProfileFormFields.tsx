@@ -1,4 +1,4 @@
-import InputField from "@/shared/components/Input";
+import InputField from "@/shared/ui/Input";
 import ProfileGenderField from "./ProfileGenderField";
 import type {
   ProfileFormErrors,

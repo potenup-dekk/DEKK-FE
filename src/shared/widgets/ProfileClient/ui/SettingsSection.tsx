@@ -1,4 +1,4 @@
-import { ActionButton } from "@/shared/components/Button";
+import { ActionButton } from "@/shared/ui/Button";
 import { profileClientStyle } from "../style";
 
 interface SettingsSectionProps {
@@ -34,13 +34,13 @@ const SettingsSection = ({
         }}
       />
 
-      <ActionButton
+      {/* <ActionButton
         type="button"
         color="cancel"
         label="회원탈퇴"
         className="w-full"
         onClick={onWithdraw}
-      />
+      /> */}
 
       {settingsError ? <p className={errorText()}>{settingsError}</p> : null}
     </section>

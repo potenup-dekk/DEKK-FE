@@ -5,7 +5,7 @@ import LayoutBodyClient from "@/app/ui/LayoutBodyClient";
 import BottomTab from "@/shared/widgets/BottomTab";
 import Header from "@/shared/widgets/Header";
 import { LayoutChromeVisibilityProvider } from "@/shared/hooks";
-import ToastProvider from "@/shared/components/ToastProvider";
+import ToastProvider from "@/shared/ui/ToastProvider";
 
 const DEFAULT_SITE_URL = "http://localhost:3000";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;

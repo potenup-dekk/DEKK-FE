@@ -1,6 +1,6 @@
 "use client";
 
-import { ActionButton } from "@/shared/components/Button";
+import { ActionButton } from "@/shared/ui/Button";
 import useJoinForm from "../model/useJoinForm";
 import JoinFormFields from "./JoinFormFields";
 import { joinPageStyle } from "./style";

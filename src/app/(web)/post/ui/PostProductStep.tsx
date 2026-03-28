@@ -1,6 +1,6 @@
 import { Trash2 } from "lucide-react";
-import { ActionButton } from "@/shared/components/Button";
-import InputField from "@/shared/components/Input";
+import { ActionButton } from "@/shared/ui/Button";
+import InputField from "@/shared/ui/Input";
 import type { PostProductItem } from "../model/postForm.types";
 import postPageStyle from "../style";
 

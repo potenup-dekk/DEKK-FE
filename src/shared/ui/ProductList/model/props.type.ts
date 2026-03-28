@@ -1,4 +1,4 @@
-import type { MockProductItem } from "@/shared/components/Card/model/mockProducts";
+import type { MockProductItem } from "@/shared/ui/Card/model/mockProducts";
 
 interface CardProductItem {
   productId: number;

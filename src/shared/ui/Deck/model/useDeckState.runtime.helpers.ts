@@ -247,7 +247,7 @@ const createDeckStateRuntimeHandlers = (
   };
 
   const leaveSharedActiveDeck = async () => {
-    if (!activeDeck || activeDeck.isDefault) {
+    if (!activeDeck || activeDeck.isDefault || activeDeck.type !== "SHARED") {
       return false;
     }
 

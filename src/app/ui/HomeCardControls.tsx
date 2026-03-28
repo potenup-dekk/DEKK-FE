@@ -1,5 +1,5 @@
 import type { RefObject } from "react";
-import ControlButton from "@/shared/components/Button/ControlButton";
+import ControlButton from "@/shared/ui/Button/ControlButton";
 import { HeartIcon, RefreshCwIcon, ThumbsDown } from "lucide-react";
 import { homePageStyle } from "./style";
 

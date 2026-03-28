@@ -2,10 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  GoogleLoginButton,
-  KakaoLoginButton,
-} from "@/shared/components/Button";
+import { GoogleLoginButton, KakaoLoginButton } from "@/shared/ui/Button";
 import { useAuthGuard } from "@/shared/hooks";
 import prefetchAndReplace from "@/shared/hooks/prefetchAndReplace";
 
