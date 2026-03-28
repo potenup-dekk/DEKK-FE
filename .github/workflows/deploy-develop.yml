@@ -1,0 +1,30 @@
+name: Deploy Develop to Mac mini
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # (선택) 맥미니에 Node.js가 깔려있겠지만, 버전을 명시하고 싶다면 추가
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25' # 사용하는 노드 버전
+
+      - name: Install Dependencies
+        run: npm install # pnpm이나 yarn을 쓴다면 맞게 변경
+
+      - name: Build Next.js
+        run: npm run build
+
+      - name: Restart PM2
+        # 아까 PM2로 띄워둔 프로세스를 새 빌드 파일로 재시작
+        run: pm2 reload next-develop
