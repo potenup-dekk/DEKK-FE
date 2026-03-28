@@ -2,7 +2,6 @@ import { useLayoutChromeVisibility } from "@/shared/hooks";
 import {
   type FocusTransitionDirection,
   useCardLayoutResizeEffect,
-  useDisablePageScroll,
   useFocusModeChromeVisibility,
   useFocusTransitionReset,
 } from "./useHomePageEffects";
@@ -28,7 +27,6 @@ const useHomePageClientEffects = ({
 }: HomePageClientEffectsParams) => {
   const { setChromeVisible } = useLayoutChromeVisibility();
 
-  useDisablePageScroll();
   useCardLayoutResizeEffect(measureCardLayout);
   useFocusModeChromeVisibility(
     isFocusMode,

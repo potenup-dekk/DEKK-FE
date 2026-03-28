@@ -3,25 +3,6 @@ import { useEffect, useLayoutEffect } from "react";
 const FOCUS_MODE_TRANSITION_MS = 260;
 type FocusTransitionDirection = "enter" | "exit" | null;
 
-const useDisablePageScroll = () => {
-  useEffect(() => {
-    const { body, documentElement } = document;
-    const prevBodyOverflow = body.style.overflow;
-    const prevBodyTouchAction = body.style.touchAction;
-    const prevHtmlOverscroll = documentElement.style.overscrollBehavior;
-
-    body.style.overflow = "hidden";
-    body.style.touchAction = "none";
-    documentElement.style.overscrollBehavior = "none";
-
-    return () => {
-      body.style.overflow = prevBodyOverflow;
-      body.style.touchAction = prevBodyTouchAction;
-      documentElement.style.overscrollBehavior = prevHtmlOverscroll;
-    };
-  }, []);
-};
-
 const useCardLayoutResizeEffect = (measureCardLayout: () => void) => {
   useEffect(() => {
     let rafId = 0;
@@ -105,7 +86,6 @@ const useFocusModeChromeVisibility = (
 export {
   type FocusTransitionDirection,
   useCardLayoutResizeEffect,
-  useDisablePageScroll,
   useFocusModeChromeVisibility,
   useFocusTransitionReset,
 };
