@@ -13,12 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build -t next-develop-app .
+      # 1. 빌드 전 .env 파일 생성 단계 추가
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_API_BASE_URL=1.213.216.100:8080" > .env
 
+      # 2. Docker 이미지 빌드 (환경변수가 포함된 상태로 빌드됨)
+      - name: Build Docker Image
+        run: docker build -t dekk-fe-develop .
+
+      # 3. 기존 컨테이너 중지 및 새 컨테이너 실행
       - name: Deploy with Docker
         run: |
-          docker stop next-develop-container || true
-          docker rm next-develop-container || true
+          docker stop dekk-fe-container || true
+          docker rm dekk-fe-container || true
 
-          docker run -d --name next-develop-container -p 3000:3000 --restart unless-stopped next-develop-app
+          docker run -d \
+            --name dekk-fe-container \
+            -p 3000:3000 \
+            --restart unless-stopped \
+            dekk-fe-develop
