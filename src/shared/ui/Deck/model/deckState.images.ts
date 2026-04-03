@@ -6,9 +6,6 @@ const PREVIEW_IMAGE_SRC_LIST = [
   "/goods/sweater.webp",
 ] as const;
 
-const CARD_IMAGE_BASE_URL =
-  "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/";
-
 const resolveCdnImageUrl = (imageUrl: string) => {
   if (!imageUrl) {
     return PREVIEW_IMAGE_SRC_LIST[0];
@@ -18,7 +15,7 @@ const resolveCdnImageUrl = (imageUrl: string) => {
     return imageUrl;
   }
 
-  return `${CARD_IMAGE_BASE_URL}${imageUrl}`;
+  return `${process.env.NEXT_PUBLIC_BUCKET_URL}${imageUrl}`;
 };
 
 const toDefaultDeckPreviewImageSrcList = (cards: DeckCardItem[]) => {

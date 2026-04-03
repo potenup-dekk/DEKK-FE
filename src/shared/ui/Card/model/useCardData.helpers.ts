@@ -1,9 +1,8 @@
 import { getCards } from "@/features/card-swipe";
 import type { CardItem } from "./useCardStack.types";
+import { env } from "process";
 
 const PICSUM_LIMIT = 5;
-const CARD_IMAGE_BASE_URL =
-  "https://dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com/";
 
 const toCardImageUrl = (cardImageUrl: string) => {
   if (
@@ -13,7 +12,7 @@ const toCardImageUrl = (cardImageUrl: string) => {
     return cardImageUrl;
   }
 
-  return `${CARD_IMAGE_BASE_URL}${cardImageUrl}`;
+  return `${process.env.NEXT_PUBLIC_BUCKET_URL}${cardImageUrl}`;
 };
 
 const mapCards = (
