@@ -20,6 +20,7 @@ const Product = ({
         width={40}
         height={40}
         alt={productName}
+        unoptimized={true}
       />
 
       <div className={content()}>
