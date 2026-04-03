@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "dekk-crawling-bucket.s3.ap-northeast-2.amazonaws.com",
+        hostname: "dekk-api-dev-crawl-bucket.s3.ap-northeast-2.amazonaws.com",
         pathname: "/**",
       },
     ],
