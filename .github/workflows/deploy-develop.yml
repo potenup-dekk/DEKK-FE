@@ -16,7 +16,7 @@ jobs:
       # 1. 빌드 전 .env 파일 생성 단계 추가
       - name: Create .env file
         run: |
-          echo "NEXT_PUBLIC_API_BASE_URL=1.213.216.100:8080" > .env
+          echo "NEXT_PUBLIC_API_BASE_URL=http://1.213.216.100:8080" > .env
 
       # 2. Docker 이미지 빌드 (환경변수가 포함된 상태로 빌드됨)
       - name: Build Docker Image
