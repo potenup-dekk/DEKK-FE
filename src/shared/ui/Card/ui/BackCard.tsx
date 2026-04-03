@@ -43,6 +43,7 @@ const BackCard = ({
           fill
           sizes="(max-width: 768px) 83vw, 66vw"
           alt="코디"
+          unoptimized={true}
         />
       </motion.div>
     </motion.div>

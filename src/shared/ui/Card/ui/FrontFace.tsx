@@ -22,6 +22,7 @@ const FrontFace = ({ imageUrl }: FrontFaceProps) => {
         // sizes="(max-width: 768px) 83vw, 66vw"
         loading="eager"
         alt="코디"
+        unoptimized={true}
       />
     </motion.div>
   );

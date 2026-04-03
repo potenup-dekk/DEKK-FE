@@ -17,6 +17,7 @@ const DeckCardImage = ({ src, alt, className }: DeckCardImageProps) => {
       onDragStart={(event) => {
         event.preventDefault();
       }}
+      unoptimized={true}
       // sizes="(max-width: 768px) 44vw, 320px"
     />
   );
