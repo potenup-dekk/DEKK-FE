@@ -29,8 +29,8 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo "NEXT_PUBLIC_API_BASE_URL=${{ env.BASE_API_URL }}" > .env
-          echo "NEXT_PUBLIC_BUCKET_URL=${{ secrets.NEXT_PUBLIC_BUCKET_URL }}" > .env
+          echo "NEXT_PUBLIC_API_BASE_URL=${{ env.BASE_API_URL }}" >> .env
+          echo "NEXT_PUBLIC_BUCKET_URL=${{ secrets.NEXT_PUBLIC_BUCKET_URL }}" >> .env
 
       # 4. Docker 이미지 빌드 (환경변수가 포함된 상태로 빌드됨)
       - name: Build Docker Image
