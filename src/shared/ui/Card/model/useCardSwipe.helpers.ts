@@ -12,13 +12,14 @@ const saveSwipeEvaluation = (
   swipeType: SwipeType,
 ) => {
   const topCard = cards[0];
-  if (!isLoggedIn || !topCard?.cardId) return;
+  if (!isLoggedIn || !topCard) return;
 
-  void saveCardSwipeEvaluation(topCard.cardId, { swipeType }).catch(
-    () => {
-      return;
-    },
-  );
+  const cardIdentifier = topCard.cardId ?? topCard.publicId;
+  if (!cardIdentifier) return;
+
+  void saveCardSwipeEvaluation(cardIdentifier, { swipeType }).catch(() => {
+    return;
+  });
 };
 
 const runSwipeAnimation = (

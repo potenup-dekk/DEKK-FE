@@ -4,7 +4,7 @@ import { useCardAuth } from "../model/cardAuthContext";
 import { cardStyle } from "../style";
 
 interface FrontCardFocusToggleProps {
-  cardId: number;
+  cardId?: number;
   isFocusMode: boolean;
   shouldShowFocusModeButton: boolean;
   onToggleFocusMode: () => void;
@@ -24,7 +24,7 @@ const FrontCardFocusToggle = ({
 
   return (
     <div className={focusActionGroup()}>
-      {isLoggedIn ? (
+      {isLoggedIn && cardId !== undefined ? (
         <button
           type="button"
           className={clsx(focusActionButton())}

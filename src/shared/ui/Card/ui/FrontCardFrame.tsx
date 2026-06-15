@@ -4,7 +4,7 @@ import FrontCardMotionContainer from "./FrontCardMotionContainer";
 
 interface FrontCardFrameProps {
   cardId: string;
-  cardNumericId: number;
+  cardNumericId?: number;
   x: FrontCardProps["x"];
   rotate: FrontCardProps["rotate"];
   rotateYSpring: FrontCardProps["rotateYSpring"];

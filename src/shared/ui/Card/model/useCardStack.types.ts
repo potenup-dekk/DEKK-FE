@@ -10,7 +10,8 @@ interface CardProductItem {
 
 interface CardItem {
   id: string;
-  cardId: number;
+  cardId?: number;
+  publicId?: string;
   imageUrl: string;
   products: CardProductItem[];
   height: number | null;

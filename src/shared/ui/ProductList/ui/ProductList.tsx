@@ -1,6 +1,9 @@
 import Product from "@/shared/ui/Product";
 import type { ProductListProps } from "../model/props.type";
 
+const CDN_BASE_URL =
+  "https://dekk-api-dev-crawl-bucket.s3.ap-northeast-2.amazonaws.com/";
+
 const resolveImage = (imageUrl: string, useCdn: boolean) => {
   if (!useCdn) {
     return imageUrl;

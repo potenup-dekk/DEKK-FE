@@ -1,8 +1,10 @@
 import { getCards } from "@/features/card-swipe";
 import type { CardItem } from "./useCardStack.types";
-import { env } from "process";
 
 const PICSUM_LIMIT = 5;
+const CARD_IMAGE_BASE_URL =
+  process.env.NEXT_PUBLIC_BUCKET_URL ??
+  "https://dekk-api-dev-crawl-bucket.s3.ap-northeast-2.amazonaws.com/";
 
 const toCardImageUrl = (cardImageUrl: string) => {
   if (
@@ -12,22 +14,37 @@ const toCardImageUrl = (cardImageUrl: string) => {
     return cardImageUrl;
   }
 
-  return `${process.env.NEXT_PUBLIC_BUCKET_URL}${cardImageUrl}`;
+  return `${CARD_IMAGE_BASE_URL}${cardImageUrl}`;
+};
+
+const getCardKey = (item: {
+  cardId?: number;
+  publicId?: string;
+  cardImageUrl?: string;
+}) => {
+  if (item.cardId !== undefined) return String(item.cardId);
+  if (item.publicId) return item.publicId;
+  return item.cardImageUrl ?? "";
 };
 
 const mapCards = (
   page: number,
   items: NonNullable<Awaited<ReturnType<typeof getCards>>["data"]>["content"],
 ) => {
-  return items.map((item, index) => ({
-    id: `${page}-${item.cardId}-${index}`,
-    cardId: item.cardId,
-    imageUrl: toCardImageUrl(item.cardImageUrl || ""),
-    products: item.products ?? [],
-    height: item.height,
-    weight: item.weight,
-    tags: item.tags ?? null,
-  }));
+  return items.map((item, index) => {
+    const cardKey = getCardKey(item) || String(index);
+
+    return {
+      id: `${page}-${cardKey}-${index}`,
+      cardId: item.cardId,
+      publicId: item.publicId,
+      imageUrl: toCardImageUrl(item.cardImageUrl || ""),
+      products: item.products ?? [],
+      height: item.height,
+      weight: item.weight,
+      tags: item.tags ?? null,
+    };
+  });
 };
 
 const resolveCardImageUrl = async (
@@ -69,7 +86,7 @@ const resolveCardImageUrl = async (
 const appendCardPage = async (
   nextPageRef: React.MutableRefObject<number>,
   isFetchingRef: React.MutableRefObject<boolean>,
-  seenCardIdRef: React.MutableRefObject<Set<number>> | undefined,
+  seenCardIdRef: React.MutableRefObject<Set<string>> | undefined,
   setCards: React.Dispatch<React.SetStateAction<CardItem[]>>,
 ) => {
   if (isFetchingRef.current) return;
@@ -78,7 +95,7 @@ const appendCardPage = async (
   try {
     const MAX_FETCH_ATTEMPTS = 3;
 
-    const seenCardIds = seenCardIdRef?.current ?? new Set<number>();
+    const seenCardIds = seenCardIdRef?.current ?? new Set<string>();
 
     for (let attempt = 0; attempt < MAX_FETCH_ATTEMPTS; attempt += 1) {
       const page = nextPageRef.current;
@@ -91,7 +108,8 @@ const appendCardPage = async (
 
       const content = response.data.content ?? [];
       const uniqueContent = content.filter((item) => {
-        return !seenCardIds.has(item.cardId);
+        const itemKey = getCardKey(item);
+        return itemKey ? !seenCardIds.has(itemKey) : true;
       });
 
       if (uniqueContent.length === 0) {
@@ -99,7 +117,10 @@ const appendCardPage = async (
       }
 
       uniqueContent.forEach((item) => {
-        seenCardIds.add(item.cardId);
+        const itemKey = getCardKey(item);
+        if (itemKey) {
+          seenCardIds.add(itemKey);
+        }
       });
 
       setCards((prev) => [...prev, ...mapCards(page, uniqueContent)]);

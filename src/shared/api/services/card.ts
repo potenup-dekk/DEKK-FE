@@ -55,7 +55,11 @@ const toCardListResponse = (
 };
 
 const isSuccessCode = (code: string) => {
-  return code.startsWith("S") || code.endsWith("OK");
+  return (
+    code.startsWith("S") ||
+    code.startsWith("R") ||
+    code.endsWith("OK")
+  );
 };
 
 const assertCardResponse = <T>(response: ApiResponse<T>) => {
@@ -94,7 +98,7 @@ const getCards = async (page: number, size: number) => {
 };
 
 const saveCardSwipeEvaluation = async (
-  cardId: number,
+  cardId: string | number,
   payload: SwipePayload,
 ) => {
   const response = await requestJson<ApiResponse<null>>(

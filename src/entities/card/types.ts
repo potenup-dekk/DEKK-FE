@@ -13,7 +13,8 @@ export interface CardListResponse {
 }
 
 export interface CardContentData {
-  cardId: number;
+  cardId?: number;
+  publicId?: string;
   cardImageUrl: string;
   height: number | null;
   weight: number | null;

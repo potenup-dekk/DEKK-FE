@@ -14,7 +14,7 @@ const useCardData = () => {
   const [cards, setCards] = useState<CardItem[]>([]);
   const nextPageRef = useRef(CARD_START_PAGE);
   const isFetchingRef = useRef(false);
-  const seenCardIdRef = useRef<Set<number>>(new Set());
+  const seenCardIdRef = useRef<Set<string>>(new Set());
   const imageUrlCacheRef = useRef<Map<string, string>>(new Map());
   const loadingImageRef = useRef<Map<string, Promise<string>>>(new Map());
   const createdBlobUrlsRef = useRef<Set<string>>(new Set());

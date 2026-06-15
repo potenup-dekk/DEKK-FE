@@ -16,7 +16,7 @@ interface DataLayerTarget {
 const toCurrentCardId = (cards: CardItem[]) => {
   const frontCard = cards[0];
 
-  return frontCard ? frontCard.cardId : null;
+  return frontCard?.cardId ?? null;
 };
 
 const pushCardSwipeEvent = (

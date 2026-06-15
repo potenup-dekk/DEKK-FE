@@ -13,7 +13,7 @@ import FrontCardFocusToggle from "./FrontCardFocusToggle";
 
 interface FrontCardMotionContainerProps {
   cardId: string;
-  cardNumericId: number;
+  cardNumericId: number | undefined;
   x: FrontCardProps["x"];
   rotate: FrontCardProps["rotate"];
   rotateYSpring: FrontCardProps["rotateYSpring"];

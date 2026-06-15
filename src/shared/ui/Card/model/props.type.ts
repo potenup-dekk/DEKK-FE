@@ -13,7 +13,7 @@ interface CardDisplayOptions {
 
 interface FrontCardProps {
   cardId: CardItem["id"];
-  cardNumericId: CardItem["cardId"];
+  cardNumericId?: CardItem["cardId"];
   frontImage: string;
   x: ReturnType<typeof useMotionValue<number>>;
   rotate: MotionValue<number>;

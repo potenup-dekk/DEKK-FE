@@ -34,7 +34,7 @@ const copyResponseHeaders = (source: Headers) => {
 };
 
 const GET = async (request: NextRequest) => {
-  const upstreamUrl = `${API_BASE}/w/v1/cards${request.nextUrl.search}`;
+  const upstreamUrl = `${API_BASE}/w/v2/cards${request.nextUrl.search}`;
 
   const headers = new Headers();
   const cookie = request.headers.get("cookie");

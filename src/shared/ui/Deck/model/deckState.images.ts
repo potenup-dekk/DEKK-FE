@@ -6,6 +6,9 @@ const PREVIEW_IMAGE_SRC_LIST = [
   "/goods/sweater.webp",
 ] as const;
 
+const CARD_IMAGE_BASE_URL =
+  "https://dekk-api-dev-crawl-bucket.s3.ap-northeast-2.amazonaws.com/";
+
 const resolveCdnImageUrl = (imageUrl: string) => {
   if (!imageUrl) {
     return PREVIEW_IMAGE_SRC_LIST[0];
